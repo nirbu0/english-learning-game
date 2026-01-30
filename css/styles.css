@@ -1135,6 +1135,9 @@ body {
     cursor: grab;
     transition: all 0.2s ease;
     user-select: none;
+    -webkit-user-select: none;
+    touch-action: none; /* Prevent browser handling of touch events */
+    -webkit-touch-callout: none; /* Disable callout on iOS */
 }
 
 .drag-item:hover {

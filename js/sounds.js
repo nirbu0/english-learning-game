@@ -10,14 +10,51 @@ const GameSounds = {
     musicGain: null,
     musicOscillators: [],
     isMusicPlaying: false,
+    isInitialized: false,
     
     /**
      * Initialize the audio context
      */
     init() {
+        // Don't create AudioContext until user interaction on mobile
+        // Just mark as ready to initialize
+        this.setupUserInteractionHandler();
+        console.log('🔊 Sound system ready (waiting for user interaction on mobile)');
+        return true;
+    },
+    
+    /**
+     * Setup handler to initialize audio on first user interaction (required for mobile)
+     */
+    setupUserInteractionHandler() {
+        const initAudio = () => {
+            if (!this.isInitialized) {
+                this.initAudioContext();
+            }
+        };
+        
+        // Listen for first user interaction
+        ['click', 'touchstart', 'touchend', 'keydown'].forEach(event => {
+            document.addEventListener(event, initAudio, { once: true, passive: true });
+        });
+    },
+    
+    /**
+     * Actually initialize the AudioContext (called after user interaction)
+     */
+    initAudioContext() {
+        if (this.isInitialized) return;
+        
         try {
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            console.log('🔊 Sound system initialized');
+            this.isInitialized = true;
+            console.log('🔊 AudioContext initialized after user interaction');
+            
+            // Resume if suspended
+            if (this.audioContext.state === 'suspended') {
+                this.audioContext.resume();
+            }
+            
             return true;
         } catch (error) {
             console.warn('Web Audio API not supported:', error);
@@ -29,6 +66,9 @@ const GameSounds = {
      * Resume audio context (required after user interaction)
      */
     resume() {
+        if (!this.isInitialized) {
+            this.initAudioContext();
+        }
         if (this.audioContext && this.audioContext.state === 'suspended') {
             this.audioContext.resume();
         }

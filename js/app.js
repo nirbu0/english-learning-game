@@ -885,28 +885,34 @@ const Game = {
                 dragItem.classList.remove('dragging');
             });
             
-            // Touch support
-            let touchStartX, touchStartY;
+            // Touch support - use getBoundingClientRect for accurate positioning
+            let touchOffsetX, touchOffsetY;
             dragItem.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Prevent scrolling while dragging
                 const touch = e.touches[0];
-                touchStartX = touch.clientX - dragItem.offsetLeft;
-                touchStartY = touch.clientY - dragItem.offsetTop;
+                const rect = dragItem.getBoundingClientRect();
+                touchOffsetX = touch.clientX - rect.left;
+                touchOffsetY = touch.clientY - rect.top;
                 dragItem.classList.add('dragging');
                 GameSounds.click();
-            });
+            }, { passive: false });
             
             dragItem.addEventListener('touchmove', (e) => {
                 e.preventDefault();
                 const touch = e.touches[0];
                 dragItem.style.position = 'fixed';
-                dragItem.style.left = (touch.clientX - touchStartX) + 'px';
-                dragItem.style.top = (touch.clientY - touchStartY) + 'px';
+                dragItem.style.left = (touch.clientX - touchOffsetX) + 'px';
+                dragItem.style.top = (touch.clientY - touchOffsetY) + 'px';
                 dragItem.style.zIndex = '1000';
-            });
+            }, { passive: false });
             
             dragItem.addEventListener('touchend', (e) => {
                 const touch = e.changedTouches[0];
+                // Temporarily hide the dragged element to find what's underneath
+                dragItem.style.visibility = 'hidden';
                 const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+                dragItem.style.visibility = '';
+                
                 if (dropTarget && dropTarget.classList.contains('drop-target')) {
                     handleDrop(dropTarget, pair.item, dragItem);
                 }
