@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>English Adventure - Learn English for Kids!</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="screen active">
+            <div class="welcome-content">
+                <h1 class="game-title">
+                    <span class="title-word title-english">English</span>
+                    <span class="title-word title-adventure">Adventure!</span>
+                </h1>
+                <p class="subtitle">Learn English through fun stories!</p>
+                
+                <div class="user-selection">
+                    <h2>Who's playing today?</h2>
+                    <div class="user-cards">
+                        <div class="user-card" data-user="explorer" data-age="4">
+                            <div class="user-avatar">🧒</div>
+                            <div class="user-name">Explorer</div>
+                            <div class="user-stars">⭐</div>
+                            <div class="user-age">Ages 4-5</div>
+                        </div>
+                        <div class="user-card" data-user="adventurer" data-age="8">
+                            <div class="user-avatar">👦</div>
+                            <div class="user-name">Adventurer</div>
+                            <div class="user-stars">⭐⭐</div>
+                            <div class="user-age">Ages 6-9</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="settings-btn" class="icon-btn" title="Settings">⚙️</button>
+            </div>
+        </div>
+
+        <!-- Theme Selection Screen -->
+        <div id="theme-screen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" data-target="welcome-screen">← Back</button>
+                <div class="current-user">
+                    <span id="current-user-avatar">🧒</span>
+                    <span id="current-user-name">Explorer</span>
+                </div>
+                <div class="total-stars">
+                    <span id="total-stars-count">0</span> ⭐
+                </div>
+            </div>
+            
+            <h2 class="screen-title">Choose Your Adventure!</h2>
+            
+            <div class="theme-grid" id="theme-grid">
+                <!-- Themes will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" data-target="theme-screen">← Back</button>
+                <div class="theme-title" id="game-theme-title">Supermarket</div>
+                <div class="game-stars">
+                    <span id="game-stars">⭐⭐⭐</span>
+                </div>
+            </div>
+            
+            <div class="game-container">
+                <!-- Story/Scene Area -->
+                <div class="scene-area" id="scene-area">
+                    <!-- Scene content will be dynamically inserted -->
+                </div>
+                
+                <!-- Instruction/Word Display -->
+                <div class="instruction-area" id="instruction-area">
+                    <button class="speak-btn" id="speak-instruction-btn">🔊</button>
+                    <span class="instruction-text" id="instruction-text">Tap on the apple!</span>
+                </div>
+                
+                <!-- Interactive Elements Area -->
+                <div class="interaction-area" id="interaction-area">
+                    <!-- Interactive elements will be dynamically inserted -->
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+                <span class="progress-text" id="progress-text">1/5</span>
+            </div>
+        </div>
+
+        <!-- Celebration Overlay -->
+        <div id="celebration-overlay" class="overlay hidden">
+            <div class="celebration-content">
+                <div class="celebration-emoji">🎉</div>
+                <h2 class="celebration-title">Great Job!</h2>
+                <div class="earned-stars" id="earned-stars">⭐⭐⭐</div>
+                <p class="celebration-message" id="celebration-message">You completed the adventure!</p>
+                <div class="celebration-buttons">
+                    <button class="btn btn-primary" id="play-again-btn">Play Again</button>
+                    <button class="btn btn-secondary" id="choose-theme-btn">Choose Theme</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Correct Answer Feedback -->
+        <div id="feedback-overlay" class="overlay hidden">
+            <div class="feedback-content" id="feedback-content">
+                <div class="feedback-emoji">✅</div>
+                <div class="feedback-text">Correct!</div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Settings</h2>
+                <div class="setting-row">
+                    <label>Sound Effects</label>
+                    <input type="checkbox" id="sound-effects-toggle" checked>
+                </div>
+                <div class="setting-row">
+                    <label>Speech Speed</label>
+                    <select id="speech-speed">
+                        <option value="0.7">Slow</option>
+                        <option value="1" selected>Normal</option>
+                        <option value="1.3">Fast</option>
+                    </select>
+                </div>
+                <div class="setting-row">
+                    <label>Reset Progress</label>
+                    <button class="btn btn-danger" id="reset-progress-btn">Reset All</button>
+                </div>
+                <button class="btn btn-primary modal-close" id="settings-close-btn">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/speech.js"></script>
+    <script src="js/scenes.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
