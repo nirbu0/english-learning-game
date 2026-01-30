@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Styles Comparison</title>
+    <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .style-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .style-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .style-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .apple-display {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            background: #f5f5f5;
+            border-radius: 15px;
+            position: relative;
+        }
+        
+        .style-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .pros-cons {
+            margin-top: 15px;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+        
+        .pro {
+            color: #4CAF50;
+        }
+        
+        .con {
+            color: #f44336;
+        }
+        
+        /* 1. Native Emoji */
+        .native-emoji {
+            font-size: 100px;
+        }
+        
+        /* 2. Twemoji */
+        .twemoji-display img.emoji {
+            width: 100px;
+            height: 100px;
+        }
+        
+        /* 3. CSS Animated Emoji */
+        .css-animated {
+            font-size: 100px;
+            animation: bounce 1s ease infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.05); }
+        }
+        
+        .css-animated:hover {
+            animation: wiggle 0.5s ease;
+        }
+        
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-15deg) scale(1.1); }
+            50% { transform: rotate(0deg) scale(1.15); }
+            75% { transform: rotate(15deg) scale(1.1); }
+        }
+        
+        /* 4. Kenney.nl style (simulated with CSS) */
+        .kenney-style {
+            width: 100px;
+            height: 100px;
+            position: relative;
+        }
+        
+        .kenney-apple-body {
+            width: 80px;
+            height: 90px;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: absolute;
+            bottom: 0;
+            left: 10px;
+            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.2),
+                        inset 15px 15px 20px rgba(255,255,255,0.2);
+        }
+        
+        .kenney-stem {
+            width: 8px;
+            height: 20px;
+            background: #8B4513;
+            position: absolute;
+            top: 0;
+            left: 46px;
+            border-radius: 3px;
+        }
+        
+        .kenney-leaf {
+            width: 25px;
+            height: 12px;
+            background: #27ae60;
+            position: absolute;
+            top: 5px;
+            left: 52px;
+            border-radius: 50%;
+            transform: rotate(30deg);
+        }
+        
+        /* 5. Custom SVG */
+        .custom-svg {
+            width: 120px;
+            height: 120px;
+        }
+        
+        /* Footer */
+        .recommendation {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        
+        .recommendation h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .recommendation p {
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <h1>🍎 Apple Styles Comparison</h1>
+    
+    <div class="comparison-grid">
+        <!-- 1. Native Emoji -->
+        <div class="style-card">
+            <div class="style-title">1. Native Emoji</div>
+            <div class="apple-display">
+                <span class="native-emoji">🍎</span>
+            </div>
+            <div class="style-description">
+                System default emoji - appearance varies by device/OS
+            </div>
+            <div class="pros-cons">
+                <div class="pro">✓ Zero dependencies</div>
+                <div class="pro">✓ Fast loading</div>
+                <div class="pro">✓ Works everywhere</div>
+                <div class="con">✗ Looks different on each device</div>
+                <div class="con">✗ Can't animate easily</div>
+            </div>
+        </div>
+        
+        <!-- 2. Twemoji -->
+        <div class="style-card">
+            <div class="style-title">2. Twemoji</div>
+            <div class="apple-display twemoji-display" id="twemoji-container">
+                <span>🍎</span>
+            </div>
+            <div class="style-description">
+                Twitter's open-source emoji as SVG images - consistent across all devices
+            </div>
+            <div class="pros-cons">
+                <div class="pro">✓ Consistent look everywhere</div>
+                <div class="pro">✓ High quality SVG</div>
+                <div class="pro">✓ Easy to implement</div>
+                <div class="con">✗ Flat design (2D look)</div>
+                <div class="con">✗ External dependency</div>
+            </div>
+        </div>
+        
+        <!-- 3. CSS Animated -->
+        <div class="style-card">
+            <div class="style-title">3. Native + CSS Animation</div>
+            <div class="apple-display">
+                <span class="css-animated">🍎</span>
+            </div>
+            <div class="style-description">
+                Native emoji enhanced with CSS animations (hover to see wiggle!)
+            </div>
+            <div class="pros-cons">
+                <div class="pro">✓ Fun and engaging</div>
+                <div class="pro">✓ No external images needed</div>
+                <div class="pro">✓ Easy to implement</div>
+                <div class="con">✗ Still device-dependent look</div>
+                <div class="con">✗ Limited customization</div>
+            </div>
+        </div>
+        
+        <!-- 4. Kenney.nl Style -->
+        <div class="style-card">
+            <div class="style-title">4. Kenney.nl Style</div>
+            <div class="apple-display">
+                <div class="kenney-style">
+                    <div class="kenney-stem"></div>
+                    <div class="kenney-leaf"></div>
+                    <div class="kenney-apple-body"></div>
+                </div>
+            </div>
+            <div class="style-description">
+                Game-style flat graphics (simulated - real ones are PNG files)
+            </div>
+            <div class="pros-cons">
+                <div class="pro">✓ Professional game look</div>
+                <div class="pro">✓ Consistent style</div>
+                <div class="pro">✓ Free CC0 license</div>
+                <div class="con">✗ Manual download required</div>
+                <div class="con">✗ Larger file size</div>
+            </div>
+        </div>
+        
+        <!-- 5. Custom SVG -->
+        <div class="style-card">
+            <div class="style-title">5. Custom SVG Character</div>
+            <div class="apple-display">
+                <object class="custom-svg" data="apple-cute.svg" type="image/svg+xml">
+                    <!-- Fallback if SVG doesn't load -->
+                    <img src="apple-cute.svg" alt="Cute apple" class="custom-svg">
+                </object>
+            </div>
+            <div class="style-description">
+                Custom animated SVG with cute character design - unique to your game!
+            </div>
+            <div class="pros-cons">
+                <div class="pro">✓ Unique custom look</div>
+                <div class="pro">✓ Built-in animations</div>
+                <div class="pro">✓ Scalable & crisp</div>
+                <div class="pro">✓ No external dependency</div>
+                <div class="con">✗ Need to create each one</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="recommendation">
+        <h2>💡 Recommendation</h2>
+        <p>
+            <strong>For quickest implementation:</strong> Use Native Emoji + CSS Animations (Option 3)<br><br>
+            <strong>For most polished look:</strong> Custom SVG Characters (Option 5)<br><br>
+            <strong>For game-like consistency:</strong> Kenney.nl Assets (Option 4)<br><br>
+            You can also <strong>mix approaches</strong> - use emoji for most items and custom SVG for key characters!
+        </p>
+    </div>
+    
+    <script>
+        // Parse Twemoji for the second card
+        twemoji.parse(document.getElementById('twemoji-container'), {
+            folder: 'svg',
+            ext: '.svg'
+        });
+    </script>
+</body>
+</html>

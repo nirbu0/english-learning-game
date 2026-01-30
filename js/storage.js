@@ -9,12 +9,15 @@ const GameStorage = {
     defaultData: {
         settings: {
             soundEffects: true,
-            speechSpeed: 1
+            musicEnabled: false,
+            speechSpeed: 1,
+            language: 'en'
         },
         users: {
             explorer: {
                 name: 'Explorer',
                 avatar: '🧒',
+                ageRange: 'Ages 4-5',
                 totalStars: 0,
                 completedThemes: [],
                 themeProgress: {}
@@ -22,6 +25,7 @@ const GameStorage = {
             adventurer: {
                 name: 'Adventurer',
                 avatar: '👦',
+                ageRange: 'Ages 6-9',
                 totalStars: 0,
                 completedThemes: [],
                 themeProgress: {}
@@ -56,6 +60,22 @@ const GameStorage = {
             console.warn('Error saving to localStorage:', e);
             return false;
         }
+    },
+    
+    /**
+     * Get theme progress for a user
+     */
+    getThemeProgress(userId, themeId) {
+        const user = this.getUser(userId);
+        return user.themeProgress?.[themeId] || {};
+    },
+    
+    /**
+     * Get all user progress (for dashboard)
+     */
+    getUserProgress(userId) {
+        const user = this.getUser(userId);
+        return user.themeProgress || {};
     },
     
     /**

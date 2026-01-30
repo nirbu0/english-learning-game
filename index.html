@@ -18,34 +18,35 @@
                     <span class="title-word title-english">English</span>
                     <span class="title-word title-adventure">Adventure!</span>
                 </h1>
-                <p class="subtitle">Learn English through fun stories!</p>
+                <p class="subtitle" data-i18n="welcome.subtitle">Learn English through fun stories!</p>
                 
                 <div class="user-selection">
-                    <h2>Who's playing today?</h2>
+                    <h2 data-i18n="welcome.whoPlaying">Who's playing today?</h2>
                     <div class="user-cards">
                         <div class="user-card" data-user="explorer" data-age="4">
                             <div class="user-avatar">🧒</div>
-                            <div class="user-name">Explorer</div>
+                            <div class="user-name" data-i18n="welcome.explorer">Explorer</div>
                             <div class="user-stars">⭐</div>
-                            <div class="user-age">Ages 4-5</div>
+                            <div class="user-age" data-i18n="welcome.ages45">Ages 4-5</div>
                         </div>
                         <div class="user-card" data-user="adventurer" data-age="8">
                             <div class="user-avatar">👦</div>
-                            <div class="user-name">Adventurer</div>
+                            <div class="user-name" data-i18n="welcome.adventurer">Adventurer</div>
                             <div class="user-stars">⭐⭐</div>
-                            <div class="user-age">Ages 6-9</div>
+                            <div class="user-age" data-i18n="welcome.ages69">Ages 6-9</div>
                         </div>
                     </div>
                 </div>
                 
                 <button id="settings-btn" class="icon-btn" title="Settings">⚙️</button>
+                <button id="dashboard-btn" class="icon-btn" title="Parent Dashboard" onclick="ParentDashboard.show()">👨‍👩‍👧</button>
             </div>
         </div>
 
         <!-- Theme Selection Screen -->
         <div id="theme-screen" class="screen">
             <div class="screen-header">
-                <button class="back-btn" data-target="welcome-screen">← Back</button>
+                <button class="back-btn" data-target="welcome-screen" data-i18n="theme.back">← Back</button>
                 <div class="current-user">
                     <span id="current-user-avatar">🧒</span>
                     <span id="current-user-name">Explorer</span>
@@ -55,7 +56,7 @@
                 </div>
             </div>
             
-            <h2 class="screen-title">Choose Your Adventure!</h2>
+            <h2 class="screen-title" data-i18n="theme.chooseAdventure">Choose Your Adventure!</h2>
             
             <div class="theme-grid" id="theme-grid">
                 <!-- Themes will be dynamically inserted here -->
@@ -101,12 +102,12 @@
         <div id="celebration-overlay" class="overlay hidden">
             <div class="celebration-content">
                 <div class="celebration-emoji">🎉</div>
-                <h2 class="celebration-title">Great Job!</h2>
+                <h2 class="celebration-title" data-i18n="feedback.greatJob">Great Job!</h2>
                 <div class="earned-stars" id="earned-stars">⭐⭐⭐</div>
                 <p class="celebration-message" id="celebration-message">You completed the adventure!</p>
                 <div class="celebration-buttons">
-                    <button class="btn btn-primary" id="play-again-btn">Play Again</button>
-                    <button class="btn btn-secondary" id="choose-theme-btn">Choose Theme</button>
+                    <button class="btn btn-primary" id="play-again-btn" data-i18n="celebration.playAgain">Play Again</button>
+                    <button class="btn btn-secondary" id="choose-theme-btn" data-i18n="celebration.chooseTheme">Choose Theme</button>
                 </div>
             </div>
         </div>
@@ -122,31 +123,45 @@
         <!-- Settings Modal -->
         <div id="settings-modal" class="modal hidden">
             <div class="modal-content">
-                <h2>Settings</h2>
+                <h2 data-i18n="settings.title">⚙️ Settings</h2>
                 <div class="setting-row">
-                    <label>Sound Effects</label>
+                    <label data-i18n="settings.soundEffects">🔊 Sound Effects</label>
                     <input type="checkbox" id="sound-effects-toggle" checked>
                 </div>
                 <div class="setting-row">
-                    <label>Speech Speed</label>
+                    <label data-i18n="settings.backgroundMusic">🎵 Background Music</label>
+                    <input type="checkbox" id="music-toggle" checked>
+                </div>
+                <div class="setting-row">
+                    <label data-i18n="settings.speechSpeed">🗣️ Speech Speed</label>
                     <select id="speech-speed">
-                        <option value="0.7">Slow</option>
-                        <option value="1" selected>Normal</option>
-                        <option value="1.3">Fast</option>
+                        <option value="0.7" data-i18n="settings.slow">Slow</option>
+                        <option value="1" selected data-i18n="settings.normal">Normal</option>
+                        <option value="1.3" data-i18n="settings.fast">Fast</option>
                     </select>
                 </div>
                 <div class="setting-row">
-                    <label>Reset Progress</label>
-                    <button class="btn btn-danger" id="reset-progress-btn">Reset All</button>
+                    <label data-i18n="settings.language">🌐 Instructions Language</label>
+                    <select id="language-select">
+                        <option value="en">🇬🇧 English</option>
+                        <option value="he">🇮🇱 עברית</option>
+                    </select>
                 </div>
-                <button class="btn btn-primary modal-close" id="settings-close-btn">Done</button>
+                <div class="setting-row">
+                    <label data-i18n="settings.resetProgress">🗑️ Reset Progress</label>
+                    <button class="btn btn-danger" id="reset-progress-btn" data-i18n="settings.resetAll">Reset All</button>
+                </div>
+                <button class="btn btn-primary modal-close" id="settings-close-btn" data-i18n="settings.done">Done</button>
             </div>
         </div>
     </div>
 
     <script src="js/storage.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/sounds.js"></script>
     <script src="js/speech.js"></script>
     <script src="js/scenes.js"></script>
+    <script src="js/dashboard.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

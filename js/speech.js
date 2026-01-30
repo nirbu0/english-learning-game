@@ -31,14 +31,14 @@ const GameSpeech = {
         this.voices = this.synth.getVoices();
         
         // Try to find a good English voice
-        // Prefer child-friendly voices or clear English voices
+        // Prefer US English child-friendly voices
         const preferredVoices = [
-            'Google UK English Female',
             'Google US English',
-            'Samantha',
+            'Samantha', // macOS US English female
+            'Alex',     // macOS US English male
+            'Google UK English Female',
             'Karen',
-            'Daniel',
-            'Alex'
+            'Daniel'
         ];
         
         for (const name of preferredVoices) {

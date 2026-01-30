@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Cute Apple Character for English Learning Game -->
+  
+  <!-- Apple Body -->
+  <ellipse cx="50" cy="55" rx="35" ry="38" fill="#ff6b6b">
+    <!-- Gradient for 3D effect -->
+    <animate attributeName="ry" values="38;40;38" dur="2s" repeatCount="indefinite"/>
+  </ellipse>
+  
+  <!-- Apple Highlight (shine) -->
+  <ellipse cx="35" cy="40" rx="12" ry="15" fill="#ff8787" opacity="0.6"/>
+  
+  <!-- Stem -->
+  <rect x="47" y="12" width="6" height="15" rx="2" fill="#8B4513"/>
+  
+  <!-- Leaf -->
+  <ellipse cx="60" cy="18" rx="12" ry="6" fill="#4CAF50" transform="rotate(25, 60, 18)">
+    <animate attributeName="transform" 
+             values="rotate(25, 60, 18);rotate(30, 60, 18);rotate(25, 60, 18)" 
+             dur="3s" 
+             repeatCount="indefinite"/>
+  </ellipse>
+  <path d="M52 18 Q58 20 60 18" stroke="#388E3C" stroke-width="1" fill="none"/>
+  
+  <!-- Cute Face -->
+  <!-- Left Eye -->
+  <ellipse cx="38" cy="50" rx="6" ry="8" fill="white"/>
+  <circle cx="40" cy="52" r="4" fill="#333">
+    <animate attributeName="cy" values="52;50;52" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="41" cy="50" r="1.5" fill="white"/>
+  
+  <!-- Right Eye -->
+  <ellipse cx="62" cy="50" rx="6" ry="8" fill="white"/>
+  <circle cx="64" cy="52" r="4" fill="#333">
+    <animate attributeName="cy" values="52;50;52" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="65" cy="50" r="1.5" fill="white"/>
+  
+  <!-- Blush (pink cheeks) -->
+  <ellipse cx="28" cy="60" rx="6" ry="4" fill="#FFB6C1" opacity="0.6"/>
+  <ellipse cx="72" cy="60" rx="6" ry="4" fill="#FFB6C1" opacity="0.6"/>
+  
+  <!-- Smile -->
+  <path d="M40 68 Q50 78 60 68" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round">
+    <animate attributeName="d" 
+             values="M40 68 Q50 78 60 68;M40 70 Q50 82 60 70;M40 68 Q50 78 60 68" 
+             dur="2s" 
+             repeatCount="indefinite"/>
+  </path>
+  
+  <!-- Sparkle effects (optional, for extra cuteness) -->
+  <g class="sparkles">
+    <path d="M15 25 L17 30 L22 28 L17 32 L15 37 L13 32 L8 28 L13 30 Z" fill="#FFD700" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;0.2;0.8" dur="1.5s" repeatCount="indefinite"/>
+    </path>
+    <path d="M85 70 L86 73 L89 72 L86 74 L85 77 L84 74 L81 72 L84 73 Z" fill="#FFD700" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;0.2;0.6" dur="1.8s" repeatCount="indefinite"/>
+    </path>
+  </g>
+</svg>

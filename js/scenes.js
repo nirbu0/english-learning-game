@@ -703,6 +703,11 @@ const GameScenes = {
             item.classList.add('collected');
         }
         
+        // Play collect sound
+        if (typeof GameSounds !== 'undefined') {
+            GameSounds.collect();
+        }
+        
         // Update cart
         const cartItems = document.getElementById('cart-items');
         const cartBadge = document.getElementById('cart-badge');

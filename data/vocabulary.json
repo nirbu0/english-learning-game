@@ -21,8 +21,8 @@
                         "targetWords": ["apple", "banana", "orange", "milk", "bread"]
                     },
                     {
-                        "type": "collect-items",
-                        "instruction": "Put the {word} in the cart!",
+                        "type": "match-pairs",
+                        "instruction": "Match the words with pictures!",
                         "items": ["apple", "banana", "orange"]
                     },
                     {
@@ -156,14 +156,18 @@
                         "items": ["lion", "elephant", "monkey", "giraffe", "zebra", "tiger", "hippo", "crocodile", "penguin"]
                     },
                     {
-                        "type": "descriptions",
-                        "instruction": "Which animal is {description}?",
-                        "items": [
-                            {"word": "elephant", "description": "big and gray"},
-                            {"word": "giraffe", "description": "very tall with a long neck"},
-                            {"word": "zebra", "description": "black and white stripes"},
-                            {"word": "lion", "description": "the king of the jungle"}
+                        "type": "drag-and-drop",
+                        "instruction": "Feed the animals! Drag the food to the right animal!",
+                        "pairs": [
+                            {"item": "meat", "target": "lion", "targetLabel": "Lion", "targetEmoji": "🦁"},
+                            {"item": "banana", "target": "monkey", "targetLabel": "Monkey", "targetEmoji": "🐵"},
+                            {"item": "fish", "target": "penguin", "targetLabel": "Penguin", "targetEmoji": "🐧"}
                         ]
+                    },
+                    {
+                        "type": "match-pairs",
+                        "instruction": "Match the animals with their names!",
+                        "items": ["lion", "elephant", "monkey", "giraffe"]
                     },
                     {
                         "type": "spelling",
@@ -523,6 +527,182 @@
                     }
                 ]
             }
+        },
+        {
+            "id": "farm",
+            "name": "Farm Friends",
+            "emoji": "🐄",
+            "description": "Visit the farm animals!",
+            "background": "farm",
+            "character": "👨‍🌾",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap each farm animal!",
+                        "items": ["cow", "pig", "chicken", "horse", "sheep"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["cow", "pig", "chicken", "horse", "sheep"]
+                    },
+                    {
+                        "type": "match-sound",
+                        "instruction": "Which animal did I say?",
+                        "words": ["cow", "pig", "chicken", "horse"]
+                    },
+                    {
+                        "type": "collect-items",
+                        "instruction": "Put the {word} in the barn!",
+                        "items": ["cow", "pig", "chicken"]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap each farm item!",
+                        "items": ["cow", "pig", "chicken", "horse", "sheep", "duck", "tractor", "barn", "corn", "hay"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["cow", "pig", "chicken", "horse", "sheep", "duck", "tractor", "barn"]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["cow", "pig", "duck"]
+                    },
+                    {
+                        "type": "farm-sounds",
+                        "instruction": "Which animal says {sound}?",
+                        "items": [
+                            {"animal": "cow", "sound": "moo"},
+                            {"animal": "pig", "sound": "oink"},
+                            {"animal": "chicken", "sound": "cluck"},
+                            {"animal": "duck", "sound": "quack"}
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "doctor",
+            "name": "Doctor's Office",
+            "emoji": "🏥",
+            "description": "Be a doctor for a day!",
+            "background": "hospital",
+            "character": "👨‍⚕️",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap to learn body parts!",
+                        "items": ["head", "arm", "leg", "hand", "foot"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["head", "arm", "leg", "hand", "foot"]
+                    },
+                    {
+                        "type": "match-sound",
+                        "instruction": "Which body part did I say?",
+                        "words": ["head", "arm", "leg", "hand"]
+                    },
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap the doctor's tools!",
+                        "items": ["bandage", "medicine", "stethoscope"]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap to learn body parts!",
+                        "items": ["head", "arm", "leg", "hand", "foot", "eye", "ear", "nose", "mouth", "heart"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["head", "arm", "leg", "hand", "foot", "eye", "ear", "nose", "mouth"]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["arm", "leg", "eye"]
+                    },
+                    {
+                        "type": "body-checkup",
+                        "instruction": "Point to your {word}!",
+                        "words": ["head", "arm", "leg", "eye", "ear"]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "weather",
+            "name": "Weather Station",
+            "emoji": "🌦️",
+            "description": "Learn about the weather!",
+            "background": "sky",
+            "character": "☀️",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap to learn weather words!",
+                        "items": ["sun", "rain", "cloud", "snow", "wind"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["sun", "rain", "cloud", "snow", "wind"]
+                    },
+                    {
+                        "type": "match-sound",
+                        "instruction": "Which weather did I say?",
+                        "words": ["sun", "rain", "cloud", "snow"]
+                    },
+                    {
+                        "type": "dress-for-weather",
+                        "instruction": "It's {weather}! Wear the {item}!",
+                        "pairs": [
+                            {"weather": "rainy", "item": "umbrella"},
+                            {"weather": "sunny", "item": "sunglasses"},
+                            {"weather": "cold", "item": "coat"}
+                        ]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap to learn weather words!",
+                        "items": ["sun", "rain", "cloud", "snow", "wind", "rainbow", "storm", "lightning", "umbrella", "coat"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["sun", "rain", "cloud", "snow", "wind", "rainbow", "umbrella", "coat"]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["sun", "rain", "snow"]
+                    },
+                    {
+                        "type": "seasons",
+                        "instruction": "When do we see {word}?",
+                        "items": [
+                            {"word": "snow", "season": "winter"},
+                            {"word": "flowers", "season": "spring"},
+                            {"word": "beach", "season": "summer"},
+                            {"word": "leaves", "season": "fall"}
+                        ]
+                    }
+                ]
+            }
         }
     ],
     "vocabulary": {
@@ -615,7 +795,43 @@
         "alarm": {"emoji": "🚨", "category": "object"},
         "door": {"emoji": "🚪", "category": "object"},
         "window": {"emoji": "🪟", "category": "object"},
-        "roof": {"emoji": "🏠", "category": "object"}
+        "roof": {"emoji": "🏠", "category": "object"},
+        "cow": {"emoji": "🐄", "category": "animal"},
+        "pig": {"emoji": "🐷", "category": "animal"},
+        "chicken": {"emoji": "🐔", "category": "animal"},
+        "horse": {"emoji": "🐴", "category": "animal"},
+        "sheep": {"emoji": "🐑", "category": "animal"},
+        "duck": {"emoji": "🦆", "category": "animal"},
+        "tractor": {"emoji": "🚜", "category": "vehicle"},
+        "barn": {"emoji": "🏚️", "category": "place"},
+        "corn": {"emoji": "🌽", "category": "food"},
+        "hay": {"emoji": "🌾", "category": "material"},
+        "head": {"emoji": "🗣️", "category": "body"},
+        "arm": {"emoji": "💪", "category": "body"},
+        "leg": {"emoji": "🦵", "category": "body"},
+        "hand": {"emoji": "✋", "category": "body"},
+        "foot": {"emoji": "🦶", "category": "body"},
+        "eye": {"emoji": "👁️", "category": "body"},
+        "ear": {"emoji": "👂", "category": "body"},
+        "nose": {"emoji": "👃", "category": "body"},
+        "mouth": {"emoji": "👄", "category": "body"},
+        "heart": {"emoji": "❤️", "category": "body"},
+        "bandage": {"emoji": "🩹", "category": "medical"},
+        "medicine": {"emoji": "💊", "category": "medical"},
+        "stethoscope": {"emoji": "🩺", "category": "medical"},
+        "rain": {"emoji": "🌧️", "category": "weather"},
+        "cloud": {"emoji": "☁️", "category": "weather"},
+        "snow": {"emoji": "❄️", "category": "weather"},
+        "wind": {"emoji": "💨", "category": "weather"},
+        "rainbow": {"emoji": "🌈", "category": "weather"},
+        "storm": {"emoji": "⛈️", "category": "weather"},
+        "lightning": {"emoji": "⚡", "category": "weather"},
+        "umbrella": {"emoji": "☂️", "category": "object"},
+        "coat": {"emoji": "🧥", "category": "clothing"},
+        "sunglasses": {"emoji": "🕶️", "category": "clothing"},
+        "flowers": {"emoji": "🌸", "category": "nature"},
+        "leaves": {"emoji": "🍂", "category": "nature"},
+        "beach": {"emoji": "🏖️", "category": "place"}
     },
     "colors": {
         "red": "🔴",

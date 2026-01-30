@@ -20,6 +20,8 @@ const Game = {
         // Initialize modules
         await GameScenes.init();
         GameSpeech.init();
+        GameSounds.init();
+        GameI18n.init();
         
         // Load settings
         this.loadSettings();
@@ -32,6 +34,9 @@ const Game = {
         if (savedUser) {
             this.currentUser = savedUser;
         }
+        
+        // Apply initial translations
+        GameI18n.updateUI();
         
         this.isInitialized = true;
         console.log('🎮 English Adventure Game initialized!');
@@ -80,7 +85,9 @@ const Game = {
             // Settings modal
             settingsModal: document.getElementById('settings-modal'),
             soundEffectsToggle: document.getElementById('sound-effects-toggle'),
+            musicToggle: document.getElementById('music-toggle'),
             speechSpeed: document.getElementById('speech-speed'),
+            languageSelect: document.getElementById('language-select'),
             resetProgressBtn: document.getElementById('reset-progress-btn'),
             settingsCloseBtn: document.getElementById('settings-close-btn'),
             
@@ -95,16 +102,21 @@ const Game = {
     setupEventListeners() {
         // User selection
         this.elements.userCards.forEach(card => {
-            card.addEventListener('click', () => this.selectUser(card.dataset.user));
+            card.addEventListener('click', () => {
+                GameSounds.click();
+                this.selectUser(card.dataset.user);
+            });
         });
         
         // Back buttons
         this.elements.backBtns.forEach(btn => {
             btn.addEventListener('click', () => {
+                GameSounds.navigate();
                 const target = btn.dataset.target;
                 if (target === 'welcome-screen') {
                     GameSpeech.cancel();
                     GameScenes.reset();
+                    GameSounds.stopMusic();
                 }
                 this.showScreen(target);
             });
@@ -112,17 +124,37 @@ const Game = {
         
         // Speak instruction button
         this.elements.speakInstructionBtn.addEventListener('click', () => {
+            GameSounds.click();
             this.speakCurrentInstruction();
         });
         
         // Settings
-        this.elements.settingsBtn.addEventListener('click', () => this.showSettings());
-        this.elements.settingsCloseBtn.addEventListener('click', () => this.hideSettings());
+        this.elements.settingsBtn.addEventListener('click', () => {
+            GameSounds.click();
+            this.showSettings();
+        });
+        this.elements.settingsCloseBtn.addEventListener('click', () => {
+            GameSounds.click();
+            this.hideSettings();
+        });
         this.elements.soundEffectsToggle.addEventListener('change', (e) => {
+            GameSounds.setEnabled(e.target.checked);
             GameStorage.saveSettings({ soundEffects: e.target.checked });
+            if (e.target.checked) GameSounds.click();
+        });
+        this.elements.musicToggle.addEventListener('change', (e) => {
+            GameSounds.setMusicEnabled(e.target.checked);
+            GameStorage.saveSettings({ musicEnabled: e.target.checked });
+            if (e.target.checked && this.currentTheme) {
+                GameSounds.startMusic();
+            }
         });
         this.elements.speechSpeed.addEventListener('change', (e) => {
             GameSpeech.setRate(parseFloat(e.target.value));
+        });
+        this.elements.languageSelect.addEventListener('change', (e) => {
+            GameI18n.setLanguage(e.target.value);
+            GameSounds.click();
         });
         this.elements.resetProgressBtn.addEventListener('click', () => {
             if (confirm('Are you sure you want to reset all progress?')) {
@@ -134,10 +166,12 @@ const Game = {
         
         // Celebration buttons
         this.elements.playAgainBtn.addEventListener('click', () => {
+            GameSounds.click();
             this.hideCelebration();
             this.startTheme(this.currentTheme.id);
         });
         this.elements.chooseThemeBtn.addEventListener('click', () => {
+            GameSounds.click();
             this.hideCelebration();
             this.showScreen('theme-screen');
         });
@@ -148,9 +182,18 @@ const Game = {
      */
     loadSettings() {
         const settings = GameStorage.getSettings();
-        this.elements.soundEffectsToggle.checked = settings.soundEffects;
-        this.elements.speechSpeed.value = settings.speechSpeed;
-        GameSpeech.setRate(settings.speechSpeed);
+        // Sound effects default to ON, but music defaults to OFF
+        const soundEnabled = settings.soundEffects !== false;
+        const musicEnabled = settings.musicEnabled === true; // Must be explicitly true, defaults to false
+        
+        this.elements.soundEffectsToggle.checked = soundEnabled;
+        this.elements.musicToggle.checked = musicEnabled;
+        this.elements.speechSpeed.value = settings.speechSpeed || 1;
+        this.elements.languageSelect.value = settings.language || 'en';
+        
+        GameSpeech.setRate(settings.speechSpeed || 1);
+        GameSounds.setEnabled(soundEnabled);
+        GameSounds.setMusicEnabled(musicEnabled);
     },
     
     /**
@@ -246,6 +289,10 @@ const Game = {
         
         this.currentTheme = theme;
         
+        // Play start sound and music
+        GameSounds.whoosh();
+        GameSounds.startMusic();
+        
         // Start the theme in GameScenes
         GameScenes.startTheme(themeId, this.currentUser);
         
@@ -290,6 +337,12 @@ const Game = {
                 break;
             case 'spelling':
                 this.runSpellingActivity(activity);
+                break;
+            case 'drag-and-drop':
+                this.runDragAndDropActivity(activity);
+                break;
+            case 'match-pairs':
+                this.runMatchPairsActivity(activity);
                 break;
             default:
                 // For unimplemented activities, skip to next
@@ -382,57 +435,167 @@ const Game = {
     },
     
     /**
-     * Collect-items activity - put items in cart
+     * Collect-items activity - drag items to cart (drag-and-drop)
      */
     runCollectItemsActivity(activity) {
         const items = activity.items;
         GameScenes.currentItemIndex = 0;
-        GameScenes.collectedItems = [];
+        let collectedCount = 0;
         
-        const showNextItem = () => {
-            if (GameScenes.currentItemIndex >= items.length) {
-                // Activity complete
-                setTimeout(() => this.nextActivity(), 1000);
-                return;
-            }
-            
+        // Set initial instruction
+        const updateInstruction = () => {
+            if (GameScenes.currentItemIndex >= items.length) return;
             const targetWord = items[GameScenes.currentItemIndex];
-            
-            // Set instruction
             const instruction = activity.instruction.replace('{word}', targetWord.toUpperCase());
             this.setInstruction(instruction, targetWord);
-            
-            // Speak the instruction
-            GameSpeech.speakInstruction(`Put the ${targetWord} in the cart!`);
+            GameSpeech.speakInstruction(`Drag the ${targetWord} to the cart!`);
         };
         
-        // Populate all items
-        GameScenes.populateItems(items, (word, element) => {
+        // Create drag and drop UI with cart
+        this.elements.interactionArea.innerHTML = `
+            <div class="collect-activity">
+                <div class="drag-items-row" id="drag-items">
+                    <!-- Draggable items will be added here -->
+                </div>
+                <div class="cart-drop-zone" id="cart-drop">
+                    <div class="cart-icon">🛒</div>
+                    <div class="cart-label">Drop here!</div>
+                    <div class="cart-items" id="cart-items"></div>
+                </div>
+            </div>
+        `;
+        
+        const dragContainer = document.getElementById('drag-items');
+        const cartDrop = document.getElementById('cart-drop');
+        const cartItems = document.getElementById('cart-items');
+        
+        // Shuffle items for display
+        const shuffledItems = [...items].sort(() => Math.random() - 0.5);
+        
+        // Create draggable items
+        shuffledItems.forEach((item) => {
+            const wordData = GameScenes.getWordData(item);
+            const dragItem = document.createElement('div');
+            dragItem.className = 'drag-item';
+            dragItem.draggable = true;
+            dragItem.dataset.item = item;
+            dragItem.innerHTML = `
+                <span class="drag-emoji">${wordData.emoji}</span>
+                <span class="drag-label">${item}</span>
+            `;
+            
+            // Mouse drag events
+            dragItem.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', item);
+                dragItem.classList.add('dragging');
+                GameSounds.click();
+            });
+            
+            dragItem.addEventListener('dragend', () => {
+                dragItem.classList.remove('dragging');
+            });
+            
+            // Touch support
+            let touchStartX, touchStartY, touchOffsetX, touchOffsetY;
+            dragItem.addEventListener('touchstart', (e) => {
+                const touch = e.touches[0];
+                const rect = dragItem.getBoundingClientRect();
+                touchOffsetX = touch.clientX - rect.left;
+                touchOffsetY = touch.clientY - rect.top;
+                dragItem.classList.add('dragging');
+                GameSounds.click();
+            });
+            
+            dragItem.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                dragItem.style.position = 'fixed';
+                dragItem.style.left = (touch.clientX - touchOffsetX) + 'px';
+                dragItem.style.top = (touch.clientY - touchOffsetY) + 'px';
+                dragItem.style.zIndex = '1000';
+            });
+            
+            dragItem.addEventListener('touchend', (e) => {
+                const touch = e.changedTouches[0];
+                const dropElement = document.elementFromPoint(touch.clientX, touch.clientY);
+                
+                // Check if dropped on cart
+                if (dropElement && (dropElement.id === 'cart-drop' || dropElement.closest('#cart-drop'))) {
+                    handleDrop(item, dragItem);
+                }
+                
+                dragItem.style.position = '';
+                dragItem.style.left = '';
+                dragItem.style.top = '';
+                dragItem.style.zIndex = '';
+                dragItem.classList.remove('dragging');
+            });
+            
+            dragContainer.appendChild(dragItem);
+        });
+        
+        // Cart drop zone events
+        cartDrop.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            cartDrop.classList.add('drag-over');
+        });
+        
+        cartDrop.addEventListener('dragleave', () => {
+            cartDrop.classList.remove('drag-over');
+        });
+        
+        cartDrop.addEventListener('drop', (e) => {
+            e.preventDefault();
+            cartDrop.classList.remove('drag-over');
+            const item = e.dataTransfer.getData('text/plain');
+            const dragItem = document.querySelector(`.drag-item[data-item="${item}"]`);
+            handleDrop(item, dragItem);
+        });
+        
+        const handleDrop = (item, dragItem) => {
             const targetWord = items[GameScenes.currentItemIndex];
             GameScenes.totalQuestions++;
             
-            if (word === targetWord) {
+            if (item === targetWord) {
                 // Correct!
                 GameScenes.correctAnswers++;
-                GameScenes.showCorrectFeedback(element);
-                GameScenes.markItemCollected(word);
+                collectedCount++;
+                
+                GameSounds.correct();
                 this.showFeedback(true);
-                GameSpeech.speakEncouragement(true);
+                GameSpeech.speak(`${item}!`);
+                
+                // Move item to cart visually
+                dragItem.classList.add('matched');
+                const wordData = GameScenes.getWordData(item);
+                cartItems.innerHTML += `<span class="cart-item">${wordData.emoji}</span>`;
                 
                 GameScenes.currentItemIndex++;
-                setTimeout(showNextItem, 1500);
+                
+                // Check if all collected
+                if (collectedCount >= items.length) {
+                    GameSpeech.speak('Great job! You collected everything!');
+                    setTimeout(() => this.nextActivity(), 1500);
+                } else {
+                    setTimeout(updateInstruction, 1000);
+                }
             } else {
-                // Wrong
-                GameScenes.showWrongFeedback(element);
+                // Wrong item
+                GameSounds.wrong();
                 this.showFeedback(false);
-                GameSpeech.speak(`That's the ${word}. Find the ${targetWord}!`);
+                GameSpeech.speak(`That's the ${item}. Drag the ${targetWord}!`);
+                
+                cartDrop.classList.add('wrong');
+                setTimeout(() => cartDrop.classList.remove('wrong'), 500);
             }
-        });
+        };
         
-        // Clear interaction area
-        this.elements.interactionArea.innerHTML = '';
+        // Hide shelf
+        const shelf = document.getElementById('store-shelf');
+        if (shelf) shelf.style.display = 'none';
         
-        showNextItem();
+        // Start with first instruction
+        updateInstruction();
     },
     
     /**
@@ -600,6 +763,258 @@ const Game = {
     },
     
     /**
+     * Drag-and-drop activity - drag items to matching targets
+     */
+    runDragAndDropActivity(activity) {
+        const pairs = activity.pairs || [];
+        let matchedCount = 0;
+        
+        this.setInstruction(activity.instruction || 'Drag each item to its place!');
+        GameSpeech.speakInstruction(activity.instruction || 'Drag each item to its place!');
+        
+        // Create drag and drop area
+        this.elements.interactionArea.innerHTML = `
+            <div class="drag-drop-container">
+                <div class="drag-items" id="drag-items">
+                    <!-- Draggable items will be added here -->
+                </div>
+                <div class="drop-targets" id="drop-targets">
+                    <!-- Drop targets will be added here -->
+                </div>
+            </div>
+        `;
+        
+        const dragContainer = document.getElementById('drag-items');
+        const dropContainer = document.getElementById('drop-targets');
+        
+        // Shuffle pairs for draggable items
+        const shuffledItems = [...pairs].sort(() => Math.random() - 0.5);
+        
+        // Create draggable items
+        shuffledItems.forEach((pair, index) => {
+            const wordData = GameScenes.getWordData(pair.item);
+            const dragItem = document.createElement('div');
+            dragItem.className = 'drag-item';
+            dragItem.draggable = true;
+            dragItem.dataset.item = pair.item;
+            dragItem.innerHTML = `
+                <span class="drag-emoji">${wordData.emoji}</span>
+                <span class="drag-label">${pair.item}</span>
+            `;
+            
+            // Touch/mouse events for dragging
+            dragItem.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', pair.item);
+                dragItem.classList.add('dragging');
+                GameSounds.click();
+            });
+            
+            dragItem.addEventListener('dragend', () => {
+                dragItem.classList.remove('dragging');
+            });
+            
+            // Touch support
+            let touchStartX, touchStartY;
+            dragItem.addEventListener('touchstart', (e) => {
+                const touch = e.touches[0];
+                touchStartX = touch.clientX - dragItem.offsetLeft;
+                touchStartY = touch.clientY - dragItem.offsetTop;
+                dragItem.classList.add('dragging');
+                GameSounds.click();
+            });
+            
+            dragItem.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                dragItem.style.position = 'fixed';
+                dragItem.style.left = (touch.clientX - touchStartX) + 'px';
+                dragItem.style.top = (touch.clientY - touchStartY) + 'px';
+                dragItem.style.zIndex = '1000';
+            });
+            
+            dragItem.addEventListener('touchend', (e) => {
+                const touch = e.changedTouches[0];
+                const dropTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+                if (dropTarget && dropTarget.classList.contains('drop-target')) {
+                    handleDrop(dropTarget, pair.item, dragItem);
+                }
+                dragItem.style.position = '';
+                dragItem.style.left = '';
+                dragItem.style.top = '';
+                dragItem.style.zIndex = '';
+                dragItem.classList.remove('dragging');
+            });
+            
+            dragContainer.appendChild(dragItem);
+        });
+        
+        // Create drop targets
+        pairs.forEach((pair) => {
+            const dropTarget = document.createElement('div');
+            dropTarget.className = 'drop-target';
+            dropTarget.dataset.target = pair.target;
+            dropTarget.innerHTML = `
+                <span class="target-label">${pair.targetLabel || pair.target}</span>
+                <span class="target-hint">${pair.targetEmoji || '📦'}</span>
+            `;
+            
+            dropTarget.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropTarget.classList.add('drag-over');
+            });
+            
+            dropTarget.addEventListener('dragleave', () => {
+                dropTarget.classList.remove('drag-over');
+            });
+            
+            dropTarget.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropTarget.classList.remove('drag-over');
+                const item = e.dataTransfer.getData('text/plain');
+                const dragItem = document.querySelector(`.drag-item[data-item="${item}"]`);
+                handleDrop(dropTarget, item, dragItem);
+            });
+            
+            dropContainer.appendChild(dropTarget);
+        });
+        
+        const handleDrop = (dropTarget, item, dragItem) => {
+            const expectedPair = pairs.find(p => p.item === item);
+            GameScenes.totalQuestions++;
+            
+            if (expectedPair && expectedPair.target === dropTarget.dataset.target) {
+                // Correct match!
+                GameScenes.correctAnswers++;
+                matchedCount++;
+                
+                GameSounds.correct();
+                this.showFeedback(true);
+                GameSpeech.speak(`${item}!`);
+                
+                // Mark as matched
+                dragItem.classList.add('matched');
+                dropTarget.classList.add('matched');
+                dropTarget.innerHTML = `
+                    <span class="matched-emoji">${GameScenes.getWordData(item).emoji}</span>
+                    <span class="matched-label">${item}</span>
+                `;
+                
+                // Check if all matched
+                if (matchedCount >= pairs.length) {
+                    setTimeout(() => this.nextActivity(), 1500);
+                }
+            } else {
+                // Wrong match
+                GameSounds.wrong();
+                this.showFeedback(false);
+                GameSpeech.speak('Try again!');
+                
+                dropTarget.classList.add('wrong');
+                setTimeout(() => dropTarget.classList.remove('wrong'), 500);
+            }
+        };
+        
+        // Hide shelf
+        const shelf = document.getElementById('store-shelf');
+        if (shelf) shelf.style.display = 'none';
+    },
+    
+    /**
+     * Match-pairs activity - match words with pictures
+     */
+    runMatchPairsActivity(activity) {
+        const items = activity.items || [];
+        let selectedFirst = null;
+        let matchedCount = 0;
+        
+        this.setInstruction(activity.instruction || 'Match the pairs!');
+        GameSpeech.speakInstruction(activity.instruction || 'Match the pairs!');
+        
+        // Create cards (words and pictures mixed)
+        const cards = [];
+        items.forEach(item => {
+            const wordData = GameScenes.getWordData(item);
+            cards.push({ type: 'word', value: item, display: item.toUpperCase() });
+            cards.push({ type: 'picture', value: item, display: wordData.emoji });
+        });
+        
+        // Shuffle cards
+        for (let i = cards.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [cards[i], cards[j]] = [cards[j], cards[i]];
+        }
+        
+        // Create game grid
+        this.elements.interactionArea.innerHTML = `
+            <div class="match-pairs-grid" id="match-pairs-grid">
+                <!-- Cards will be added here -->
+            </div>
+        `;
+        
+        const grid = document.getElementById('match-pairs-grid');
+        
+        cards.forEach((card, index) => {
+            const cardEl = document.createElement('div');
+            cardEl.className = 'match-card';
+            cardEl.dataset.type = card.type;
+            cardEl.dataset.value = card.value;
+            cardEl.innerHTML = `<span>${card.display}</span>`;
+            
+            cardEl.addEventListener('click', () => {
+                if (cardEl.classList.contains('matched') || cardEl.classList.contains('selected')) return;
+                
+                GameSounds.click();
+                cardEl.classList.add('selected');
+                
+                if (card.type === 'word') {
+                    GameSpeech.speakWord(card.value);
+                }
+                
+                if (!selectedFirst) {
+                    selectedFirst = { element: cardEl, card };
+                } else {
+                    GameScenes.totalQuestions++;
+                    
+                    // Check for match (word + picture of same item)
+                    if (selectedFirst.card.value === card.value && selectedFirst.card.type !== card.type) {
+                        // Match!
+                        GameScenes.correctAnswers++;
+                        matchedCount++;
+                        
+                        GameSounds.correct();
+                        this.showFeedback(true);
+                        
+                        selectedFirst.element.classList.add('matched');
+                        cardEl.classList.add('matched');
+                        
+                        if (matchedCount >= items.length) {
+                            setTimeout(() => this.nextActivity(), 1500);
+                        }
+                    } else {
+                        // No match
+                        GameSounds.wrong();
+                        this.showFeedback(false);
+                        
+                        const first = selectedFirst.element;
+                        setTimeout(() => {
+                            first.classList.remove('selected');
+                            cardEl.classList.remove('selected');
+                        }, 800);
+                    }
+                    
+                    selectedFirst = null;
+                }
+            });
+            
+            grid.appendChild(cardEl);
+        });
+        
+        // Hide shelf
+        const shelf = document.getElementById('store-shelf');
+        if (shelf) shelf.style.display = 'none';
+    },
+    
+    /**
      * Move to next activity
      */
     nextActivity() {
@@ -642,9 +1057,9 @@ const Game = {
      * Get celebration message based on stars
      */
     getCelebrationMessage(stars) {
-        if (stars === 3) return "Perfect! You're a superstar! 🌟";
-        if (stars === 2) return "Great job! Keep practicing! 💪";
-        return "Good try! You can do even better! 🎯";
+        if (stars === 3) return GameI18n.t('celebration.perfect');
+        if (stars === 2) return GameI18n.t('celebration.great');
+        return GameI18n.t('celebration.good');
     },
     
     /**
@@ -730,16 +1145,19 @@ const Game = {
         const overlay = this.elements.feedbackOverlay;
         const content = this.elements.feedbackContent;
         
+        // Play sound effect
         if (correct) {
+            GameSounds.correct();
             content.innerHTML = `
                 <div class="feedback-emoji">✅</div>
-                <div class="feedback-text">Correct!</div>
+                <div class="feedback-text">${GameI18n.t('feedback.correct')}</div>
             `;
             content.classList.remove('wrong');
         } else {
+            GameSounds.wrong();
             content.innerHTML = `
                 <div class="feedback-emoji">❌</div>
-                <div class="feedback-text">Try again!</div>
+                <div class="feedback-text">${GameI18n.t('feedback.tryAgain')}</div>
             `;
             content.classList.add('wrong');
         }
@@ -755,7 +1173,14 @@ const Game = {
      * Show celebration overlay
      */
     showCelebration() {
+        GameSounds.celebrate();
+        GameSounds.stopMusic();
         this.elements.celebrationOverlay.classList.remove('hidden');
+        
+        // Play star sounds with delay
+        setTimeout(() => GameSounds.star(), 500);
+        setTimeout(() => GameSounds.star(), 800);
+        setTimeout(() => GameSounds.star(), 1100);
     },
     
     /**
