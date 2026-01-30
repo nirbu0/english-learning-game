@@ -328,6 +328,31 @@ body {
     transform: scale(0.98);
 }
 
+/* Edit Profile Button */
+.edit-profile-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.edit-profile-btn:hover {
+    background: var(--secondary-color);
+    transform: scale(1.1);
+}
+
+.user-card {
+    position: relative;
+}
+
 .user-avatar {
     font-size: 4rem;
     margin-bottom: 10px;
@@ -1448,6 +1473,354 @@ html[dir="rtl"] .setting-row {
     
     .theme-emoji {
         font-size: 2.5rem;
+    }
+}
+
+/* ==========================================
+   Profile Setup Modal
+   ========================================== */
+.profile-setup {
+    max-width: 450px;
+}
+
+.profile-setup h2 {
+    text-align: center;
+    font-family: var(--font-title);
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group label {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.form-group input[type="text"] {
+    padding: 15px;
+    font-size: 1.2rem;
+    border: 3px solid #ddd;
+    border-radius: var(--border-radius-sm);
+    font-family: var(--font-body);
+    text-align: center;
+}
+
+.form-group input[type="text"]:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.avatar-picker {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 8px;
+}
+
+.avatar-option {
+    font-size: 2rem;
+    padding: 8px;
+    border: 3px solid #ddd;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.avatar-option:hover {
+    border-color: var(--accent-color);
+    transform: scale(1.1);
+}
+
+.avatar-option.selected {
+    border-color: var(--primary-color);
+    background: rgba(76, 175, 80, 0.2);
+    transform: scale(1.1);
+}
+
+.age-picker {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.age-option {
+    width: 50px;
+    height: 50px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border: 3px solid #ddd;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-title);
+}
+
+.age-option:hover {
+    border-color: var(--accent-color);
+    transform: scale(1.1);
+}
+
+.age-option.selected {
+    border-color: var(--secondary-color);
+    background: rgba(255, 152, 0, 0.2);
+    transform: scale(1.1);
+}
+
+.profile-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+@media (max-width: 400px) {
+    .avatar-picker {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ==========================================
+   Enhanced Reward Animations (Confetti, Streaks)
+   ========================================== */
+
+/* Confetti container */
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    animation: confettiFall 3s ease-out forwards;
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Flying stars animation */
+.flying-star {
+    position: fixed;
+    font-size: 2rem;
+    pointer-events: none;
+    z-index: 1000;
+    animation: flyStar 1s ease-out forwards;
+}
+
+@keyframes flyStar {
+    0% {
+        transform: scale(0) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.5) rotate(180deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.5) rotate(360deg) translateY(-100px);
+        opacity: 0;
+    }
+}
+
+/* Streak counter */
+.streak-indicator {
+    position: fixed;
+    top: 20%;
+    right: 20px;
+    background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-family: var(--font-title);
+    font-size: 1.2rem;
+    z-index: 100;
+    animation: streakPop 0.5s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+}
+
+@keyframes streakPop {
+    0% { transform: scale(0) rotate(-10deg); }
+    50% { transform: scale(1.2) rotate(5deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+/* Character celebration dance */
+.character.dancing {
+    animation: characterDance 0.5s ease infinite;
+}
+
+@keyframes characterDance {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    25% { transform: translateY(-15px) rotate(5deg); }
+    50% { transform: translateY(0) rotate(-5deg); }
+    75% { transform: translateY(-10px) rotate(5deg); }
+}
+
+/* Enhanced celebration overlay */
+.celebration-content.enhanced {
+    animation: celebrationEnhanced 0.6s ease;
+}
+
+@keyframes celebrationEnhanced {
+    0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+    50% { transform: scale(1.1) rotate(5deg); }
+    75% { transform: scale(0.95) rotate(-2deg); }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* Correct answer burst effect */
+.correct-burst {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.correct-burst::before,
+.correct-burst::after {
+    content: '✨';
+    position: absolute;
+    font-size: 2rem;
+    animation: burstOut 0.6s ease-out forwards;
+}
+
+.correct-burst::before {
+    animation-delay: 0s;
+}
+
+.correct-burst::after {
+    content: '⭐';
+    animation-delay: 0.1s;
+}
+
+@keyframes burstOut {
+    0% {
+        transform: scale(0) translate(0, 0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1) translate(var(--x, 50px), var(--y, -50px));
+        opacity: 0;
+    }
+}
+
+/* ==========================================
+   Hint Button System
+   ========================================== */
+.hint-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.4);
+    transition: all 0.3s ease;
+    z-index: 50;
+    animation: hintPulse 2s ease-in-out infinite;
+}
+
+.hint-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 165, 0, 0.6);
+}
+
+.hint-btn:active {
+    transform: scale(0.95);
+}
+
+@keyframes hintPulse {
+    0%, 100% { box-shadow: 0 4px 15px rgba(255, 165, 0, 0.4); }
+    50% { box-shadow: 0 4px 25px rgba(255, 165, 0, 0.8); }
+}
+
+/* Hint visual indicators */
+.hint-hand {
+    position: absolute;
+    font-size: 3rem;
+    pointer-events: none;
+    z-index: 100;
+    animation: tapHint 1s ease-in-out infinite;
+}
+
+@keyframes tapHint {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.9; }
+    50% { transform: translateY(10px) scale(0.9); opacity: 1; }
+}
+
+.hint-arrow {
+    position: absolute;
+    width: 60px;
+    height: 20px;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.hint-arrow::after {
+    content: '➡️';
+    font-size: 2rem;
+    animation: arrowBounce 0.8s ease-in-out infinite;
+    display: block;
+}
+
+@keyframes arrowBounce {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(15px); }
+}
+
+@keyframes arrowBounceDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(15px); }
+}
+
+/* Pulsing hint on target item */
+.hint-pulse {
+    animation: hintTargetPulse 0.8s ease-in-out infinite !important;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8) !important;
+}
+
+@keyframes hintTargetPulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+    50% { 
+        transform: scale(1.15);
+        box-shadow: 0 0 30px rgba(255, 215, 0, 1);
     }
 }
 

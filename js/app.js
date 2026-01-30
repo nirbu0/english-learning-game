@@ -10,6 +10,19 @@ const Game = {
     // DOM Elements
     elements: {},
     
+    // Profile setup state
+    profileSetup: {
+        editingUser: null,
+        selectedAvatar: '🧒',
+        selectedAge: 5
+    },
+    
+    // Streak tracking for rewards
+    streak: {
+        count: 0,
+        lastCorrect: false
+    },
+    
     /**
      * Initialize the game
      */
@@ -29,11 +42,20 @@ const Game = {
         // Setup event listeners
         this.setupEventListeners();
         
+        // Initialize profile setup
+        this.initProfileSetup();
+        
+        // Initialize hint button
+        this.initHintButton();
+        
         // Check for returning user
         const savedUser = GameStorage.getCurrentUser();
         if (savedUser) {
             this.currentUser = savedUser;
         }
+        
+        // Load saved user profiles to welcome screen
+        this.loadUserProfiles();
         
         // Apply initial translations
         GameI18n.updateUI();
@@ -104,9 +126,20 @@ const Game = {
     setupEventListeners() {
         // User selection
         this.elements.userCards.forEach(card => {
-            card.addEventListener('click', () => {
+            card.addEventListener('click', (e) => {
+                // Don't select user if edit button was clicked
+                if (e.target.classList.contains('edit-profile-btn')) return;
                 GameSounds.click();
                 this.selectUser(card.dataset.user);
+            });
+        });
+        
+        // Edit profile buttons
+        document.querySelectorAll('.edit-profile-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent card selection
+                GameSounds.click();
+                this.showProfileSetup(btn.dataset.user);
             });
         });
         
@@ -187,6 +220,8 @@ const Game = {
         this.elements.chooseThemeBtn.addEventListener('click', () => {
             GameSounds.click();
             this.hideCelebration();
+            // Re-render themes to show newly unlocked themes
+            this.renderThemes();
             this.showScreen('theme-screen');
         });
     },
@@ -220,6 +255,27 @@ const Game = {
             screen.classList.remove('active');
         });
         document.getElementById(screenId).classList.add('active');
+    },
+    
+    /**
+     * Load saved user profiles to welcome screen
+     */
+    loadUserProfiles() {
+        ['explorer', 'adventurer'].forEach(userId => {
+            const user = GameStorage.getUser(userId);
+            const card = document.querySelector(`.user-card[data-user="${userId}"]`);
+            if (card && user) {
+                card.querySelector('.user-avatar').textContent = user.avatar || (userId === 'explorer' ? '🧒' : '👦');
+                card.querySelector('.user-name').textContent = user.name || (userId === 'explorer' ? 'Explorer' : 'Adventurer');
+                
+                // Update stars display
+                const starsDiv = card.querySelector('.user-stars');
+                const totalStars = user.totalStars || 0;
+                if (totalStars > 0) {
+                    starsDiv.textContent = '⭐'.repeat(Math.min(totalStars, 5));
+                }
+            }
+        });
     },
     
     /**
@@ -1218,6 +1274,424 @@ const Game = {
      */
     hideSettings() {
         this.elements.settingsModal.classList.add('hidden');
+    },
+    
+    // ===========================================
+    // PROFILE SETUP SYSTEM
+    // ===========================================
+    
+    /**
+     * Show profile setup modal
+     */
+    showProfileSetup(userId) {
+        this.profileSetup.editingUser = userId;
+        const user = GameStorage.getUser(userId);
+        
+        // Pre-fill existing data
+        document.getElementById('profile-name-input').value = user.name || '';
+        this.profileSetup.selectedAvatar = user.avatar || '🧒';
+        this.profileSetup.selectedAge = parseInt(user.ageRange?.match(/\d+/)?.[0]) || 5;
+        
+        // Update UI selections
+        document.querySelectorAll('.avatar-option').forEach(btn => {
+            btn.classList.toggle('selected', btn.dataset.avatar === this.profileSetup.selectedAvatar);
+        });
+        document.querySelectorAll('.age-option').forEach(btn => {
+            btn.classList.toggle('selected', parseInt(btn.dataset.age) === this.profileSetup.selectedAge);
+        });
+        
+        document.getElementById('profile-modal').classList.remove('hidden');
+    },
+    
+    /**
+     * Hide profile setup modal
+     */
+    hideProfileSetup() {
+        document.getElementById('profile-modal').classList.add('hidden');
+        this.profileSetup.editingUser = null;
+    },
+    
+    /**
+     * Save profile and start playing
+     */
+    saveProfile() {
+        const userId = this.profileSetup.editingUser;
+        if (!userId) return;
+        
+        const name = document.getElementById('profile-name-input').value.trim() || 
+            (userId === 'explorer' ? 'Explorer' : 'Adventurer');
+        const avatar = this.profileSetup.selectedAvatar;
+        const age = this.profileSetup.selectedAge;
+        
+        // Determine user type based on age
+        const userType = age <= 5 ? 'explorer' : 'adventurer';
+        const ageRange = age <= 5 ? 'Ages 4-5' : 'Ages 6-9';
+        
+        // Save user data
+        GameStorage.saveUser(userId, {
+            name,
+            avatar,
+            age,
+            ageRange
+        });
+        
+        // Update welcome screen card
+        const card = document.querySelector(`.user-card[data-user="${userId}"]`);
+        if (card) {
+            card.querySelector('.user-avatar').textContent = avatar;
+            card.querySelector('.user-name').textContent = name;
+        }
+        
+        this.hideProfileSetup();
+        
+        // Select this user and start playing
+        this.selectUser(userId);
+    },
+    
+    /**
+     * Initialize profile setup event listeners
+     */
+    initProfileSetup() {
+        // Avatar picker
+        document.querySelectorAll('.avatar-option').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.avatar-option').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                this.profileSetup.selectedAvatar = btn.dataset.avatar;
+                GameSounds.click();
+            });
+        });
+        
+        // Age picker
+        document.querySelectorAll('.age-option').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.age-option').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                this.profileSetup.selectedAge = parseInt(btn.dataset.age);
+                GameSounds.click();
+            });
+        });
+        
+        // Save button
+        document.getElementById('save-profile-btn')?.addEventListener('click', () => {
+            GameSounds.click();
+            this.saveProfile();
+        });
+        
+        // Cancel button
+        document.getElementById('cancel-profile-btn')?.addEventListener('click', () => {
+            GameSounds.click();
+            this.hideProfileSetup();
+        });
+    },
+    
+    // ===========================================
+    // CONFETTI & REWARD ANIMATIONS
+    // ===========================================
+    
+    /**
+     * Create confetti explosion
+     */
+    createConfetti() {
+        const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', '#f38181', '#aa96da', '#fcbad3'];
+        const container = document.createElement('div');
+        container.className = 'confetti-container';
+        document.body.appendChild(container);
+        
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 0.5 + 's';
+            confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+            
+            // Random shapes
+            if (Math.random() > 0.5) {
+                confetti.style.borderRadius = '50%';
+            } else {
+                confetti.style.width = '8px';
+                confetti.style.height = '15px';
+            }
+            
+            container.appendChild(confetti);
+        }
+        
+        // Remove after animation
+        setTimeout(() => container.remove(), 4000);
+    },
+    
+    /**
+     * Create flying star animation
+     */
+    createFlyingStar(x, y) {
+        const star = document.createElement('div');
+        star.className = 'flying-star';
+        star.textContent = '⭐';
+        star.style.left = x + 'px';
+        star.style.top = y + 'px';
+        document.body.appendChild(star);
+        
+        setTimeout(() => star.remove(), 1000);
+    },
+    
+    /**
+     * Show streak indicator
+     */
+    showStreak(count) {
+        // Remove existing streak
+        document.querySelector('.streak-indicator')?.remove();
+        
+        if (count < 3) return;
+        
+        const streak = document.createElement('div');
+        streak.className = 'streak-indicator';
+        streak.innerHTML = `🔥 ${count} in a row!`;
+        document.body.appendChild(streak);
+        
+        setTimeout(() => streak.remove(), 2000);
+    },
+    
+    /**
+     * Track correct/wrong answers for streaks
+     */
+    trackAnswer(correct) {
+        if (correct) {
+            this.streak.count++;
+            this.streak.lastCorrect = true;
+            
+            // Show streak indicator
+            if (this.streak.count >= 3) {
+                this.showStreak(this.streak.count);
+            }
+            
+            // Make character dance on streaks
+            if (this.streak.count >= 3) {
+                const character = document.querySelector('.character');
+                if (character) {
+                    character.classList.add('dancing');
+                    setTimeout(() => character.classList.remove('dancing'), 2000);
+                }
+            }
+        } else {
+            this.streak.count = 0;
+            this.streak.lastCorrect = false;
+        }
+    },
+    
+    // ===========================================
+    // HINT SYSTEM
+    // ===========================================
+    
+    /**
+     * Current hint state
+     */
+    hintState: {
+        active: false,
+        target: null,
+        elements: []
+    },
+    
+    /**
+     * Show hint for current activity
+     */
+    showHint() {
+        // Remove any existing hints
+        this.clearHints();
+        
+        const activity = GameScenes.getCurrentActivity();
+        if (!activity) return;
+        
+        GameSounds.click();
+        
+        // Repeat instruction based on activity type
+        switch (activity.type) {
+            case 'find-item':
+                this.showFindItemHint(activity);
+                break;
+            case 'match-sound':
+                this.showMatchSoundHint(activity);
+                break;
+            case 'collect-items':
+                this.showCollectHint(activity);
+                break;
+            case 'spelling':
+                this.showSpellingHint(activity);
+                break;
+            case 'tap-to-learn':
+                this.showTapHint(activity);
+                break;
+            default:
+                this.showGenericHint();
+        }
+    },
+    
+    /**
+     * Show hint for find-item activities
+     */
+    showFindItemHint(activity) {
+        const targetWords = activity.targetWords || activity.words;
+        const targetWord = targetWords[GameScenes.currentItemIndex];
+        
+        // Repeat instruction
+        GameSpeech.speakInstruction(`Find the ${targetWord}!`);
+        
+        // Find the target item element
+        const targetElement = document.querySelector(`.shelf-item[data-word="${targetWord}"]`);
+        if (targetElement) {
+            // Just pulse/highlight the target - subtle hint
+            targetElement.classList.add('hint-pulse');
+            this.hintState.elements.push(targetElement);
+            
+            // Clear after 3 seconds
+            setTimeout(() => this.clearHints(), 3000);
+        }
+    },
+    
+    /**
+     * Show hint for match-sound activities
+     */
+    showMatchSoundHint(activity) {
+        const words = activity.words;
+        const targetWord = words[GameScenes.currentItemIndex];
+        
+        // Repeat the word - this is the main hint for this activity
+        GameSpeech.speakWord(targetWord);
+        
+        // Find the target item element
+        const targetElement = document.querySelector(`.shelf-item[data-word="${targetWord}"]`);
+        if (targetElement) {
+            // Pulse the target after a delay
+            setTimeout(() => {
+                targetElement.classList.add('hint-pulse');
+                this.hintState.elements.push(targetElement);
+                
+                // Clear after 3 seconds
+                setTimeout(() => this.clearHints(), 3000);
+            }, 1000);
+        }
+    },
+    
+    /**
+     * Show hint for collect activities
+     */
+    showCollectHint(activity) {
+        const items = activity.items;
+        const targetWord = items[GameScenes.currentItemIndex];
+        
+        // Repeat instruction
+        GameSpeech.speakInstruction(`Drag the ${targetWord} to the cart!`);
+        
+        // Find the target drag item
+        const targetElement = document.querySelector(`.drag-item[data-item="${targetWord}"]`);
+        const cart = document.getElementById('cart-drop');
+        
+        if (targetElement && cart) {
+            // Pulse/highlight the target item - subtle hint
+            targetElement.classList.add('hint-pulse');
+            this.hintState.elements.push(targetElement);
+            
+            // Add downward arrow pointing to cart
+            const arrow = document.createElement('div');
+            arrow.className = 'hint-arrow-down';
+            arrow.innerHTML = '⬇️';
+            arrow.style.cssText = `
+                position: fixed;
+                font-size: 2rem;
+                animation: arrowBounceDown 0.8s ease-in-out infinite;
+                z-index: 100;
+                pointer-events: none;
+            `;
+            
+            const cartRect = cart.getBoundingClientRect();
+            arrow.style.left = cartRect.left + cartRect.width / 2 - 20 + 'px';
+            arrow.style.top = cartRect.top - 50 + 'px';
+            document.body.appendChild(arrow);
+            this.hintState.elements.push(arrow);
+            
+            // Also pulse the cart
+            cart.classList.add('hint-pulse');
+            this.hintState.elements.push(cart);
+            
+            // Clear after 3 seconds
+            setTimeout(() => this.clearHints(), 3000);
+        }
+    },
+    
+    /**
+     * Show hint for spelling activities
+     */
+    showSpellingHint(activity) {
+        const words = activity.words;
+        const targetWord = words[GameScenes.currentItemIndex];
+        const answerEl = document.getElementById('spelling-answer');
+        
+        if (answerEl) {
+            const currentAnswer = answerEl.textContent.replace(/\s/g, '').replace(/_/g, '');
+            const nextLetter = targetWord[currentAnswer.length]?.toUpperCase();
+            
+            if (nextLetter) {
+                const letterBtn = document.querySelector(`#letter-buttons button[data-letter="${nextLetter}"]:not([disabled])`);
+                if (letterBtn) {
+                    letterBtn.classList.add('hint-pulse');
+                    this.hintState.elements.push(letterBtn);
+                    
+                    setTimeout(() => this.clearHints(), 2000);
+                }
+            }
+        }
+    },
+    
+    /**
+     * Show tap hint
+     */
+    showTapHint() {
+        // Speak instruction
+        GameSpeech.speakInstruction("Tap each item to learn its name!");
+        
+        const items = document.querySelectorAll('.shelf-item:not(.collected)');
+        if (items.length > 0) {
+            // Just highlight the first uncollected item - subtle hint
+            const item = items[0];
+            item.classList.add('hint-pulse');
+            this.hintState.elements.push(item);
+            
+            setTimeout(() => this.clearHints(), 3000);
+        }
+    },
+    
+    /**
+     * Show generic hint
+     */
+    showGenericHint() {
+        GameSpeech.speak("Look at the highlighted items and try to find the right answer!");
+    },
+    
+    /**
+     * Clear all hint elements
+     */
+    clearHints() {
+        this.hintState.elements.forEach(el => {
+            if (el && el.classList) {
+                el.classList.remove('hint-pulse');
+            }
+            // Remove dynamically added hint elements
+            if (el && (el.className === 'hint-hand' || el.className === 'hint-arrow' || el.className?.includes('hint-arrow-down'))) {
+                el.remove();
+            }
+        });
+        this.hintState.elements = [];
+        this.hintState.active = false;
+    },
+    
+    /**
+     * Initialize hint button
+     */
+    initHintButton() {
+        const hintBtn = document.getElementById('hint-btn');
+        if (hintBtn) {
+            hintBtn.addEventListener('click', () => this.showHint());
+        }
     }
 };
 

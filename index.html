@@ -24,12 +24,14 @@
                     <h2 data-i18n="welcome.whoPlaying">Who's playing today?</h2>
                     <div class="user-cards">
                         <div class="user-card" data-user="explorer" data-age="4">
+                            <button class="edit-profile-btn" data-user="explorer" title="Edit Profile">✏️</button>
                             <div class="user-avatar">🧒</div>
                             <div class="user-name" data-i18n="welcome.explorer">Explorer</div>
                             <div class="user-stars">⭐</div>
                             <div class="user-age" data-i18n="welcome.ages45">Ages 4-5</div>
                         </div>
                         <div class="user-card" data-user="adventurer" data-age="8">
+                            <button class="edit-profile-btn" data-user="adventurer" title="Edit Profile">✏️</button>
                             <div class="user-avatar">👦</div>
                             <div class="user-name" data-i18n="welcome.adventurer">Adventurer</div>
                             <div class="user-stars">⭐⭐</div>
@@ -96,6 +98,9 @@
                 <div class="progress-bar" id="progress-bar"></div>
                 <span class="progress-text" id="progress-text">1/5</span>
             </div>
+            
+            <!-- Hint Button -->
+            <button id="hint-btn" class="hint-btn" title="Need a hint?">💡</button>
         </div>
 
         <!-- Celebration Overlay -->
@@ -117,6 +122,55 @@
             <div class="feedback-content" id="feedback-content">
                 <div class="feedback-emoji">✅</div>
                 <div class="feedback-text">Correct!</div>
+            </div>
+        </div>
+
+        <!-- Profile Setup Modal -->
+        <div id="profile-modal" class="modal hidden">
+            <div class="modal-content profile-setup">
+                <h2>👋 Create Your Profile!</h2>
+                <div class="profile-form">
+                    <div class="form-group">
+                        <label>What's your name?</label>
+                        <input type="text" id="profile-name-input" placeholder="Enter your name..." maxlength="15">
+                    </div>
+                    <div class="form-group">
+                        <label>Pick your avatar!</label>
+                        <div class="avatar-picker" id="avatar-picker">
+                            <button class="avatar-option" data-avatar="👧">👧</button>
+                            <button class="avatar-option" data-avatar="👦">👦</button>
+                            <button class="avatar-option" data-avatar="🧒">🧒</button>
+                            <button class="avatar-option" data-avatar="👶">👶</button>
+                            <button class="avatar-option" data-avatar="🧒🏻">🧒🏻</button>
+                            <button class="avatar-option" data-avatar="👧🏽">👧🏽</button>
+                            <button class="avatar-option" data-avatar="👦🏾">👦🏾</button>
+                            <button class="avatar-option" data-avatar="🧑">🧑</button>
+                            <button class="avatar-option" data-avatar="🦸">🦸</button>
+                            <button class="avatar-option" data-avatar="🧙">🧙</button>
+                            <button class="avatar-option" data-avatar="🧚">🧚</button>
+                            <button class="avatar-option" data-avatar="🤴">🤴</button>
+                            <button class="avatar-option" data-avatar="👸">👸</button>
+                            <button class="avatar-option" data-avatar="🦄">🦄</button>
+                            <button class="avatar-option" data-avatar="🐱">🐱</button>
+                            <button class="avatar-option" data-avatar="🐶">🐶</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>How old are you?</label>
+                        <div class="age-picker" id="age-picker">
+                            <button class="age-option" data-age="4">4</button>
+                            <button class="age-option" data-age="5">5</button>
+                            <button class="age-option" data-age="6">6</button>
+                            <button class="age-option" data-age="7">7</button>
+                            <button class="age-option" data-age="8">8</button>
+                            <button class="age-option" data-age="9">9</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-buttons">
+                    <button class="btn btn-secondary" id="cancel-profile-btn">Cancel</button>
+                    <button class="btn btn-primary" id="save-profile-btn">Let's Play! 🎮</button>
+                </div>
             </div>
         </div>
 
