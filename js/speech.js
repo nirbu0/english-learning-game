@@ -10,30 +10,116 @@ const GameSpeech = {
     rate: 1,
     accent: 'us',   // us, uk, au
     gender: 'female', // female, male
+    voicesLoaded: false,
+    voiceLoadAttempts: 0,
+    maxVoiceLoadAttempts: 20, // Try for up to 10 seconds (20 * 500ms)
     
     /**
      * Initialize speech synthesis
      */
     init() {
-        // Get voices when they're loaded
-        if (this.synth.onvoiceschanged !== undefined) {
-            this.synth.onvoiceschanged = () => this.loadVoices();
-        }
-        this.loadVoices();
-        
-        // Load settings
+        // Load settings first
         const settings = GameStorage.getSettings();
         this.rate = settings.speechSpeed || 1;
         this.accent = settings.voiceAccent || 'us';
         this.gender = settings.voiceGender || 'female';
+        
+        // Get voices when they're loaded
+        if (this.synth.onvoiceschanged !== undefined) {
+            this.synth.onvoiceschanged = () => {
+                console.log('🎤 onvoiceschanged fired');
+                this.loadVoices();
+            };
+        }
+        
+        // Initial load attempt
+        this.loadVoices();
+        
+        // On Android/mobile, voices may load late - poll for them
+        this.pollForVoices();
+    },
+    
+    /**
+     * Poll for voices on mobile devices where onvoiceschanged may not fire
+     */
+    pollForVoices() {
+        if (this.voicesLoaded || this.voiceLoadAttempts >= this.maxVoiceLoadAttempts) {
+            if (!this.voicesLoaded) {
+                console.warn('🎤 Voice loading timed out after', this.voiceLoadAttempts, 'attempts');
+            }
+            return;
+        }
+        
+        this.voiceLoadAttempts++;
+        const voices = this.synth.getVoices();
+        
+        if (voices.length > 0) {
+            console.log('🎤 Voices loaded via polling on attempt', this.voiceLoadAttempts);
+            this.voices = voices;
+            this.voicesLoaded = true;
+            this.selectBestVoice();
+        } else {
+            // Keep polling
+            setTimeout(() => this.pollForVoices(), 500);
+        }
     },
     
     /**
      * Load available voices
      */
     loadVoices() {
-        this.voices = this.synth.getVoices();
-        this.selectBestVoice();
+        const voices = this.synth.getVoices();
+        if (voices.length > 0) {
+            this.voices = voices;
+            this.voicesLoaded = true;
+            console.log('🎤 Loaded', voices.length, 'voices');
+            this.selectBestVoice();
+        }
+    },
+    
+    /**
+     * Ensure voices are loaded before performing an action
+     * Returns a promise that resolves when voices are available
+     */
+    ensureVoicesLoaded() {
+        return new Promise((resolve) => {
+            if (this.voices.length > 0) {
+                resolve(this.voices);
+                return;
+            }
+            
+            // Try to get voices immediately
+            const voices = this.synth.getVoices();
+            if (voices.length > 0) {
+                this.voices = voices;
+                this.voicesLoaded = true;
+                this.selectBestVoice();
+                resolve(this.voices);
+                return;
+            }
+            
+            // Wait for voices with timeout
+            let attempts = 0;
+            const maxAttempts = 20;
+            
+            const checkVoices = () => {
+                attempts++;
+                const v = this.synth.getVoices();
+                if (v.length > 0) {
+                    this.voices = v;
+                    this.voicesLoaded = true;
+                    this.selectBestVoice();
+                    resolve(this.voices);
+                } else if (attempts < maxAttempts) {
+                    setTimeout(checkVoices, 250);
+                } else {
+                    console.warn('🎤 Could not load voices');
+                    resolve([]);
+                }
+            };
+            
+            setTimeout(checkVoices, 250);
+        });
     },
     
     /**
@@ -113,19 +199,29 @@ const GameSpeech = {
     /**
      * Set voice accent
      */
-    setAccent(accent) {
+    async setAccent(accent) {
         this.accent = accent;
         GameStorage.saveSettings({ voiceAccent: accent });
+        
+        // Ensure voices are loaded before selecting
+        await this.ensureVoicesLoaded();
         this.selectBestVoice();
+        
+        console.log(`🎤 Accent changed to: ${accent}, voice: ${this.preferredVoice?.name || 'none'}`);
     },
     
     /**
      * Set voice gender
      */
-    setGender(gender) {
+    async setGender(gender) {
         this.gender = gender;
         GameStorage.saveSettings({ voiceGender: gender });
+        
+        // Ensure voices are loaded before selecting
+        await this.ensureVoicesLoaded();
         this.selectBestVoice();
+        
+        console.log(`🎤 Gender changed to: ${gender}, voice: ${this.preferredVoice?.name || 'none'}`);
     },
     
     /**
@@ -160,21 +256,30 @@ const GameSpeech = {
     /**
      * Speak text
      */
-    speak(text, options = {}) {
-        return new Promise((resolve, reject) => {
-            // Cancel any ongoing speech
-            this.cancel();
-            
-            if (!this.synth) {
-                console.warn('Speech synthesis not supported');
-                resolve();
-                return;
-            }
-            
+    async speak(text, options = {}) {
+        // Cancel any ongoing speech
+        this.cancel();
+        
+        if (!this.synth) {
+            console.warn('Speech synthesis not supported');
+            return;
+        }
+        
+        // Ensure voices are loaded before speaking (important for Android)
+        if (!this.preferredVoice && this.voices.length === 0) {
+            await this.ensureVoicesLoaded();
+        }
+        
+        return new Promise((resolve) => {
             const utterance = new SpeechSynthesisUtterance(text);
             
-            // Set voice
+            // Set voice - use preferred voice or try to get one now
             utterance.voice = options.voice || this.preferredVoice;
+            
+            // Android Chrome workaround: if no voice set, try to get default English voice
+            if (!utterance.voice && this.voices.length > 0) {
+                utterance.voice = this.voices.find(v => v.lang.startsWith('en')) || this.voices[0];
+            }
             
             // Set rate (slower for kids)
             utterance.rate = options.rate || this.rate;
@@ -204,8 +309,23 @@ const GameSpeech = {
                 resolve(); // Resolve instead of reject to not break game flow
             };
             
+            // Android Chrome bug fix: speech can get stuck, use resume/pause trick
+            // This helps when the browser has been in background
+            if (this.synth.paused) {
+                this.synth.resume();
+            }
+            
             // Speak
             this.synth.speak(utterance);
+            
+            // Android workaround: sometimes speech doesn't start, force with timeout
+            setTimeout(() => {
+                if (this.synth.pending && !this.synth.speaking) {
+                    console.log('🎤 Forcing speech start (Android workaround)');
+                    this.synth.pause();
+                    this.synth.resume();
+                }
+            }, 100);
         });
     },
     
