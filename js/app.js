@@ -87,6 +87,8 @@ const Game = {
             soundEffectsToggle: document.getElementById('sound-effects-toggle'),
             musicToggle: document.getElementById('music-toggle'),
             speechSpeed: document.getElementById('speech-speed'),
+            voiceAccent: document.getElementById('voice-accent'),
+            voiceGender: document.getElementById('voice-gender'),
             languageSelect: document.getElementById('language-select'),
             resetProgressBtn: document.getElementById('reset-progress-btn'),
             settingsCloseBtn: document.getElementById('settings-close-btn'),
@@ -152,6 +154,18 @@ const Game = {
         this.elements.speechSpeed.addEventListener('change', (e) => {
             GameSpeech.setRate(parseFloat(e.target.value));
         });
+        this.elements.voiceAccent.addEventListener('change', (e) => {
+            GameSpeech.setAccent(e.target.value);
+            GameSounds.click();
+            // Test the new voice
+            GameSpeech.speak('Hello!');
+        });
+        this.elements.voiceGender.addEventListener('change', (e) => {
+            GameSpeech.setGender(e.target.value);
+            GameSounds.click();
+            // Test the new voice
+            GameSpeech.speak('Hello!');
+        });
         this.elements.languageSelect.addEventListener('change', (e) => {
             GameI18n.setLanguage(e.target.value);
             GameSounds.click();
@@ -189,6 +203,8 @@ const Game = {
         this.elements.soundEffectsToggle.checked = soundEnabled;
         this.elements.musicToggle.checked = musicEnabled;
         this.elements.speechSpeed.value = settings.speechSpeed || 1;
+        this.elements.voiceAccent.value = settings.voiceAccent || 'us';
+        this.elements.voiceGender.value = settings.voiceGender || 'female';
         this.elements.languageSelect.value = settings.language || 'en';
         
         GameSpeech.setRate(settings.speechSpeed || 1);

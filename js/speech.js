@@ -8,6 +8,8 @@ const GameSpeech = {
     voices: [],
     preferredVoice: null,
     rate: 1,
+    accent: 'us',   // us, uk, au
+    gender: 'female', // female, male
     
     /**
      * Initialize speech synthesis
@@ -19,9 +21,11 @@ const GameSpeech = {
         }
         this.loadVoices();
         
-        // Load speech rate from settings
+        // Load settings
         const settings = GameStorage.getSettings();
         this.rate = settings.speechSpeed || 1;
+        this.accent = settings.voiceAccent || 'us';
+        this.gender = settings.voiceGender || 'female';
     },
     
     /**
@@ -29,30 +33,120 @@ const GameSpeech = {
      */
     loadVoices() {
         this.voices = this.synth.getVoices();
+        this.selectBestVoice();
+    },
+    
+    /**
+     * Select best voice based on accent and gender preferences
+     */
+    selectBestVoice() {
+        if (!this.voices.length) return;
         
-        // Try to find a good English voice
-        // Prefer US English child-friendly voices
-        const preferredVoices = [
-            'Google US English',
-            'Samantha', // macOS US English female
-            'Alex',     // macOS US English male
-            'Google UK English Female',
-            'Karen',
-            'Daniel'
-        ];
+        // Voice preferences by accent and gender
+        const voicePreferences = {
+            us: {
+                female: ['Samantha', 'Google US English Female', 'Microsoft Zira', 'Allison', 'Ava'],
+                male: ['Alex', 'Google US English Male', 'Microsoft David', 'Tom', 'Fred']
+            },
+            uk: {
+                female: ['Kate', 'Google UK English Female', 'Microsoft Hazel', 'Serena', 'Fiona'],
+                male: ['Daniel', 'Google UK English Male', 'Microsoft George', 'Oliver', 'Arthur']
+            },
+            au: {
+                female: ['Karen', 'Google Australian English Female', 'Catherine', 'Lee'],
+                male: ['Lee', 'Google Australian English Male', 'Gordon']
+            }
+        };
         
-        for (const name of preferredVoices) {
+        const langCodes = {
+            us: ['en-US', 'en_US'],
+            uk: ['en-GB', 'en_GB'],
+            au: ['en-AU', 'en_AU']
+        };
+        
+        const preferred = voicePreferences[this.accent]?.[this.gender] || [];
+        
+        // Try to find a voice by name
+        for (const name of preferred) {
             const voice = this.voices.find(v => v.name.includes(name));
             if (voice) {
                 this.preferredVoice = voice;
-                break;
+                console.log(`🎤 Selected voice: ${voice.name} (${voice.lang})`);
+                return;
             }
         }
         
-        // Fallback to first English voice
-        if (!this.preferredVoice) {
-            this.preferredVoice = this.voices.find(v => v.lang.startsWith('en')) || this.voices[0];
+        // Fallback: find by language code and gender hint in name
+        const codes = langCodes[this.accent] || langCodes.us;
+        const genderHints = this.gender === 'female' 
+            ? ['female', 'woman', 'girl', 'zira', 'samantha', 'karen', 'kate', 'fiona']
+            : ['male', 'man', 'boy', 'david', 'alex', 'daniel', 'tom', 'fred'];
+        
+        for (const code of codes) {
+            const voicesForLang = this.voices.filter(v => v.lang === code || v.lang.startsWith(code.split('-')[0]));
+            
+            // Try to match gender
+            for (const voice of voicesForLang) {
+                const nameLower = voice.name.toLowerCase();
+                if (genderHints.some(hint => nameLower.includes(hint))) {
+                    this.preferredVoice = voice;
+                    console.log(`🎤 Selected voice: ${voice.name} (${voice.lang})`);
+                    return;
+                }
+            }
+            
+            // Just take first voice for the accent
+            if (voicesForLang.length) {
+                this.preferredVoice = voicesForLang[0];
+                console.log(`🎤 Selected voice: ${this.preferredVoice.name} (fallback)`);
+                return;
+            }
         }
+        
+        // Ultimate fallback: any English voice
+        this.preferredVoice = this.voices.find(v => v.lang.startsWith('en')) || this.voices[0];
+        if (this.preferredVoice) {
+            console.log(`🎤 Selected voice: ${this.preferredVoice.name} (ultimate fallback)`);
+        }
+    },
+    
+    /**
+     * Set voice accent
+     */
+    setAccent(accent) {
+        this.accent = accent;
+        GameStorage.saveSettings({ voiceAccent: accent });
+        this.selectBestVoice();
+    },
+    
+    /**
+     * Set voice gender
+     */
+    setGender(gender) {
+        this.gender = gender;
+        GameStorage.saveSettings({ voiceGender: gender });
+        this.selectBestVoice();
+    },
+    
+    /**
+     * Get available voices grouped by accent
+     */
+    getVoicesByAccent() {
+        const grouped = { us: [], uk: [], au: [], other: [] };
+        
+        for (const voice of this.voices) {
+            if (voice.lang.includes('US') || voice.lang === 'en-US') {
+                grouped.us.push(voice);
+            } else if (voice.lang.includes('GB') || voice.lang === 'en-GB') {
+                grouped.uk.push(voice);
+            } else if (voice.lang.includes('AU') || voice.lang === 'en-AU') {
+                grouped.au.push(voice);
+            } else if (voice.lang.startsWith('en')) {
+                grouped.other.push(voice);
+            }
+        }
+        
+        return grouped;
     },
     
     /**
