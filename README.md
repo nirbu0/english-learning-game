@@ -2,6 +2,8 @@
 
 An interactive English learning game designed for children ages 4-9 who are beginning to learn English. The game uses contextual learning through fun, story-based adventures.
 
+🎮 **Play Now**: [https://nirbu0.github.io/english-learning-game/](https://nirbu0.github.io/english-learning-game/)
+
 ## ✨ Features
 
 - **Two User Profiles**: 
