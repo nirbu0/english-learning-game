@@ -1418,8 +1418,8 @@ const Game = {
         const nextActivities = GameScenes.filterActivitiesByLevel(this.currentTheme.activities[userType] || [], nextLevel);
         const hasNext = nextActivities.length > 0;
 
-        // Reward logic: Sticker
-        const earnedSticker = this.awardSticker();
+        // Get sticker choices for user to select from
+        const stickerChoices = this.getStickerChoices(4);
 
         // Message
         const message = `Level ${level} Complete!`;
@@ -1430,7 +1430,6 @@ const Game = {
         this.elements.celebrationMessage.textContent = message;
 
         // Show celebration
-
         let celebrationHtml = `
             <div class="celebration-emoji">🎉</div>
             <h2 class="celebration-title">${GameI18n.t('feedback.greatJob')}</h2>
@@ -1438,23 +1437,79 @@ const Game = {
             <p class="celebration-message">${message}</p>
         `;
 
-        if (earnedSticker) {
+        // Show sticker selection if available
+        if (stickerChoices.length > 0) {
             celebrationHtml += `
-                <div class="earned-sticker-container">
-                    <p>New Sticker!</p>
-                    <div class="earned-sticker bounce">${earnedSticker}</div>
+                <div class="sticker-selection-container">
+                    <p class="sticker-selection-title">🎁 Choose your sticker reward!</p>
+                    <div class="sticker-choices" id="sticker-choices">
+                        ${stickerChoices.map(sticker => `
+                            <button class="sticker-choice-btn" data-sticker="${sticker}" title="Choose this sticker!">
+                                ${sticker}
+                            </button>
+                        `).join('')}
+                    </div>
                 </div>
             `;
-            GameSounds.celebrate(); // Extra sound?
+        } else {
+            // User has collected all stickers!
+            celebrationHtml += `
+                <div class="sticker-complete-msg">
+                    <p>🏆 You've collected all stickers! Amazing!</p>
+                </div>
+            `;
         }
 
         this.elements.celebrationOverlay.querySelector('.celebration-content').innerHTML = `
             ${celebrationHtml}
-            <div class="celebration-buttons">
+            <div class="celebration-buttons" id="celebration-buttons" style="${stickerChoices.length > 0 ? 'display: none;' : ''}">
                 <button class="btn btn-primary" id="play-again-btn" data-i18n="celebration.playAgain">Play Again</button>
                 <button class="btn btn-secondary" id="choose-theme-btn" data-i18n="celebration.chooseTheme">Choose Theme</button>
             </div>
         `;
+
+        // Setup sticker selection handlers
+        if (stickerChoices.length > 0) {
+            document.querySelectorAll('.sticker-choice-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const chosenSticker = btn.dataset.sticker;
+                    
+                    // Award the chosen sticker
+                    this.awardChosenSticker(chosenSticker);
+                    
+                    // Play sound and animate
+                    GameSounds.celebrate();
+                    btn.classList.add('chosen');
+                    
+                    // Hide other options
+                    document.querySelectorAll('.sticker-choice-btn').forEach(b => {
+                        if (b !== btn) {
+                            b.classList.add('not-chosen');
+                        }
+                    });
+                    
+                    // Show the "You got!" message
+                    const container = document.querySelector('.sticker-selection-container');
+                    if (container) {
+                        container.innerHTML = `
+                            <div class="earned-sticker-container">
+                                <p>🎉 You got a new sticker!</p>
+                                <div class="earned-sticker bounce">${chosenSticker}</div>
+                            </div>
+                        `;
+                    }
+                    
+                    // Show the action buttons after selection
+                    const btnsContainer = document.getElementById('celebration-buttons');
+                    if (btnsContainer) {
+                        btnsContainer.style.display = 'flex';
+                    }
+                    
+                    // Speak
+                    GameSpeech.speak("Great choice! You got a new sticker!");
+                });
+            });
+        }
 
         // Re-attach listeners since we overwrote HTML
         document.getElementById('play-again-btn').addEventListener('click', () => {
@@ -1473,27 +1528,42 @@ const Game = {
 
         // Speak celebration
         let speakText = `Amazing! ${message} You earned ${stars} stars!`;
-        if (earnedSticker) {
-            speakText += " And a new sticker!";
+        if (stickerChoices.length > 0) {
+            speakText += " Choose a sticker for your collection!";
         }
         GameSpeech.speak(speakText);
 
         // Update total stars
         this.elements.totalStarsCount.textContent = GameStorage.getTotalStars(this.currentUser);
 
-        // Add "Next Level" button if available
+        // Add "Next Level" button if available (after sticker selection or immediately if no stickers)
         if (hasNext) {
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'btn btn-primary';
-            nextBtn.textContent = `Next Level →`;
-            nextBtn.addEventListener('click', () => {
-                GameSounds.click();
-                this.hideCelebration();
-                this.startTheme(this.currentTheme.id, nextLevel);
-            });
-            // Insert before Play Again
-            const btnsContainer = this.elements.celebrationOverlay.querySelector('.celebration-buttons');
-            btnsContainer.insertBefore(nextBtn, btnsContainer.firstChild);
+            const addNextButton = () => {
+                const btnsContainer = document.getElementById('celebration-buttons');
+                if (btnsContainer && !document.getElementById('next-level-btn')) {
+                    const nextBtn = document.createElement('button');
+                    nextBtn.id = 'next-level-btn';
+                    nextBtn.className = 'btn btn-primary';
+                    nextBtn.textContent = `Next Level →`;
+                    nextBtn.addEventListener('click', () => {
+                        GameSounds.click();
+                        this.hideCelebration();
+                        this.startTheme(this.currentTheme.id, nextLevel);
+                    });
+                    btnsContainer.insertBefore(nextBtn, btnsContainer.firstChild);
+                }
+            };
+            
+            if (stickerChoices.length === 0) {
+                addNextButton();
+            } else {
+                // Add after sticker selection
+                document.querySelectorAll('.sticker-choice-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        setTimeout(addNextButton, 100);
+                    });
+                });
+            }
         }
     },
 
@@ -1898,20 +1968,48 @@ const Game = {
     },
 
     /**
-     * Award a random sticker
+     * Get available stickers (ones user doesn't have yet)
      */
-    awardSticker() {
+    getAvailableStickers() {
         const myStickers = GameStorage.getStickers(this.currentUser);
+        return this.availableStickers.filter(s => !myStickers.includes(s));
+    },
 
-        // Filter out stickers user already has
-        const newStickers = this.availableStickers.filter(s => !myStickers.includes(s));
-
-        if (newStickers.length === 0) {
-            // Already collected all! Maybe duplicate?
-            return null; // Or return random duplicate
+    /**
+     * Get random selection of available stickers for user to choose
+     * @param {number} count - Number of stickers to show (default 4)
+     */
+    getStickerChoices(count = 4) {
+        const available = this.getAvailableStickers();
+        
+        if (available.length === 0) {
+            return []; // User has all stickers!
         }
 
-        const randomSticker = newStickers[Math.floor(Math.random() * newStickers.length)];
+        // Shuffle and take up to 'count' stickers
+        const shuffled = [...available].sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, Math.min(count, shuffled.length));
+    },
+
+    /**
+     * Award a specific sticker chosen by the user
+     */
+    awardChosenSticker(sticker) {
+        GameStorage.addSticker(this.currentUser, sticker);
+        return sticker;
+    },
+
+    /**
+     * Legacy: Award a random sticker (for cases where choice isn't shown)
+     */
+    awardSticker() {
+        const available = this.getAvailableStickers();
+
+        if (available.length === 0) {
+            return null;
+        }
+
+        const randomSticker = available[Math.floor(Math.random() * available.length)];
         GameStorage.addSticker(this.currentUser, randomSticker);
 
         return randomSticker;

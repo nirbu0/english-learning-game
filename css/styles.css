@@ -2822,6 +2822,104 @@ input[type="checkbox"]:checked::after {
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 }
 
+/* Sticker Selection - Let kids choose their reward! */
+.sticker-selection-container {
+    margin: 20px 0;
+    padding: 15px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 182, 193, 0.2) 100%);
+    border-radius: 20px;
+    border: 3px dashed var(--primary-color);
+}
+
+.sticker-selection-title {
+    font-family: var(--font-title);
+    font-size: 1.3rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    text-align: center;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.sticker-choices {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.sticker-choice-btn {
+    width: 80px;
+    height: 80px;
+    font-size: 3rem;
+    border: 4px solid #e0e0e0;
+    border-radius: 20px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.sticker-choice-btn:hover {
+    transform: scale(1.15) rotate(5deg);
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+}
+
+.sticker-choice-btn:active {
+    transform: scale(1.05);
+}
+
+.sticker-choice-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+}
+
+.sticker-choice-btn:hover::before {
+    transform: translateX(100%);
+}
+
+.sticker-choice-btn.chosen {
+    border-color: var(--success-color);
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(129, 199, 132, 0.3) 100%);
+    animation: chosenPop 0.5s ease forwards;
+    pointer-events: none;
+}
+
+.sticker-choice-btn.not-chosen {
+    opacity: 0.3;
+    transform: scale(0.8);
+    pointer-events: none;
+    filter: grayscale(1);
+}
+
+@keyframes chosenPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3) rotate(10deg); }
+    100% { transform: scale(1.1) rotate(0deg); }
+}
+
+.sticker-complete-msg {
+    text-align: center;
+    padding: 15px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.1) 100%);
+    border-radius: 15px;
+    margin: 20px 0;
+}
+
+.sticker-complete-msg p {
+    font-family: var(--font-title);
+    font-size: 1.2rem;
+    color: #f9a825;
+}
+
 /* ==========================================
    Letter Block Styling for Alphabet Theme
    ========================================== */
