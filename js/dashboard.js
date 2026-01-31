@@ -189,7 +189,7 @@ const ParentDashboard = {
         const container = document.getElementById('statistics-container');
         if (!container) return;
 
-        const users = ['explorer', 'adventurer'];
+        const allUsers = GameStorage.getAllUsers ? GameStorage.getAllUsers() : [];
         const themes = GameScenes.getThemes();
 
         // Calculate overall statistics
@@ -197,9 +197,11 @@ const ParentDashboard = {
         let totalCorrectAnswers = 0;
         let totalQuestions = 0;
         let wordsLearned = new Set();
+        let totalStars = 0;
 
-        users.forEach(userId => {
-            const userProgress = GameStorage.getUserProgress(userId);
+        allUsers.forEach(user => {
+            totalStars += user.totalStars || 0;
+            const userProgress = GameStorage.getUserProgress(user.id);
             themes.forEach(theme => {
                 const progress = userProgress[theme.id];
                 if (progress) {
@@ -235,7 +237,7 @@ const ParentDashboard = {
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon">⭐</div>
-                        <div class="stat-value">${GameStorage.getTotalStars('explorer') + GameStorage.getTotalStars('adventurer')}</div>
+                        <div class="stat-value">${totalStars}</div>
                         <div class="stat-label">Total Stars</div>
                     </div>
                 </div>
@@ -271,8 +273,22 @@ const ParentDashboard = {
         const container = document.getElementById('certificates-container');
         if (!container) return;
 
-        const users = ['explorer', 'adventurer'];
+        const allUsers = GameStorage.getAllUsers ? GameStorage.getAllUsers() : [];
         const themes = GameScenes.getThemes();
+
+        if (allUsers.length === 0) {
+            container.innerHTML = `
+                <div class="certificates-intro">
+                    <h3>🏆 Achievement Certificates</h3>
+                    <p>Print certificates for completed themes!</p>
+                </div>
+                <div class="no-data" style="text-align: center; padding: 40px; color: #666;">
+                    <div style="font-size: 4rem; margin-bottom: 15px;">🎓</div>
+                    <p>No users created yet. Add an Explorer or Adventurer to start earning certificates!</p>
+                </div>
+            `;
+            return;
+        }
 
         container.innerHTML = `
             <div class="certificates-intro">
@@ -281,10 +297,9 @@ const ParentDashboard = {
             </div>
             
             <div class="certificates-list">
-                ${users.map(userId => {
-            const user = GameStorage.getUser(userId);
+                ${allUsers.map(user => {
             const completedThemes = themes.filter(t =>
-                GameStorage.getThemeProgress(userId, t.id).completed
+                GameStorage.getThemeProgress(user.id, t.id).completed
             );
 
             if (completedThemes.length === 0) {
@@ -301,13 +316,13 @@ const ParentDashboard = {
                             <h4>${user.avatar} ${user.name}</h4>
                             <div class="certificate-cards">
                                 ${completedThemes.map(theme => {
-                const progress = GameStorage.getThemeProgress(userId, theme.id);
+                const progress = GameStorage.getThemeProgress(user.id, theme.id);
                 return `
                                         <div class="certificate-card">
                                             <div class="cert-theme">${theme.emoji}</div>
                                             <div class="cert-name">${theme.name}</div>
-                                            <div class="cert-stars">${'⭐'.repeat(progress.stars)}</div>
-                                            <button class="btn btn-primary btn-small" onclick="ParentDashboard.printCertificate('${userId}', '${theme.id}')">
+                                            <div class="cert-stars">${'⭐'.repeat(progress.stars || 0)}</div>
+                                            <button class="btn btn-primary btn-small" onclick="ParentDashboard.printCertificate('${user.id}', '${theme.id}')">
                                                 🖨️ Print
                                             </button>
                                         </div>
