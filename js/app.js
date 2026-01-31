@@ -12,7 +12,8 @@ const Game = {
 
     // Profile setup state
     profileSetup: {
-        editingUser: null,
+        editingUserId: null, // null means creating new user
+        userType: 'explorer', // 'explorer' or 'adventurer'
         selectedAvatar: '🧒',
         selectedAge: 5
     },
@@ -137,22 +138,11 @@ const Game = {
      * Setup event listeners
      */
     setupEventListeners() {
-        // User selection
-        this.elements.userCards.forEach(card => {
-            card.addEventListener('click', (e) => {
-                // Don't select user if edit button was clicked
-                if (e.target.classList.contains('edit-profile-btn')) return;
+        // Add user buttons
+        document.querySelectorAll('.add-user-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
                 GameSounds.click();
-                this.selectUser(card.dataset.user);
-            });
-        });
-
-        // Edit profile buttons
-        document.querySelectorAll('.edit-profile-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent card selection
-                GameSounds.click();
-                this.showProfileSetup(btn.dataset.user);
+                this.showProfileSetup(null, btn.dataset.userType);
             });
         });
 
@@ -281,21 +271,80 @@ const Game = {
      * Load saved user profiles to welcome screen
      */
     loadUserProfiles() {
-        ['explorer', 'adventurer'].forEach(userId => {
-            const user = GameStorage.getUser(userId);
-            const card = document.querySelector(`.user-card[data-user="${userId}"]`);
-            if (card && user) {
-                card.querySelector('.user-avatar').textContent = user.avatar || (userId === 'explorer' ? '🧒' : '👦');
-                card.querySelector('.user-name').textContent = user.name || (userId === 'explorer' ? 'Explorer' : 'Adventurer');
+        // Render explorers
+        const explorerContainer = document.getElementById('explorer-users');
+        const adventurerContainer = document.getElementById('adventurer-users');
+        
+        if (explorerContainer) {
+            explorerContainer.innerHTML = '';
+            const explorers = GameStorage.getUsersByType('explorer');
+            explorers.forEach(user => {
+                explorerContainer.appendChild(this.createUserCard(user));
+            });
+        }
+        
+        if (adventurerContainer) {
+            adventurerContainer.innerHTML = '';
+            const adventurers = GameStorage.getUsersByType('adventurer');
+            adventurers.forEach(user => {
+                adventurerContainer.appendChild(this.createUserCard(user));
+            });
+        }
+    },
 
-                // Update stars display
-                const starsDiv = card.querySelector('.user-stars');
-                const totalStars = user.totalStars || 0;
-                if (totalStars > 0) {
-                    starsDiv.textContent = '⭐'.repeat(Math.min(totalStars, 5));
-                }
-            }
+    /**
+     * Create a user card element
+     */
+    createUserCard(user) {
+        const card = document.createElement('div');
+        card.className = 'user-card';
+        card.dataset.userId = user.id;
+        card.dataset.userType = user.userType;
+        
+        const totalStars = user.totalStars || 0;
+        const starsDisplay = totalStars > 0 ? '⭐'.repeat(Math.min(totalStars, 5)) : '⭐';
+        
+        card.innerHTML = `
+            <button class="delete-user-btn" title="Delete">🗑️</button>
+            <button class="edit-profile-btn" title="Edit Profile">✏️</button>
+            <div class="user-avatar">${user.avatar}</div>
+            <div class="user-name">${user.name}</div>
+            <div class="user-stars">${starsDisplay}</div>
+        `;
+        
+        // Click on card to play
+        card.addEventListener('click', (e) => {
+            if (e.target.classList.contains('edit-profile-btn') || 
+                e.target.classList.contains('delete-user-btn')) return;
+            GameSounds.click();
+            this.selectUser(user.id);
         });
+        
+        // Edit button
+        card.querySelector('.edit-profile-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            GameSounds.click();
+            this.showProfileSetup(user.id, user.userType);
+        });
+        
+        // Delete button
+        card.querySelector('.delete-user-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            GameSounds.click();
+            this.confirmDeleteUser(user);
+        });
+        
+        return card;
+    },
+
+    /**
+     * Confirm and delete a user
+     */
+    confirmDeleteUser(user) {
+        if (confirm(`Are you sure you want to delete ${user.name}? All progress will be lost.`)) {
+            GameStorage.deleteUser(user.id);
+            this.loadUserProfiles();
+        }
     },
 
     /**
@@ -639,15 +688,18 @@ const Game = {
             GameSpeech.speakInstruction(`Drag the ${targetWord} to the cart!`);
         };
 
-        // Create drag and drop UI with cart
+        // Get theme-specific drop zone config
+        const dropZoneConfig = GameScenes.getDropZoneConfig(this.currentTheme?.id);
+
+        // Create drag and drop UI with theme-appropriate container
         this.elements.interactionArea.innerHTML = `
             <div class="collect-activity">
                 <div class="drag-items-row" id="drag-items">
                     <!-- Draggable items will be added here -->
                 </div>
                 <div class="cart-drop-zone" id="cart-drop">
-                    <div class="cart-icon">🛒</div>
-                    <div class="cart-label">Drop here!</div>
+                    <div class="cart-icon">${dropZoneConfig.icon}</div>
+                    <div class="cart-label">Drop in ${dropZoneConfig.label}!</div>
                     <div class="cart-items" id="cart-items"></div>
                 </div>
             </div>
@@ -683,16 +735,17 @@ const Game = {
                 dragItem.classList.remove('dragging');
             });
 
-            // Touch support
-            let touchStartX, touchStartY, touchOffsetX, touchOffsetY;
+            // Touch support - improved for mobile devices
+            let touchOffsetX, touchOffsetY;
             dragItem.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // Prevent scrolling while dragging
                 const touch = e.touches[0];
                 const rect = dragItem.getBoundingClientRect();
                 touchOffsetX = touch.clientX - rect.left;
                 touchOffsetY = touch.clientY - rect.top;
                 dragItem.classList.add('dragging');
                 GameSounds.click();
-            });
+            }, { passive: false });
 
             dragItem.addEventListener('touchmove', (e) => {
                 e.preventDefault();
@@ -701,17 +754,33 @@ const Game = {
                 dragItem.style.left = (touch.clientX - touchOffsetX) + 'px';
                 dragItem.style.top = (touch.clientY - touchOffsetY) + 'px';
                 dragItem.style.zIndex = '1000';
-            });
+                
+                // Highlight cart when dragging over it
+                const cartRect = cartDrop.getBoundingClientRect();
+                const itemRect = dragItem.getBoundingClientRect();
+                const isOverCart = this.checkRectOverlap(itemRect, cartRect);
+                cartDrop.classList.toggle('drag-over', isOverCart);
+            }, { passive: false });
 
             dragItem.addEventListener('touchend', (e) => {
                 const touch = e.changedTouches[0];
+                
+                // Hide the dragged element to find what's underneath
+                dragItem.style.visibility = 'hidden';
                 const dropElement = document.elementFromPoint(touch.clientX, touch.clientY);
+                dragItem.style.visibility = '';
 
-                // Check if dropped on cart
-                if (dropElement && (dropElement.id === 'cart-drop' || dropElement.closest('#cart-drop'))) {
+                // Also check using bounding box overlap for better touch accuracy
+                const cartRect = cartDrop.getBoundingClientRect();
+                const itemRect = dragItem.getBoundingClientRect();
+                const isOverCart = this.checkRectOverlap(itemRect, cartRect) ||
+                    (dropElement && (dropElement.id === 'cart-drop' || dropElement.closest('#cart-drop')));
+
+                if (isOverCart) {
                     handleDrop(item, dragItem);
                 }
 
+                cartDrop.classList.remove('drag-over');
                 dragItem.style.position = '';
                 dragItem.style.left = '';
                 dragItem.style.top = '';
@@ -1576,15 +1645,27 @@ const Game = {
 
     /**
      * Show profile setup modal
+     * @param {string|null} userId - User ID to edit, or null to create new user
+     * @param {string} userType - 'explorer' or 'adventurer' (for new users)
      */
-    showProfileSetup(userId) {
-        this.profileSetup.editingUser = userId;
-        const user = GameStorage.getUser(userId);
+    showProfileSetup(userId, userType = 'explorer') {
+        this.profileSetup.editingUserId = userId;
+        this.profileSetup.userType = userType;
+        
+        const user = userId ? GameStorage.getUser(userId) : null;
+        const defaultAge = userType === 'explorer' ? 5 : 7;
+        const defaultAvatar = userType === 'explorer' ? '🧒' : '👦';
 
-        // Pre-fill existing data
-        document.getElementById('profile-name-input').value = user.name || '';
-        this.profileSetup.selectedAvatar = user.avatar || '🧒';
-        this.profileSetup.selectedAge = parseInt(user.ageRange?.match(/\d+/)?.[0]) || 5;
+        // Pre-fill existing data or defaults
+        document.getElementById('profile-name-input').value = user?.name || '';
+        this.profileSetup.selectedAvatar = user?.avatar || defaultAvatar;
+        this.profileSetup.selectedAge = user?.age || defaultAge;
+
+        // Update modal title
+        const modalTitle = document.querySelector('#profile-modal h2');
+        if (modalTitle) {
+            modalTitle.textContent = userId ? '✏️ Edit Profile' : '👋 Create Your Profile!';
+        }
 
         // Update UI selections
         document.querySelectorAll('.avatar-option').forEach(btn => {
@@ -1602,40 +1683,38 @@ const Game = {
      */
     hideProfileSetup() {
         document.getElementById('profile-modal').classList.add('hidden');
-        this.profileSetup.editingUser = null;
+        this.profileSetup.editingUserId = null;
     },
 
     /**
      * Save profile and start playing
      */
     saveProfile() {
-        const userId = this.profileSetup.editingUser;
-        if (!userId) return;
-
         const name = document.getElementById('profile-name-input').value.trim() ||
-            (userId === 'explorer' ? 'Explorer' : 'Adventurer');
+            (this.profileSetup.userType === 'explorer' ? 'Explorer' : 'Adventurer');
         const avatar = this.profileSetup.selectedAvatar;
         const age = this.profileSetup.selectedAge;
+        const userType = this.profileSetup.userType;
 
-        // Determine user type based on age
-        const userType = age <= 5 ? 'explorer' : 'adventurer';
-        const ageRange = age <= 5 ? 'Ages 4-5' : 'Ages 6-9';
-
-        // Save user data
-        GameStorage.saveUser(userId, {
-            name,
-            avatar,
-            age,
-            ageRange
-        });
-
-        // Update welcome screen card
-        const card = document.querySelector(`.user-card[data-user="${userId}"]`);
-        if (card) {
-            card.querySelector('.user-avatar').textContent = avatar;
-            card.querySelector('.user-name').textContent = name;
+        let userId;
+        
+        if (this.profileSetup.editingUserId) {
+            // Editing existing user
+            userId = this.profileSetup.editingUserId;
+            GameStorage.saveUser(userId, {
+                name,
+                avatar,
+                age,
+                userType
+            });
+        } else {
+            // Creating new user
+            const newUser = GameStorage.addUser(name, avatar, userType, age);
+            userId = newUser.id;
         }
 
+        // Reload user profiles on welcome screen
+        this.loadUserProfiles();
         this.hideProfileSetup();
 
         // Select this user and start playing
@@ -2042,6 +2121,24 @@ const Game = {
         if (hintBtn) {
             hintBtn.addEventListener('click', () => this.showHint());
         }
+    },
+
+    // ===========================================
+    // UTILITY FUNCTIONS
+    // ===========================================
+
+    /**
+     * Check if two rectangles overlap (for touch drag-and-drop)
+     * Uses a generous overlap check for better mobile UX
+     */
+    checkRectOverlap(rect1, rect2) {
+        // Add some padding for more forgiving touch detection
+        const padding = 20;
+        
+        return !(rect1.right < rect2.left - padding ||
+                 rect1.left > rect2.right + padding ||
+                 rect1.bottom < rect2.top - padding ||
+                 rect1.top > rect2.bottom + padding);
     }
 };
 

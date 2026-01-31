@@ -272,8 +272,8 @@ const GameScenes = {
                 "cheese": { "emoji": "🧀", "category": "food" },
                 "eggs": { "emoji": "🥚", "category": "food" },
                 "egg": { "emoji": "🥚", "category": "food" },
-                "flour": { "emoji": "🌾", "category": "food" },
-                "sugar": { "emoji": "🍬", "category": "food" },
+                "flour": { "emoji": "🫓", "category": "food" },
+                "sugar": { "emoji": "🧊", "category": "food" },
                 "butter": { "emoji": "🧈", "category": "food" },
                 "chocolate": { "emoji": "🍫", "category": "food" },
                 "vanilla": { "emoji": "🧁", "category": "food" },
@@ -476,10 +476,26 @@ const GameScenes = {
     },
 
     /**
+     * Get the current user's avatar (for scene character)
+     */
+    getCurrentUserAvatar() {
+        const userId = GameStorage?.getCurrentUser?.();
+        if (userId) {
+            const user = GameStorage?.getUser?.(userId);
+            if (user?.avatar) {
+                return user.avatar;
+            }
+        }
+        return null;
+    },
+
+    /**
      * Render scene based on theme
      */
     renderScene(sceneArea, theme) {
         const background = theme?.background || 'default';
+        // Store user avatar for use in scene rendering
+        this.userAvatar = this.getCurrentUserAvatar();
 
         switch (background) {
             case 'supermarket':
@@ -508,9 +524,44 @@ const GameScenes = {
     },
 
     /**
+     * Get character emoji - use user avatar if available, otherwise theme character
+     */
+    getCharacterEmoji(themeCharacter) {
+        return this.userAvatar || themeCharacter || '👦';
+    },
+
+    /**
+     * Get drop zone icon and label based on theme
+     */
+    getDropZoneConfig(themeId) {
+        const configs = {
+            supermarket: { icon: '🛒', label: 'Cart' },
+            bakery: { icon: '🥣', label: 'Bowl' },
+            kitchen: { icon: '🥣', label: 'Bowl' },
+            zoo: { icon: '🏕️', label: 'Safari Bag' },
+            space: { icon: '🚀', label: 'Spaceship' },
+            pirate: { icon: '📦', label: 'Treasure Chest' },
+            island: { icon: '📦', label: 'Treasure Chest' },
+            dinosaur: { icon: '🎒', label: 'Backpack' },
+            prehistoric: { icon: '🎒', label: 'Backpack' },
+            construction: { icon: '🧰', label: 'Toolbox' },
+            racing: { icon: '🏎️', label: 'Car' },
+            firefighter: { icon: '🚒', label: 'Fire Truck' },
+            city: { icon: '🚒', label: 'Fire Truck' },
+            ocean: { icon: '🪣', label: 'Bucket' },
+            underwater: { icon: '🪣', label: 'Bucket' },
+            farm: { icon: '🧺', label: 'Basket' },
+            doctor: { icon: '🧳', label: 'Medical Bag' },
+            weather: { icon: '☂️', label: 'Umbrella' }
+        };
+        return configs[themeId] || { icon: '📦', label: 'Collect here!' };
+    },
+
+    /**
      * Render supermarket scene
      */
     renderSupermarketScene(sceneArea) {
+        const char = this.getCharacterEmoji('👦');
         sceneArea.innerHTML = `
             <div class="scene-background supermarket-scene">
                 <div class="scene-sky"></div>
@@ -520,7 +571,7 @@ const GameScenes = {
                         <!-- Items will be added here -->
                     </div>
                 </div>
-                <div class="character" id="scene-character">👦</div>
+                <div class="character" id="scene-character">${char}</div>
                 <div class="shopping-cart" id="shopping-cart">
                     🛒
                     <div class="cart-badge" id="cart-badge">0</div>
@@ -534,6 +585,7 @@ const GameScenes = {
      * Render kitchen scene
      */
     renderKitchenScene(sceneArea) {
+        const char = this.getCharacterEmoji('👨‍🍳');
         sceneArea.innerHTML = `
             <div class="scene-background kitchen-scene" style="background: linear-gradient(180deg, #FFF8DC 0%, #FAEBD7 100%);">
                 <div style="padding: 20px; text-align: center;">
@@ -548,7 +600,7 @@ const GameScenes = {
                     </div>
                     <div style="font-size: 0.9rem; color: #666;">Mixing Bowl</div>
                 </div>
-                <div class="character" id="scene-character">👨‍🍳</div>
+                <div class="character" id="scene-character">${char}</div>
             </div>
         `;
     },
@@ -557,6 +609,7 @@ const GameScenes = {
      * Render zoo scene
      */
     renderZooScene(sceneArea) {
+        const char = this.getCharacterEmoji('🧑‍🌾');
         sceneArea.innerHTML = `
             <div class="scene-background zoo-scene" style="background: linear-gradient(180deg, #87CEEB 0%, #90EE90 50%, #228B22 100%);">
                 <div style="padding: 20px; text-align: center;">
@@ -567,7 +620,7 @@ const GameScenes = {
                         <!-- Animals will be added here -->
                     </div>
                 </div>
-                <div class="character" id="scene-character">🧑‍🌾</div>
+                <div class="character" id="scene-character">${char}</div>
             </div>
         `;
     },
@@ -576,6 +629,7 @@ const GameScenes = {
      * Render space scene
      */
     renderSpaceScene(sceneArea) {
+        const char = this.getCharacterEmoji('👨‍🚀');
         sceneArea.innerHTML = `
             <div class="scene-background space-scene" style="background: linear-gradient(180deg, #0a0a2e 0%, #1a1a4e 50%, #2a2a6e 100%);">
                 <div style="padding: 20px; text-align: center;">
@@ -589,7 +643,7 @@ const GameScenes = {
                         <!-- Items will be added here -->
                     </div>
                 </div>
-                <div class="character" id="scene-character">👨‍🚀</div>
+                <div class="character" id="scene-character">${char}</div>
             </div>
         `;
     },
@@ -598,6 +652,7 @@ const GameScenes = {
      * Render island/pirate scene
      */
     renderIslandScene(sceneArea) {
+        const char = this.getCharacterEmoji('🏴‍☠️');
         sceneArea.innerHTML = `
             <div class="scene-background island-scene" style="background: linear-gradient(180deg, #87CEEB 0%, #00CED1 50%, #F4A460 100%);">
                 <div style="padding: 20px; text-align: center;">
@@ -608,7 +663,7 @@ const GameScenes = {
                         <!-- Items will be added here -->
                     </div>
                 </div>
-                <div class="character" id="scene-character">🏴‍☠️</div>
+                <div class="character" id="scene-character">${char}</div>
             </div>
         `;
     },
@@ -617,6 +672,7 @@ const GameScenes = {
      * Render prehistoric/dinosaur scene
      */
     renderPrehistoricScene(sceneArea) {
+        const char = this.getCharacterEmoji('🔍');
         sceneArea.innerHTML = `
             <div class="scene-background prehistoric-scene" style="background: linear-gradient(180deg, #FFA07A 0%, #DEB887 50%, #8B4513 100%);">
                 <div style="padding: 20px; text-align: center;">
@@ -628,7 +684,7 @@ const GameScenes = {
                         <!-- Items will be added here -->
                     </div>
                 </div>
-                <div class="character" id="scene-character">🔍</div>
+                <div class="character" id="scene-character">${char}</div>
             </div>
         `;
     },
@@ -637,6 +693,7 @@ const GameScenes = {
      * Render construction scene
      */
     renderConstructionScene(sceneArea) {
+        const char = this.getCharacterEmoji('👷');
         sceneArea.innerHTML = `
             <div class="scene-background construction-scene" style="background: linear-gradient(180deg, #87CEEB 0%, #D2691E 70%, #8B4513 100%);">
                 <div style="padding: 20px; text-align: center;">
@@ -647,7 +704,7 @@ const GameScenes = {
                         <!-- Items will be added here -->
                     </div>
                 </div>
-                <div class="character" id="scene-character">👷</div>
+                <div class="character" id="scene-character">${char}</div>
             </div>
         `;
     },
@@ -656,6 +713,7 @@ const GameScenes = {
      * Render racetrack scene
      */
     renderRacetrackScene(sceneArea) {
+        const char = this.getCharacterEmoji('🏁');
         sceneArea.innerHTML = `
             <div class="scene-background racetrack-scene" style="background: linear-gradient(180deg, #87CEEB 0%, #228B22 50%, #333 100%);">
                 <div style="padding: 20px; text-align: center;">
@@ -666,7 +724,7 @@ const GameScenes = {
                         <!-- Items will be added here -->
                     </div>
                 </div>
-                <div class="character" id="scene-character">🏁</div>
+                <div class="character" id="scene-character">${char}</div>
             </div>
         `;
     },
@@ -675,6 +733,7 @@ const GameScenes = {
      * Render city/firefighter scene
      */
     renderCityScene(sceneArea) {
+        const char = this.getCharacterEmoji('👨‍🚒');
         sceneArea.innerHTML = `
             <div class="scene-background city-scene" style="background: linear-gradient(180deg, #87CEEB 0%, #A9A9A9 70%, #696969 100%);">
                 <div style="padding: 20px; text-align: center;">
@@ -687,7 +746,7 @@ const GameScenes = {
                         <!-- Items will be added here -->
                     </div>
                 </div>
-                <div class="character" id="scene-character">👨‍🚒</div>
+                <div class="character" id="scene-character">${char}</div>
             </div>
         `;
     },
@@ -696,6 +755,7 @@ const GameScenes = {
      * Render underwater/ocean scene
      */
     renderUnderwaterScene(sceneArea) {
+        const char = this.getCharacterEmoji('🤿');
         sceneArea.innerHTML = `
             <div class="scene-background underwater-scene" style="background: linear-gradient(180deg, #00CED1 0%, #1E90FF 50%, #000080 100%);">
                 <div style="padding: 20px; text-align: center;">
@@ -708,7 +768,7 @@ const GameScenes = {
                         <!-- Items will be added here -->
                     </div>
                 </div>
-                <div class="character" id="scene-character">🤿</div>
+                <div class="character" id="scene-character">${char}</div>
             </div>
         `;
     },
@@ -717,6 +777,7 @@ const GameScenes = {
      * Render default scene
      */
     renderDefaultScene(sceneArea) {
+        const char = this.getCharacterEmoji('👦');
         sceneArea.innerHTML = `
             <div class="scene-background default-scene" style="background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);">
                 <div style="padding: 20px; text-align: center;">
@@ -724,7 +785,7 @@ const GameScenes = {
                         <!-- Items will be added here -->
                     </div>
                 </div>
-                <div class="character" id="scene-character">👦</div>
+                <div class="character" id="scene-character">${char}</div>
             </div>
         `;
     },

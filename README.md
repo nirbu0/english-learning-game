@@ -242,6 +242,86 @@ Quick bonus games to break up learning:
 
 ---
 
+## 🎯 Features to Adopt from Educational-Game
+
+These features were identified by comparing with the `educational-game` sibling project and would significantly enhance engagement and code quality.
+
+### 🔴 High Priority - High Impact Engagement Features
+
+| Feature | Description | Effort | Impact |
+|---------|-------------|--------|--------|
+| 🔥 **Streak & Combo System** | Points multiplier that increases with consecutive correct answers (2x at 3 streak, 3x at 5, 5x at 10). Visual milestone celebrations ("🔥 5 ברצף!"), combo indicator display, special sound effects for milestones, confetti/star burst effects. | Medium | Very High |
+| 🏆 **Achievement System** | Unlock badges for milestones: first win, 5-streak, 10-streak, score milestones (50, 100, 200 points). Persistent storage in localStorage. Golden popup notifications with trophy icon. Speech announcement of achievements. | Medium | High |
+
+**Why prioritize these?**
+- Creates "just one more try" gameplay loops
+- Provides tangible progress markers for children
+- Keeps motivation high through immediate positive feedback
+- Works across ALL existing activity types without major changes
+
+### 🟡 Medium Priority - Quality & Polish
+
+| Feature | Description | Effort | Impact |
+|---------|-------------|--------|--------|
+| ✨ **Canvas Particle Effects (Konva.js)** | More dynamic particle system: `createConfetti()` with multiple shapes (circles, rects, stars) and 8 colors, `createStarBurst()` radiating golden stars, `createSparkles()` twinkling effects. Currently using CSS-only animations. | Medium | Medium |
+| 🔊 **Sound Rate Limiting** | Prevent jarring overlapping sounds when children click rapidly. Add cooldown timers (150ms between same sound type, 300ms for speech). Includes `lastSoundTime` tracking object. | Low | Medium |
+| 🧹 **Animation/Timer Cleanup System** | Register all animations & timers in tracking arrays (`activeAnimations`, `activeTimers`). Cleanup function for mode transitions to prevent memory leaks: `cleanupAnimations()`, `cleanupTimers()`, `cleanupMode()`. | Medium | Medium |
+| ⏱️ **Animation Duration Constants** | Centralized timing values for easier maintenance and consistent feel: `ANIMATION_DURATIONS = { FEEDBACK_DISPLAY: 2500, CORRECT_ANSWER_DELAY: 1500, WRONG_ANSWER_RECOVERY: 1000, SPEECH_DELAY: 500 }` | Low | Low |
+
+### 🟢 Nice to Have - Future Enhancements
+
+| Feature | Description | Effort | Impact |
+|---------|-------------|--------|--------|
+| 👥 **Two-Player Mode (Memory Game)** | Turn-based gameplay for match-pairs activity. Separate score tracking per player. Turn indicator ("Player 1's turn"). Winner announcement at end. Great for siblings playing together! | High | Medium |
+| 📱 **Pull-to-Refresh Prevention** | Mobile-specific: `overscroll-behavior-y: contain` CSS property plus touch event handling in JavaScript to prevent accidental page refresh gestures on mobile devices. | Low | Low |
+| 🎨 **Floating Background Shapes** | Ambient animated shapes (letters, numbers, stars) floating slowly across the background for visual interest. Semi-transparent, non-distracting. Different shapes per theme context. | Low | Low |
+
+### 📝 Implementation Notes
+
+**Streak & Combo System Implementation:**
+```javascript
+// State tracking
+let currentStreak = 0;
+let bestStreak = 0;
+let comboMultiplier = 1;
+
+// On correct answer
+function handleCorrectAnswer() {
+    currentStreak++;
+    if (currentStreak >= 10) comboMultiplier = 5;
+    else if (currentStreak >= 5) comboMultiplier = 3;
+    else if (currentStreak >= 3) comboMultiplier = 2;
+    else comboMultiplier = 1;
+    
+    const points = 10 * comboMultiplier;
+    // Show visual feedback, play sounds, etc.
+}
+
+// On wrong answer
+function handleWrongAnswer() {
+    if (currentStreak >= 3) showStreakLostMessage();
+    currentStreak = 0;
+    comboMultiplier = 1;
+}
+```
+
+**Achievement System Structure:**
+```javascript
+const achievements = {
+    userId: {
+        firstWin: false,
+        streak5: false,
+        streak10: false,
+        score50: false,
+        score100: false,
+        score200: false,
+        modesPlayed: new Set()
+    }
+};
+```
+
+---
+
 ## ☁️ Cloud Sync Setup (Optional)
 
 To enable progress syncing across devices using Firebase:

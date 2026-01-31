@@ -1,12 +1,15 @@
 /**
  * Storage Module - Handles saving and loading game progress
+ * Supports multiple users per class (explorer/adventurer)
  */
 
 const GameStorage = {
     STORAGE_KEY: 'english_adventure_game',
+    VERSION: 2, // Storage version for migration
 
-    // Default data structure
+    // Default data structure (v2 - multi-user support)
     defaultData: {
+        version: 2,
         settings: {
             soundEffects: true,
             musicEnabled: false,
@@ -14,27 +17,35 @@ const GameStorage = {
             language: 'en',
             unlockAll: false
         },
-        users: {
-            explorer: {
-                name: 'Explorer',
-                avatar: '🧒',
-                ageRange: 'Ages 4-5',
-                totalStars: 0,
-                completedThemes: [],
-                themeProgress: {},
-                stickers: []
-            },
-            adventurer: {
-                name: 'Adventurer',
-                avatar: '👦',
-                ageRange: 'Ages 6-9',
-                totalStars: 0,
-                completedThemes: [],
-                themeProgress: {},
-                stickers: []
-            }
-        },
-        currentUser: null
+        // Users are now stored as array with unique IDs
+        users: [],
+        currentUserId: null
+    },
+
+    /**
+     * Generate unique user ID
+     */
+    generateUserId() {
+        return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    },
+
+    /**
+     * Create a new user
+     */
+    createUser(name, avatar, userType, age) {
+        return {
+            id: this.generateUserId(),
+            name: name || (userType === 'explorer' ? 'Explorer' : 'Adventurer'),
+            avatar: avatar || (userType === 'explorer' ? '🧒' : '👦'),
+            userType: userType, // 'explorer' or 'adventurer'
+            age: age || (userType === 'explorer' ? 5 : 7),
+            ageRange: userType === 'explorer' ? 'Ages 4-5' : 'Ages 6-9',
+            totalStars: 0,
+            completedThemes: [],
+            themeProgress: {},
+            stickers: [],
+            createdAt: Date.now()
+        };
     },
 
     /**
@@ -44,12 +55,68 @@ const GameStorage = {
         try {
             const stored = localStorage.getItem(this.STORAGE_KEY);
             if (stored) {
-                return JSON.parse(stored);
+                const data = JSON.parse(stored);
+                // Migrate old data format if needed
+                return this.migrateData(data);
             }
         } catch (e) {
             console.warn('Error reading from localStorage:', e);
         }
-        return { ...this.defaultData };
+        return { ...this.defaultData, users: [] };
+    },
+
+    /**
+     * Migrate data from old format to new format
+     */
+    migrateData(data) {
+        // Already v2 format
+        if (data.version === 2 && Array.isArray(data.users)) {
+            return data;
+        }
+
+        // Migrate from v1 (object-based users) to v2 (array-based users)
+        console.log('Migrating storage from v1 to v2...');
+        
+        const newData = {
+            version: 2,
+            settings: data.settings || this.defaultData.settings,
+            users: [],
+            currentUserId: null
+        };
+
+        // Convert old user objects to array format
+        if (data.users && typeof data.users === 'object' && !Array.isArray(data.users)) {
+            ['explorer', 'adventurer'].forEach(userType => {
+                const oldUser = data.users[userType];
+                if (oldUser) {
+                    const newUser = {
+                        id: this.generateUserId(),
+                        name: oldUser.name || (userType === 'explorer' ? 'Explorer' : 'Adventurer'),
+                        avatar: oldUser.avatar || (userType === 'explorer' ? '🧒' : '👦'),
+                        userType: userType,
+                        age: oldUser.age || (userType === 'explorer' ? 5 : 7),
+                        ageRange: oldUser.ageRange || (userType === 'explorer' ? 'Ages 4-5' : 'Ages 6-9'),
+                        totalStars: oldUser.totalStars || 0,
+                        completedThemes: oldUser.completedThemes || [],
+                        themeProgress: oldUser.themeProgress || {},
+                        stickers: oldUser.stickers || [],
+                        createdAt: Date.now()
+                    };
+                    newData.users.push(newUser);
+
+                    // Set current user if it was the old current user
+                    if (data.currentUser === userType) {
+                        newData.currentUserId = newUser.id;
+                    }
+                }
+            });
+        }
+
+        // Save migrated data
+        this.saveData(newData);
+        console.log('Storage migration complete!');
+        
+        return newData;
     },
 
     /**
@@ -66,11 +133,79 @@ const GameStorage = {
     },
 
     /**
+     * Get all users
+     */
+    getAllUsers() {
+        const data = this.getData();
+        return data.users || [];
+    },
+
+    /**
+     * Get users by type (explorer or adventurer)
+     */
+    getUsersByType(userType) {
+        return this.getAllUsers().filter(u => u.userType === userType);
+    },
+
+    /**
+     * Get user by ID
+     */
+    getUser(userId) {
+        const users = this.getAllUsers();
+        return users.find(u => u.id === userId);
+    },
+
+    /**
+     * Add a new user
+     */
+    addUser(name, avatar, userType, age) {
+        const data = this.getData();
+        const newUser = this.createUser(name, avatar, userType, age);
+        data.users.push(newUser);
+        this.saveData(data);
+        return newUser;
+    },
+
+    /**
+     * Update user data
+     */
+    saveUser(userId, userData) {
+        const data = this.getData();
+        const userIndex = data.users.findIndex(u => u.id === userId);
+        
+        if (userIndex !== -1) {
+            data.users[userIndex] = { ...data.users[userIndex], ...userData };
+            return this.saveData(data);
+        }
+        return false;
+    },
+
+    /**
+     * Delete a user
+     */
+    deleteUser(userId) {
+        const data = this.getData();
+        const userIndex = data.users.findIndex(u => u.id === userId);
+        
+        if (userIndex !== -1) {
+            data.users.splice(userIndex, 1);
+            
+            // Clear current user if it was deleted
+            if (data.currentUserId === userId) {
+                data.currentUserId = null;
+            }
+            
+            return this.saveData(data);
+        }
+        return false;
+    },
+
+    /**
      * Get theme progress for a user
      */
     getThemeProgress(userId, themeId) {
         const user = this.getUser(userId);
-        return user.themeProgress?.[themeId] || {};
+        return user?.themeProgress?.[themeId] || {};
     },
 
     /**
@@ -78,7 +213,7 @@ const GameStorage = {
      */
     getUserProgress(userId) {
         const user = this.getUser(userId);
-        return user.themeProgress || {};
+        return user?.themeProgress || {};
     },
 
     /**
@@ -99,28 +234,11 @@ const GameStorage = {
     },
 
     /**
-     * Get user data
-     */
-    getUser(userId) {
-        const data = this.getData();
-        return data.users[userId] || this.defaultData.users[userId];
-    },
-
-    /**
-     * Save user data
-     */
-    saveUser(userId, userData) {
-        const data = this.getData();
-        data.users[userId] = { ...data.users[userId], ...userData };
-        return this.saveData(data);
-    },
-
-    /**
-     * Get current user
+     * Get current user ID
      */
     getCurrentUser() {
         const data = this.getData();
-        return data.currentUser;
+        return data.currentUserId;
     },
 
     /**
@@ -128,7 +246,7 @@ const GameStorage = {
      */
     setCurrentUser(userId) {
         const data = this.getData();
-        data.currentUser = userId;
+        data.currentUserId = userId;
         return this.saveData(data);
     },
 
@@ -136,10 +254,11 @@ const GameStorage = {
      * Add stars to user
      */
     addStars(userId, stars) {
-        const data = this.getData();
-        if (data.users[userId]) {
-            data.users[userId].totalStars = (data.users[userId].totalStars || 0) + stars;
-            return this.saveData(data);
+        const user = this.getUser(userId);
+        if (user) {
+            return this.saveUser(userId, {
+                totalStars: (user.totalStars || 0) + stars
+            });
         }
         return false;
     },
@@ -149,69 +268,17 @@ const GameStorage = {
      */
     getTotalStars(userId) {
         const user = this.getUser(userId);
-        return user.totalStars || 0;
+        return user?.totalStars || 0;
     },
 
     /**
      * Save theme progress
      */
     saveThemeProgress(userId, themeId, progress) {
-        const data = this.getData();
-        if (data.users[userId]) {
-            if (!data.users[userId].themeProgress) {
-                data.users[userId].themeProgress = {};
-            }
-            data.users[userId].themeProgress[themeId] = progress;
-            return this.saveData(data);
-        }
-        return false;
-    },
-
-    /**
-     * Get theme progress
-     * (Overloaded method name in original file, keeping robust implementation)
-     */
-    getThemeProgressFull(userId, themeId) {
         const user = this.getUser(userId);
-        return (user.themeProgress && user.themeProgress[themeId]) || {
-            completed: false,
-            stars: 0,
-            currentActivity: 0
-        };
-    },
-
-    /**
-     * Mark theme as completed
-     */
-    completeTheme(userId, themeId, stars) {
-        const data = this.getData();
-        if (data.users[userId]) {
-            // Add to completed themes if not already there
-            if (!data.users[userId].completedThemes) {
-                data.users[userId].completedThemes = [];
-            }
-            if (!data.users[userId].completedThemes.includes(themeId)) {
-                data.users[userId].completedThemes.push(themeId);
-            }
-
-            // Update theme progress
-            if (!data.users[userId].themeProgress) {
-                data.users[userId].themeProgress = {};
-            }
-            const currentProgress = data.users[userId].themeProgress[themeId] || {};
-            const previousStars = currentProgress.stars || 0;
-
-            // Only add new stars (don't double count on replay)
-            const newStars = Math.max(0, stars - previousStars);
-            data.users[userId].totalStars = (data.users[userId].totalStars || 0) + newStars;
-
-            data.users[userId].themeProgress[themeId] = {
-                completed: true,
-                stars: Math.max(previousStars, stars),
-                currentActivity: 0
-            };
-
-            return this.saveData(data);
+        if (user) {
+            const themeProgress = { ...user.themeProgress, [themeId]: progress };
+            return this.saveUser(userId, { themeProgress });
         }
         return false;
     },
@@ -223,14 +290,14 @@ const GameStorage = {
         // If QA mode is enabled, all levels are unlocked
         if (this.getSettings().unlockAll) {
             const user = this.getUser(userId);
-            if (user.themeProgress && user.themeProgress[themeId] && user.themeProgress[themeId].levels && user.themeProgress[themeId].levels[level]) {
+            if (user?.themeProgress?.[themeId]?.levels?.[level]) {
                 return { ...user.themeProgress[themeId].levels[level], unlocked: true };
             }
             return { completed: false, stars: 0, unlocked: true };
         }
 
         const user = this.getUser(userId);
-        if (!user.themeProgress || !user.themeProgress[themeId] || !user.themeProgress[themeId].levels) {
+        if (!user?.themeProgress?.[themeId]?.levels) {
             return { completed: false, stars: 0, unlocked: level === 1 };
         }
         return user.themeProgress[themeId].levels[level] || { completed: false, stars: 0, unlocked: level === 1 };
@@ -240,54 +307,53 @@ const GameStorage = {
      * Complete a level
      */
     completeLevel(userId, themeId, level, stars) {
-        const data = this.getData();
-        if (data.users[userId]) {
-            if (!data.users[userId].themeProgress) {
-                data.users[userId].themeProgress = {};
-            }
-            if (!data.users[userId].themeProgress[themeId]) {
-                data.users[userId].themeProgress[themeId] = { levels: {} };
-            }
-            if (!data.users[userId].themeProgress[themeId].levels) {
-                data.users[userId].themeProgress[themeId].levels = {};
-            }
+        const user = this.getUser(userId);
+        if (!user) return false;
 
-            // Save current level
-            const currentLevel = data.users[userId].themeProgress[themeId].levels[level] || { stars: 0 };
-            data.users[userId].themeProgress[themeId].levels[level] = {
-                completed: true,
-                stars: Math.max(currentLevel.stars || 0, stars),
+        const themeProgress = { ...user.themeProgress };
+        
+        if (!themeProgress[themeId]) {
+            themeProgress[themeId] = { levels: {} };
+        }
+        if (!themeProgress[themeId].levels) {
+            themeProgress[themeId].levels = {};
+        }
+
+        // Save current level
+        const currentLevel = themeProgress[themeId].levels[level] || { stars: 0 };
+        themeProgress[themeId].levels[level] = {
+            completed: true,
+            stars: Math.max(currentLevel.stars || 0, stars),
+            unlocked: true
+        };
+
+        // Unlock next level
+        const nextLevel = level + 1;
+        if (!themeProgress[themeId].levels[nextLevel]) {
+            themeProgress[themeId].levels[nextLevel] = {
+                completed: false,
+                stars: 0,
                 unlocked: true
             };
-
-            // Unlock next level
-            const nextLevel = level + 1;
-            if (!data.users[userId].themeProgress[themeId].levels[nextLevel]) {
-                data.users[userId].themeProgress[themeId].levels[nextLevel] = {
-                    completed: false,
-                    stars: 0,
-                    unlocked: true
-                };
-            } else {
-                data.users[userId].themeProgress[themeId].levels[nextLevel].unlocked = true;
-            }
-
-            // If Level 1 is completed, mark theme as "completed" for sequential unlocking of NEXT theme
-            if (level === 1) {
-                if (!data.users[userId].completedThemes) data.users[userId].completedThemes = [];
-                if (!data.users[userId].completedThemes.includes(themeId)) {
-                    data.users[userId].completedThemes.push(themeId);
-                }
-            }
-
-            // Add stars to total
-            const oldStars = currentLevel.stars || 0;
-            const newStarsToAdd = Math.max(0, stars - oldStars);
-            data.users[userId].totalStars = (data.users[userId].totalStars || 0) + newStarsToAdd;
-
-            return this.saveData(data);
+        } else {
+            themeProgress[themeId].levels[nextLevel].unlocked = true;
         }
-        return false;
+
+        // Update completed themes list
+        let completedThemes = [...(user.completedThemes || [])];
+        if (level === 1 && !completedThemes.includes(themeId)) {
+            completedThemes.push(themeId);
+        }
+
+        // Calculate new stars to add
+        const oldStars = currentLevel.stars || 0;
+        const newStarsToAdd = Math.max(0, stars - oldStars);
+
+        return this.saveUser(userId, {
+            themeProgress,
+            completedThemes,
+            totalStars: (user.totalStars || 0) + newStarsToAdd
+        });
     },
 
     /**
@@ -295,21 +361,19 @@ const GameStorage = {
      */
     getStickers(userId) {
         const user = this.getUser(userId);
-        return user.stickers || [];
+        return user?.stickers || [];
     },
 
     /**
      * Add sticker to user
      */
     addSticker(userId, sticker) {
-        const data = this.getData();
-        if (data.users[userId]) {
-            if (!data.users[userId].stickers) {
-                data.users[userId].stickers = [];
-            }
-            if (!data.users[userId].stickers.includes(sticker)) {
-                data.users[userId].stickers.push(sticker);
-                return this.saveData(data);
+        const user = this.getUser(userId);
+        if (user) {
+            const stickers = [...(user.stickers || [])];
+            if (!stickers.includes(sticker)) {
+                stickers.push(sticker);
+                return this.saveUser(userId, { stickers });
             }
         }
         return false;
@@ -342,7 +406,7 @@ const GameStorage = {
         const previousTheme = themes[themeIndex - 1];
         if (previousTheme) {
             const user = this.getUser(userId);
-            return user.completedThemes && user.completedThemes.includes(previousTheme.id);
+            return user?.completedThemes?.includes(previousTheme.id) || false;
         }
 
         return false;
@@ -359,6 +423,22 @@ const GameStorage = {
             console.warn('Error resetting localStorage:', e);
             return false;
         }
+    },
+
+    /**
+     * Reset progress for a specific user
+     */
+    resetUserProgress(userId) {
+        const user = this.getUser(userId);
+        if (user) {
+            return this.saveUser(userId, {
+                totalStars: 0,
+                completedThemes: [],
+                themeProgress: {},
+                stickers: []
+            });
+        }
+        return false;
     }
 };
 

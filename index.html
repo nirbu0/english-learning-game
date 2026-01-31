@@ -25,21 +25,37 @@
 
                 <div class="user-selection">
                     <h2 data-i18n="welcome.whoPlaying">Who's playing today?</h2>
-                    <div class="user-cards">
-                        <div class="user-card" data-user="explorer" data-age="4">
-                            <button class="edit-profile-btn" data-user="explorer" title="Edit Profile">✏️</button>
-                            <div class="user-avatar">🧒</div>
-                            <div class="user-name" data-i18n="welcome.explorer">Explorer</div>
-                            <div class="user-stars">⭐</div>
-                            <div class="user-age" data-i18n="welcome.ages45">Ages 4-5</div>
+                    
+                    <!-- Explorers Section (Ages 4-5) -->
+                    <div class="user-type-section">
+                        <div class="user-type-header">
+                            <span class="user-type-emoji">🧒</span>
+                            <span class="user-type-title" data-i18n="welcome.explorers">Explorers</span>
+                            <span class="user-type-age" data-i18n="welcome.ages45">(Ages 4-5)</span>
                         </div>
-                        <div class="user-card" data-user="adventurer" data-age="8">
-                            <button class="edit-profile-btn" data-user="adventurer" title="Edit Profile">✏️</button>
-                            <div class="user-avatar">👦</div>
-                            <div class="user-name" data-i18n="welcome.adventurer">Adventurer</div>
-                            <div class="user-stars">⭐⭐</div>
-                            <div class="user-age" data-i18n="welcome.ages69">Ages 6-9</div>
+                        <div class="user-cards" id="explorer-users">
+                            <!-- Explorer users will be dynamically inserted here -->
                         </div>
+                        <button class="add-user-btn" data-user-type="explorer" title="Add Explorer">
+                            <span class="add-user-icon">➕</span>
+                            <span class="add-user-text">Add Explorer</span>
+                        </button>
+                    </div>
+
+                    <!-- Adventurers Section (Ages 6-9) -->
+                    <div class="user-type-section">
+                        <div class="user-type-header">
+                            <span class="user-type-emoji">👦</span>
+                            <span class="user-type-title" data-i18n="welcome.adventurers">Adventurers</span>
+                            <span class="user-type-age" data-i18n="welcome.ages69">(Ages 6-9)</span>
+                        </div>
+                        <div class="user-cards" id="adventurer-users">
+                            <!-- Adventurer users will be dynamically inserted here -->
+                        </div>
+                        <button class="add-user-btn" data-user-type="adventurer" title="Add Adventurer">
+                            <span class="add-user-icon">➕</span>
+                            <span class="add-user-text">Add Adventurer</span>
+                        </button>
                     </div>
                 </div>
 

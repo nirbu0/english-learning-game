@@ -450,11 +450,117 @@ body {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
+/* User Type Sections for Multi-User Support */
+.user-type-section {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: var(--border-radius);
+    padding: 15px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.user-type-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-type-emoji {
+    font-size: 2rem;
+}
+
+.user-type-title {
+    font-family: var(--font-title);
+    font-size: 1.3rem;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.user-type-age {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-left: auto;
+}
+
 .user-cards {
     display: flex;
-    gap: 20px;
-    justify-content: center;
+    gap: 15px;
+    justify-content: flex-start;
     flex-wrap: wrap;
+    min-height: 60px;
+}
+
+.user-cards:empty::after {
+    content: 'No players yet';
+    color: rgba(255, 255, 255, 0.6);
+    font-style: italic;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Add User Button */
+.add-user-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border: 2px dashed rgba(255, 255, 255, 0.5);
+    border-radius: var(--border-radius-sm);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.add-user-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: scale(1.02);
+}
+
+.add-user-btn:active {
+    transform: scale(0.98);
+}
+
+.add-user-icon {
+    font-size: 1.2rem;
+}
+
+/* Delete User Button */
+.delete-user-btn {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(244, 67, 54, 0.8);
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
+    opacity: 0;
+}
+
+.user-card:hover .delete-user-btn {
+    opacity: 1;
+}
+
+.delete-user-btn:hover {
+    background: var(--danger-color);
+    transform: scale(1.15);
 }
 
 .user-card {
