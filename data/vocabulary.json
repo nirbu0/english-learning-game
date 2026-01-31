@@ -63,20 +63,20 @@
             "character": "👨‍🍳",
             "activities": {
                 "explorer": [
-                    { "type": "tap-to-learn", "instruction": "Tap each ingredient!", "items": ["egg", "milk", "flour"], "level": 1 },
-                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["egg", "milk", "flour"], "level": 1 },
-                    { "type": "tap-to-learn", "instruction": "Tap each ingredient!", "items": ["sugar", "butter", "chocolate"], "level": 2 },
-                    { "type": "collect-items", "instruction": "Put the {word} in the bowl!", "items": ["egg", "milk", "flour"], "level": 2 },
-                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["egg", "milk", "flour", "sugar", "butter"], "level": 3 },
-                    { "type": "match-sound", "instruction": "Which ingredient did I say?", "words": ["egg", "milk", "flour", "sugar"], "level": 3 }
+                    { "type": "tap-to-learn", "instruction": "Tap each ingredient!", "items": ["egg", "milk", "cookie"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["egg", "milk", "cookie"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap each ingredient!", "items": ["honey", "butter", "chocolate"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Put the {word} in the bowl!", "items": ["egg", "milk", "cookie"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["egg", "milk", "cookie", "honey", "butter"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which ingredient did I say?", "words": ["egg", "milk", "cookie", "honey"], "level": 3 }
                 ],
                 "adventurer": [
-                    { "type": "tap-to-learn", "instruction": "Tap each ingredient!", "items": ["egg", "milk", "flour", "sugar", "butter"], "level": 1 },
-                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["egg", "milk", "flour", "sugar"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap each ingredient!", "items": ["egg", "milk", "cookie", "honey", "butter"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["egg", "milk", "cookie", "honey"], "level": 1 },
                     { "type": "tap-to-learn", "instruction": "Tap each ingredient!", "items": ["chocolate", "vanilla", "cream", "cake"], "level": 2 },
-                    { "type": "collect-items", "instruction": "Put the {word} in the bowl!", "items": ["egg", "milk", "flour", "sugar"], "level": 2 },
-                    { "type": "match-sound", "instruction": "Which ingredient did I say?", "words": ["egg", "milk", "flour", "chocolate"], "level": 2 },
-                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["egg", "milk", "flour", "chocolate", "cream"], "level": 3 },
+                    { "type": "collect-items", "instruction": "Put the {word} in the bowl!", "items": ["egg", "milk", "cookie", "honey"], "level": 2 },
+                    { "type": "match-sound", "instruction": "Which ingredient did I say?", "words": ["egg", "milk", "cookie", "chocolate"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["egg", "milk", "cookie", "chocolate", "cream"], "level": 3 },
                     { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["egg", "milk", "cake"], "level": 3 }
                 ]
             }
@@ -253,16 +253,16 @@
                 "explorer": [
                     { "type": "tap-to-learn", "instruction": "Tap the firefighter items!", "items": ["fire", "water", "truck"], "level": 1 },
                     { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fire", "water", "truck"], "level": 1 },
-                    { "type": "tap-to-learn", "instruction": "Tap the firefighter items!", "items": ["ladder", "hose", "helmet"], "level": 2 },
-                    { "type": "collect-items", "instruction": "Get the {word}!", "items": ["water", "hose", "ladder"], "level": 2 },
-                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fire", "water", "truck", "ladder", "hose"], "level": 3 },
-                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["fire", "water", "truck", "hose"], "level": 3 }
+                    { "type": "tap-to-learn", "instruction": "Tap the firefighter items!", "items": ["ladder", "extinguisher", "helmet"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Get the {word}!", "items": ["water", "extinguisher", "ladder"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fire", "water", "truck", "ladder", "extinguisher"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["fire", "water", "truck", "extinguisher"], "level": 3 }
                 ],
                 "adventurer": [
-                    { "type": "tap-to-learn", "instruction": "Tap the firefighter items!", "items": ["fire", "water", "truck", "ladder", "hose"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap the firefighter items!", "items": ["fire", "water", "truck", "ladder", "extinguisher"], "level": 1 },
                     { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fire", "water", "truck", "ladder"], "level": 1 },
                     { "type": "tap-to-learn", "instruction": "Tap the firefighter items!", "items": ["helmet", "boots", "axe", "alarm"], "level": 2 },
-                    { "type": "collect-items", "instruction": "Get the {word}!", "items": ["water", "hose", "ladder", "helmet"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Get the {word}!", "items": ["water", "extinguisher", "ladder", "helmet"], "level": 2 },
                     { "type": "match-sound", "instruction": "Which one did I say?", "words": ["fire", "water", "ladder", "helmet"], "level": 2 },
                     { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fire", "truck", "helmet", "boots", "alarm"], "level": 3 },
                     { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["fire", "water"], "level": 3 }
@@ -280,16 +280,16 @@
                 "explorer": [
                     { "type": "tap-to-learn", "instruction": "Tap the sea creatures!", "items": ["fish", "whale", "crab"], "level": 1 },
                     { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fish", "whale", "crab"], "level": 1 },
-                    { "type": "tap-to-learn", "instruction": "Tap the sea creatures!", "items": ["octopus", "starfish", "dolphin"], "level": 2 },
-                    { "type": "collect-items", "instruction": "Catch the {word}!", "items": ["fish", "crab", "starfish"], "level": 2 },
-                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fish", "whale", "octopus", "crab", "starfish"], "level": 3 },
+                    { "type": "tap-to-learn", "instruction": "Tap the sea creatures!", "items": ["octopus", "shell", "dolphin"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Catch the {word}!", "items": ["fish", "crab", "shell"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fish", "whale", "octopus", "crab", "shell"], "level": 3 },
                     { "type": "match-sound", "instruction": "Which one did I say?", "words": ["fish", "whale", "crab", "octopus"], "level": 3 }
                 ],
                 "adventurer": [
-                    { "type": "tap-to-learn", "instruction": "Tap the sea creatures!", "items": ["fish", "whale", "octopus", "crab", "starfish"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap the sea creatures!", "items": ["fish", "whale", "octopus", "crab", "shell"], "level": 1 },
                     { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fish", "whale", "octopus", "crab"], "level": 1 },
                     { "type": "tap-to-learn", "instruction": "Tap the sea creatures!", "items": ["shark", "dolphin", "jellyfish", "turtle"], "level": 2 },
-                    { "type": "collect-items", "instruction": "Catch the {word}!", "items": ["fish", "crab", "starfish", "dolphin"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Catch the {word}!", "items": ["fish", "crab", "shell", "dolphin"], "level": 2 },
                     { "type": "match-sound", "instruction": "Which one did I say?", "words": ["fish", "whale", "shark", "dolphin"], "level": 2 },
                     { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fish", "whale", "shark", "dolphin", "turtle"], "level": 3 },
                     { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["fish", "crab"], "level": 3 }
@@ -389,8 +389,8 @@
         "cheese": {"emoji": "🧀", "category": "food"},
         "eggs": {"emoji": "🥚", "category": "food"},
         "egg": {"emoji": "🥚", "category": "food"},
-        "flour": {"emoji": "🫓", "category": "food"},
-        "sugar": {"emoji": "🧊", "category": "food"},
+        "honey": {"emoji": "🍯", "category": "food"},
+        "cookie": {"emoji": "🍪", "category": "food"},
         "butter": {"emoji": "🧈", "category": "food"},
         "chocolate": {"emoji": "🍫", "category": "food"},
         "vanilla": {"emoji": "🧁", "category": "food"},
@@ -411,7 +411,7 @@
         "whale": {"emoji": "🐳", "category": "animal"},
         "octopus": {"emoji": "🐙", "category": "animal"},
         "crab": {"emoji": "🦀", "category": "animal"},
-        "starfish": {"emoji": "⭐", "category": "animal"},
+        "shell": {"emoji": "🐚", "category": "animal"},
         "shark": {"emoji": "🦈", "category": "animal"},
         "dolphin": {"emoji": "🐬", "category": "animal"},
         "jellyfish": {"emoji": "🪼", "category": "animal"},
@@ -463,7 +463,7 @@
         "fire": {"emoji": "🔥", "category": "element"},
         "water": {"emoji": "💧", "category": "element"},
         "ladder": {"emoji": "🪜", "category": "object"},
-        "hose": {"emoji": "🔫", "category": "object"},
+        "extinguisher": {"emoji": "🧯", "category": "object"},
         "axe": {"emoji": "🪓", "category": "tool"},
         "alarm": {"emoji": "🚨", "category": "object"},
         "door": {"emoji": "🚪", "category": "object"},
