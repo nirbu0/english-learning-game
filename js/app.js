@@ -422,11 +422,19 @@ const Game = {
     },
 
     /**
+     * Get the current user's type (explorer or adventurer)
+     */
+    getCurrentUserType() {
+        const user = GameStorage.getUser(this.currentUser);
+        return user?.userType || 'explorer';
+    },
+
+    /**
      * Handle theme click
      */
     handleThemeClick(theme) {
         // Check if theme has multiple levels
-        const userType = this.currentUser;
+        const userType = this.getCurrentUserType();
         const activities = theme.activities[userType] || [];
 
         // Simple check: does level 2 exist?
@@ -472,7 +480,7 @@ const Game = {
 
         // Determine available levels (up to 3 for now)
         const levels = [1, 2, 3];
-        const userType = this.currentUser;
+        const userType = this.getCurrentUserType();
 
         levels.forEach(level => {
             const activities = GameScenes.filterActivitiesByLevel(theme.activities[userType] || [], level);
@@ -527,8 +535,8 @@ const Game = {
         GameSounds.whoosh();
         GameSounds.startMusic();
 
-        // Start the theme in GameScenes
-        GameScenes.startTheme(themeId, this.currentUser, level);
+        // Start the theme in GameScenes (use userType, not userId)
+        GameScenes.startTheme(themeId, this.getCurrentUserType(), level);
 
         // Update UI
         this.elements.gameThemeTitle.textContent = `${theme.name} - Level ${level}`;
@@ -1382,7 +1390,7 @@ const Game = {
      * Move to next activity
      */
     nextActivity() {
-        const nextActivity = GameScenes.nextActivity(this.currentUser);
+        const nextActivity = GameScenes.nextActivity(this.getCurrentUserType());
 
         if (nextActivity) {
             // Re-render scene if needed
@@ -1406,7 +1414,8 @@ const Game = {
 
         // Check if next level exists to prompt user or just congrats
         const nextLevel = level + 1;
-        const nextActivities = GameScenes.filterActivitiesByLevel(this.currentTheme.activities[this.currentUser] || [], nextLevel);
+        const userType = this.getCurrentUserType();
+        const nextActivities = GameScenes.filterActivitiesByLevel(this.currentTheme.activities[userType] || [], nextLevel);
         const hasNext = nextActivities.length > 0;
 
         // Reward logic: Sticker
@@ -1564,7 +1573,7 @@ const Game = {
      * Update progress bar
      */
     updateProgress() {
-        const activities = GameScenes.getActivities(this.currentUser);
+        const activities = GameScenes.getActivities(this.getCurrentUserType());
         const current = GameScenes.currentActivityIndex + 1;
         const total = activities.length;
         const percentage = (current / total) * 100;
