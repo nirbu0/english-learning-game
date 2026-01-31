@@ -687,17 +687,18 @@ const Game = {
         GameScenes.currentItemIndex = 0;
         let collectedCount = 0;
 
+        // Get theme-specific drop zone config
+        const dropZoneConfig = GameScenes.getDropZoneConfig(this.currentTheme?.id);
+
         // Set initial instruction
         const updateInstruction = () => {
             if (GameScenes.currentItemIndex >= items.length) return;
             const targetWord = items[GameScenes.currentItemIndex];
             const instruction = activity.instruction.replace('{word}', targetWord.toUpperCase());
             this.setInstruction(instruction, targetWord);
-            GameSpeech.speakInstruction(`Drag the ${targetWord} to the cart!`);
+            // Use theme-specific destination in speech
+            GameSpeech.speakInstruction(`Drag the ${targetWord} to the ${dropZoneConfig.label.toLowerCase()}!`);
         };
-
-        // Get theme-specific drop zone config
-        const dropZoneConfig = GameScenes.getDropZoneConfig(this.currentTheme?.id);
 
         // Create drag and drop UI with theme-appropriate container
         this.elements.interactionArea.innerHTML = `
@@ -2115,8 +2116,11 @@ const Game = {
         const items = activity.items;
         const targetWord = items[GameScenes.currentItemIndex];
 
-        // Repeat instruction
-        GameSpeech.speakInstruction(`Drag the ${targetWord} to the cart!`);
+        // Get theme-specific drop zone config for correct speech
+        const dropZoneConfig = GameScenes.getDropZoneConfig(this.currentTheme?.id);
+
+        // Repeat instruction with theme-specific destination
+        GameSpeech.speakInstruction(`Drag the ${targetWord} to the ${dropZoneConfig.label.toLowerCase()}!`);
 
         // Find the target drag item
         const targetElement = document.querySelector(`.drag-item[data-item="${targetWord}"]`);
