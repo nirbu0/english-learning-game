@@ -112,15 +112,27 @@ const ParentDashboard = {
         const container = document.getElementById('user-progress-cards');
         if (!container) return;
 
-        const users = ['explorer', 'adventurer'];
+        // Get all users from storage (new multi-user system)
+        const allUsers = GameStorage.getAllUsers ? GameStorage.getAllUsers() : [];
         const themes = GameScenes.getThemes();
 
-        container.innerHTML = users.map(userId => {
-            const user = GameStorage.getUser(userId);
-            const totalStars = GameStorage.getTotalStars(userId);
+        if (allUsers.length === 0) {
+            container.innerHTML = `
+                <div class="no-data" style="text-align: center; padding: 40px; color: #666;">
+                    <div style="font-size: 4rem; margin-bottom: 15px;">👶</div>
+                    <p>No users created yet. Add an Explorer or Adventurer to start tracking progress!</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = allUsers.map(user => {
+            const userId = user.id;
+            const totalStars = user.totalStars || 0;
             const completedThemes = themes.filter(t =>
                 GameStorage.getThemeProgress(userId, t.id).completed
             ).length;
+            const ageRange = user.userType === 'explorer' ? 'Ages 4-5' : 'Ages 6-9';
 
             return `
                 <div class="user-progress-card">
@@ -128,7 +140,7 @@ const ParentDashboard = {
                         <span class="user-avatar-large">${user.avatar}</span>
                         <div class="user-info">
                             <h3>${user.name}</h3>
-                            <p>${user.ageRange}</p>
+                            <p>${ageRange} (${user.userType})</p>
                         </div>
                         <div class="user-total-stars">
                             <span class="star-count">${totalStars}</span>

@@ -802,9 +802,18 @@ body {
     background: #fff;
     border-radius: var(--border-radius);
     box-shadow: var(--card-shadow);
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
     min-height: 200px;
+    max-height: 50vh;
+}
+
+/* On smaller screens, allow more space */
+@media (max-height: 700px) {
+    .scene-area {
+        max-height: 40vh;
+    }
 }
 
 .scene-background {
