@@ -14,15 +14,15 @@ const ParentDashboard = {
             modal = this.createDashboardModal();
             document.body.appendChild(modal);
         }
-        
+
         // Populate with data
         this.populateData();
-        
+
         // Show modal
         modal.classList.remove('hidden');
         GameSounds.click();
     },
-    
+
     /**
      * Hide the dashboard
      */
@@ -32,7 +32,7 @@ const ParentDashboard = {
             modal.classList.add('hidden');
         }
     },
-    
+
     /**
      * Create the dashboard modal HTML
      */
@@ -40,7 +40,7 @@ const ParentDashboard = {
         const modal = document.createElement('div');
         modal.id = 'parent-dashboard-modal';
         modal.className = 'modal hidden';
-        
+
         modal.innerHTML = `
             <div class="dashboard-content">
                 <div class="dashboard-header">
@@ -52,6 +52,7 @@ const ParentDashboard = {
                     <button class="tab-btn active" data-tab="progress">📊 Progress</button>
                     <button class="tab-btn" data-tab="statistics">📈 Statistics</button>
                     <button class="tab-btn" data-tab="certificates">🏆 Certificates</button>
+                    <button class="tab-btn" data-tab="settings">⚙️ Settings</button>
                 </div>
                 
                 <div class="tab-content" id="progress-tab">
@@ -71,9 +72,15 @@ const ParentDashboard = {
                         <!-- Certificates will be inserted here -->
                     </div>
                 </div>
+
+                <div class="tab-content hidden" id="settings-tab">
+                    <div class="settings-container" id="settings-container">
+                        <!-- Settings will be inserted here -->
+                    </div>
+                </div>
             </div>
         `;
-        
+
         // Add tab switching
         modal.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -84,10 +91,10 @@ const ParentDashboard = {
                 GameSounds.click();
             });
         });
-        
+
         return modal;
     },
-    
+
     /**
      * Populate dashboard with data
      */
@@ -95,25 +102,26 @@ const ParentDashboard = {
         this.populateProgress();
         this.populateStatistics();
         this.populateCertificates();
+        this.populateSettings();
     },
-    
+
     /**
      * Populate progress tab
      */
     populateProgress() {
         const container = document.getElementById('user-progress-cards');
         if (!container) return;
-        
+
         const users = ['explorer', 'adventurer'];
         const themes = GameScenes.getThemes();
-        
+
         container.innerHTML = users.map(userId => {
             const user = GameStorage.getUser(userId);
             const totalStars = GameStorage.getTotalStars(userId);
-            const completedThemes = themes.filter(t => 
+            const completedThemes = themes.filter(t =>
                 GameStorage.getThemeProgress(userId, t.id).completed
             ).length;
-            
+
             return `
                 <div class="user-progress-card">
                     <div class="user-header">
@@ -147,37 +155,37 @@ const ParentDashboard = {
                         <h4>Theme Progress</h4>
                         <div class="themes-grid-mini">
                             ${themes.map(theme => {
-                                const progress = GameStorage.getThemeProgress(userId, theme.id);
-                                return `
+                const progress = GameStorage.getThemeProgress(userId, theme.id);
+                return `
                                     <div class="theme-progress-item ${progress.completed ? 'completed' : ''}">
                                         <span class="theme-emoji-mini">${theme.emoji}</span>
                                         <span class="theme-stars-mini">${'⭐'.repeat(progress.stars || 0)}${'☆'.repeat(3 - (progress.stars || 0))}</span>
                                     </div>
                                 `;
-                            }).join('')}
+            }).join('')}
                         </div>
                     </div>
                 </div>
             `;
         }).join('');
     },
-    
+
     /**
      * Populate statistics tab
      */
     populateStatistics() {
         const container = document.getElementById('statistics-container');
         if (!container) return;
-        
+
         const users = ['explorer', 'adventurer'];
         const themes = GameScenes.getThemes();
-        
+
         // Calculate overall statistics
         let totalPlayTime = 0;
         let totalCorrectAnswers = 0;
         let totalQuestions = 0;
         let wordsLearned = new Set();
-        
+
         users.forEach(userId => {
             const userProgress = GameStorage.getUserProgress(userId);
             themes.forEach(theme => {
@@ -191,9 +199,9 @@ const ParentDashboard = {
                 }
             });
         });
-        
+
         const accuracy = totalQuestions > 0 ? Math.round((totalCorrectAnswers / totalQuestions) * 100) : 0;
-        
+
         container.innerHTML = `
             <div class="stats-overview">
                 <h3>📊 Learning Statistics</h3>
@@ -225,9 +233,9 @@ const ParentDashboard = {
                 <h3>📖 Vocabulary Learned</h3>
                 <div class="words-cloud">
                     ${Array.from(wordsLearned).slice(0, 30).map(word => {
-                        const wordData = GameScenes.getWordData(word);
-                        return `<span class="word-tag">${wordData.emoji} ${word}</span>`;
-                    }).join('')}
+            const wordData = GameScenes.getWordData(word);
+            return `<span class="word-tag">${wordData.emoji} ${word}</span>`;
+        }).join('')}
                     ${wordsLearned.size === 0 ? '<p class="no-data">Start playing to learn words!</p>' : ''}
                 </div>
             </div>
@@ -243,17 +251,17 @@ const ParentDashboard = {
             </div>
         `;
     },
-    
+
     /**
      * Populate certificates tab
      */
     populateCertificates() {
         const container = document.getElementById('certificates-container');
         if (!container) return;
-        
+
         const users = ['explorer', 'adventurer'];
         const themes = GameScenes.getThemes();
-        
+
         container.innerHTML = `
             <div class="certificates-intro">
                 <h3>🏆 Achievement Certificates</h3>
@@ -262,27 +270,27 @@ const ParentDashboard = {
             
             <div class="certificates-list">
                 ${users.map(userId => {
-                    const user = GameStorage.getUser(userId);
-                    const completedThemes = themes.filter(t => 
-                        GameStorage.getThemeProgress(userId, t.id).completed
-                    );
-                    
-                    if (completedThemes.length === 0) {
-                        return `
+            const user = GameStorage.getUser(userId);
+            const completedThemes = themes.filter(t =>
+                GameStorage.getThemeProgress(userId, t.id).completed
+            );
+
+            if (completedThemes.length === 0) {
+                return `
                             <div class="user-certificates">
                                 <h4>${user.avatar} ${user.name}</h4>
                                 <p class="no-certificates">No certificates yet. Complete themes to earn certificates!</p>
                             </div>
                         `;
-                    }
-                    
-                    return `
+            }
+
+            return `
                         <div class="user-certificates">
                             <h4>${user.avatar} ${user.name}</h4>
                             <div class="certificate-cards">
                                 ${completedThemes.map(theme => {
-                                    const progress = GameStorage.getThemeProgress(userId, theme.id);
-                                    return `
+                const progress = GameStorage.getThemeProgress(userId, theme.id);
+                return `
                                         <div class="certificate-card">
                                             <div class="cert-theme">${theme.emoji}</div>
                                             <div class="cert-name">${theme.name}</div>
@@ -292,15 +300,65 @@ const ParentDashboard = {
                                             </button>
                                         </div>
                                     `;
-                                }).join('')}
+            }).join('')}
                             </div>
                         </div>
                     `;
-                }).join('')}
+        }).join('')}
             </div>
         `;
     },
-    
+
+    /**
+     * Populate settings tab
+     */
+    populateSettings() {
+        const container = document.getElementById('settings-container');
+        if (!container) return;
+
+        const settings = GameStorage.getSettings();
+
+        container.innerHTML = `
+            <div class="settings-intro">
+                <h3>🛠️ Dashboard Settings & QA</h3>
+                <p>Manage game settings and debug tools.</p>
+            </div>
+            
+            <div class="setting-group">
+                <div class="setting-row">
+                    <div class="setting-info">
+                        <label>🔓 Unlock All Content (QA Mode)</label>
+                        <p class="setting-desc">Unlocks all levels and themes for testing purposes.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="dashboard-unlock-all" ${settings.unlockAll ? 'checked' : ''}>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="danger-zone">
+                <h4>⚠️ Danger Zone</h4>
+                <button class="btn btn-danger" onclick="if(confirm('Reset ALL game data? This cannot be undone.')) { GameStorage.resetAll(); location.reload(); }">
+                    🗑️ Factory Reset Game
+                </button>
+            </div>
+        `;
+
+        // Add event listener
+        setTimeout(() => {
+            const toggle = document.getElementById('dashboard-unlock-all');
+            if (toggle) {
+                toggle.addEventListener('change', (e) => {
+                    GameStorage.saveSettings({ unlockAll: e.target.checked });
+                    if (GameScenes.currentTheme) {
+                        alert("Settings saved. Please return to main menu or restart theme to see changes.");
+                    }
+                });
+            }
+        }, 0);
+    },
+
     /**
      * Print a certificate
      */
@@ -308,12 +366,12 @@ const ParentDashboard = {
         const user = GameStorage.getUser(userId);
         const theme = GameScenes.getTheme(themeId);
         const progress = GameStorage.getThemeProgress(userId, themeId);
-        const date = new Date().toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
+        const date = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
         });
-        
+
         // Create certificate HTML
         const certWindow = window.open('', '_blank');
         certWindow.document.write(`

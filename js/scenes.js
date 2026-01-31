@@ -5,13 +5,14 @@
 const GameScenes = {
     vocabulary: null,
     currentTheme: null,
+    currentLevel: 1,
     currentActivity: null,
     currentActivityIndex: 0,
     currentItemIndex: 0,
     collectedItems: [],
     correctAnswers: 0,
     totalQuestions: 0,
-    
+
     /**
      * Initialize scenes with vocabulary data
      */
@@ -28,13 +29,34 @@ const GameScenes = {
             return true;
         }
     },
-    
+
     /**
      * Get embedded vocabulary data (fallback for when fetch fails)
      */
     getEmbeddedVocabulary() {
         return {
             "themes": [
+                {
+                    "id": "alphabet",
+                    "name": "Alphabet Adventure",
+                    "emoji": "🔤",
+                    "description": "Learn your ABCs!",
+                    "background": "default",
+                    "character": "🎓",
+                    "unlocked": true,
+                    "activities": {
+                        "explorer": [
+                            { "type": "tap-to-learn", "instruction": "Tap the letter!", "items": ["A", "B", "C", "D", "E"] },
+                            { "type": "tap-to-learn", "instruction": "Tap the letter!", "items": ["F", "G", "H", "I", "J"] },
+                            { "type": "find-item", "instruction": "Find the letter {word}!", "targetWords": ["A", "B", "C", "D", "E"] }
+                        ],
+                        "adventurer": [
+                            { "type": "tap-to-learn", "instruction": "Tap the letter!", "items": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"] },
+                            { "type": "find-item", "instruction": "Find the letter {word}!", "targetWords": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"] },
+                            { "type": "match-sound", "instruction": "Which letter did I say?", "words": ["A", "B", "C", "D", "E"] }
+                        ]
+                    }
+                },
                 {
                     "id": "supermarket",
                     "name": "Supermarket Adventure",
@@ -240,159 +262,208 @@ const GameScenes = {
                 }
             ],
             "vocabulary": {
-                "apple": {"emoji": "🍎", "category": "food"},
-                "banana": {"emoji": "🍌", "category": "food"},
-                "orange": {"emoji": "🍊", "category": "food"},
-                "milk": {"emoji": "🥛", "category": "food"},
-                "bread": {"emoji": "🍞", "category": "food"},
-                "carrot": {"emoji": "🥕", "category": "food"},
-                "tomato": {"emoji": "🍅", "category": "food"},
-                "cheese": {"emoji": "🧀", "category": "food"},
-                "eggs": {"emoji": "🥚", "category": "food"},
-                "egg": {"emoji": "🥚", "category": "food"},
-                "flour": {"emoji": "🌾", "category": "food"},
-                "sugar": {"emoji": "🍬", "category": "food"},
-                "butter": {"emoji": "🧈", "category": "food"},
-                "chocolate": {"emoji": "🍫", "category": "food"},
-                "vanilla": {"emoji": "🧁", "category": "food"},
-                "cream": {"emoji": "🍦", "category": "food"},
-                "cake": {"emoji": "🎂", "category": "food"},
-                "lion": {"emoji": "🦁", "category": "animal"},
-                "elephant": {"emoji": "🐘", "category": "animal"},
-                "monkey": {"emoji": "🐵", "category": "animal"},
-                "giraffe": {"emoji": "🦒", "category": "animal"},
-                "zebra": {"emoji": "🦓", "category": "animal"},
-                "tiger": {"emoji": "🐯", "category": "animal"},
-                "hippo": {"emoji": "🦛", "category": "animal"},
-                "penguin": {"emoji": "🐧", "category": "animal"},
-                "parrot": {"emoji": "🦜", "category": "animal"},
-                "fish": {"emoji": "🐟", "category": "animal"},
-                "whale": {"emoji": "🐳", "category": "animal"},
-                "octopus": {"emoji": "🐙", "category": "animal"},
-                "crab": {"emoji": "🦀", "category": "animal"},
-                "starfish": {"emoji": "⭐", "category": "animal"},
-                "shark": {"emoji": "🦈", "category": "animal"},
-                "dolphin": {"emoji": "🐬", "category": "animal"},
-                "turtle": {"emoji": "🐢", "category": "animal"},
-                "rocket": {"emoji": "🚀", "category": "space"},
-                "star": {"emoji": "⭐", "category": "space"},
-                "moon": {"emoji": "🌙", "category": "space"},
-                "planet": {"emoji": "🪐", "category": "space"},
-                "sun": {"emoji": "☀️", "category": "space"},
-                "astronaut": {"emoji": "👨‍🚀", "category": "space"},
-                "ship": {"emoji": "🚢", "category": "vehicle"},
-                "treasure": {"emoji": "💎", "category": "object"},
-                "map": {"emoji": "🗺️", "category": "object"},
-                "island": {"emoji": "🏝️", "category": "place"},
-                "chest": {"emoji": "📦", "category": "object"},
-                "sword": {"emoji": "⚔️", "category": "object"},
-                "compass": {"emoji": "🧭", "category": "object"},
-                "gold": {"emoji": "🪙", "category": "object"},
-                "t-rex": {"emoji": "🦖", "category": "dinosaur"},
-                "bone": {"emoji": "🦴", "category": "object"},
-                "fossil": {"emoji": "🪨", "category": "object"},
-                "big": {"emoji": "📏", "category": "adjective"},
-                "hammer": {"emoji": "🔨", "category": "tool"},
-                "truck": {"emoji": "🚚", "category": "vehicle"},
-                "crane": {"emoji": "🏗️", "category": "vehicle"},
-                "brick": {"emoji": "🧱", "category": "material"},
-                "wood": {"emoji": "🪵", "category": "material"},
-                "nail": {"emoji": "🔩", "category": "tool"},
-                "saw": {"emoji": "🪚", "category": "tool"},
-                "helmet": {"emoji": "⛑️", "category": "clothing"},
-                "car": {"emoji": "🚗", "category": "vehicle"},
-                "wheel": {"emoji": "🛞", "category": "object"},
-                "flag": {"emoji": "🏁", "category": "object"},
-                "trophy": {"emoji": "🏆", "category": "object"},
-                "engine": {"emoji": "⚙️", "category": "object"},
-                "tire": {"emoji": "🛞", "category": "object"},
-                "fast": {"emoji": "💨", "category": "adjective"},
-                "win": {"emoji": "🥇", "category": "verb"},
-                "fire": {"emoji": "🔥", "category": "element"},
-                "water": {"emoji": "💧", "category": "element"},
-                "ladder": {"emoji": "🪜", "category": "object"},
-                "hose": {"emoji": "🔫", "category": "object"},
-                "boots": {"emoji": "👢", "category": "clothing"},
-                "alarm": {"emoji": "🚨", "category": "object"},
-                "help": {"emoji": "🆘", "category": "verb"},
-                "swim": {"emoji": "🏊", "category": "verb"}
+                "apple": { "emoji": "🍎", "category": "food" },
+                "banana": { "emoji": "🍌", "category": "food" },
+                "orange": { "emoji": "🍊", "category": "food" },
+                "milk": { "emoji": "🥛", "category": "food" },
+                "bread": { "emoji": "🍞", "category": "food" },
+                "carrot": { "emoji": "🥕", "category": "food" },
+                "tomato": { "emoji": "🍅", "category": "food" },
+                "cheese": { "emoji": "🧀", "category": "food" },
+                "eggs": { "emoji": "🥚", "category": "food" },
+                "egg": { "emoji": "🥚", "category": "food" },
+                "flour": { "emoji": "🌾", "category": "food" },
+                "sugar": { "emoji": "🍬", "category": "food" },
+                "butter": { "emoji": "🧈", "category": "food" },
+                "chocolate": { "emoji": "🍫", "category": "food" },
+                "vanilla": { "emoji": "🧁", "category": "food" },
+                "cream": { "emoji": "🍦", "category": "food" },
+                "cake": { "emoji": "🎂", "category": "food" },
+                "lion": { "emoji": "🦁", "category": "animal" },
+                "elephant": { "emoji": "🐘", "category": "animal" },
+                "monkey": { "emoji": "🐵", "category": "animal" },
+                "giraffe": { "emoji": "🦒", "category": "animal" },
+                "zebra": { "emoji": "🦓", "category": "animal" },
+                "tiger": { "emoji": "🐯", "category": "animal" },
+                "hippo": { "emoji": "🦛", "category": "animal" },
+                "penguin": { "emoji": "🐧", "category": "animal" },
+                "parrot": { "emoji": "🦜", "category": "animal" },
+                "fish": { "emoji": "🐟", "category": "animal" },
+                "whale": { "emoji": "🐳", "category": "animal" },
+                "octopus": { "emoji": "🐙", "category": "animal" },
+                "crab": { "emoji": "🦀", "category": "animal" },
+                "starfish": { "emoji": "⭐", "category": "animal" },
+                "shark": { "emoji": "🦈", "category": "animal" },
+                "dolphin": { "emoji": "🐬", "category": "animal" },
+                "turtle": { "emoji": "🐢", "category": "animal" },
+                "rocket": { "emoji": "🚀", "category": "space" },
+                "star": { "emoji": "⭐", "category": "space" },
+                "moon": { "emoji": "🌙", "category": "space" },
+                "planet": { "emoji": "🪐", "category": "space" },
+                "sun": { "emoji": "☀️", "category": "space" },
+                "astronaut": { "emoji": "👨‍🚀", "category": "space" },
+                "ship": { "emoji": "🚢", "category": "vehicle" },
+                "treasure": { "emoji": "💎", "category": "object" },
+                "map": { "emoji": "🗺️", "category": "object" },
+                "island": { "emoji": "🏝️", "category": "place" },
+                "chest": { "emoji": "📦", "category": "object" },
+                "sword": { "emoji": "⚔️", "category": "object" },
+                "compass": { "emoji": "🧭", "category": "object" },
+                "gold": { "emoji": "🪙", "category": "object" },
+                "t-rex": { "emoji": "🦖", "category": "dinosaur" },
+                "bone": { "emoji": "🦴", "category": "object" },
+                "fossil": { "emoji": "🪨", "category": "object" },
+                "big": { "emoji": "📏", "category": "adjective" },
+                "hammer": { "emoji": "🔨", "category": "tool" },
+                "truck": { "emoji": "🚚", "category": "vehicle" },
+                "crane": { "emoji": "🏗️", "category": "vehicle" },
+                "brick": { "emoji": "🧱", "category": "material" },
+                "wood": { "emoji": "🪵", "category": "material" },
+                "nail": { "emoji": "🔩", "category": "tool" },
+                "saw": { "emoji": "🪚", "category": "tool" },
+                "helmet": { "emoji": "⛑️", "category": "clothing" },
+                "car": { "emoji": "🚗", "category": "vehicle" },
+                "wheel": { "emoji": "🛞", "category": "object" },
+                "flag": { "emoji": "🏁", "category": "object" },
+                "trophy": { "emoji": "🏆", "category": "object" },
+                "engine": { "emoji": "⚙️", "category": "object" },
+                "tire": { "emoji": "🛞", "category": "object" },
+                "fast": { "emoji": "💨", "category": "adjective" },
+                "win": { "emoji": "🥇", "category": "verb" },
+                "fire": { "emoji": "🔥", "category": "element" },
+                "water": { "emoji": "💧", "category": "element" },
+                "ladder": { "emoji": "🪜", "category": "object" },
+                "hose": { "emoji": "🔫", "category": "object" },
+                "boots": { "emoji": "👢", "category": "clothing" },
+                "alarm": { "emoji": "🚨", "category": "object" },
+                "help": { "emoji": "🆘", "category": "verb" },
+                "swim": { "emoji": "🏊", "category": "verb" },
+                "A": { "emoji": "🔤", "letter": "A", "category": "letter", "word": "apple", "wordEmoji": "🍎" },
+                "B": { "emoji": "🔤", "letter": "B", "category": "letter", "word": "banana", "wordEmoji": "🍌" },
+                "C": { "emoji": "🔤", "letter": "C", "category": "letter", "word": "cat", "wordEmoji": "🐱" },
+                "D": { "emoji": "🔤", "letter": "D", "category": "letter", "word": "dog", "wordEmoji": "🐕" },
+                "E": { "emoji": "🔤", "letter": "E", "category": "letter", "word": "elephant", "wordEmoji": "🐘" },
+                "F": { "emoji": "🔤", "letter": "F", "category": "letter", "word": "fish", "wordEmoji": "🐟" },
+                "G": { "emoji": "🔤", "letter": "G", "category": "letter", "word": "grape", "wordEmoji": "🍇" },
+                "H": { "emoji": "🔤", "letter": "H", "category": "letter", "word": "house", "wordEmoji": "🏠" },
+                "I": { "emoji": "🔤", "letter": "I", "category": "letter", "word": "ice cream", "wordEmoji": "🍦" },
+                "J": { "emoji": "🔤", "letter": "J", "category": "letter", "word": "juice", "wordEmoji": "🧃" }
             }
         };
     },
-    
+
     /**
      * Get all themes
      */
     getThemes() {
         return this.vocabulary?.themes || [];
     },
-    
+
     /**
      * Get theme by ID
      */
     getTheme(themeId) {
         return this.getThemes().find(t => t.id === themeId);
     },
-    
+
     /**
      * Get word data (emoji, etc.)
+     * For letters, returns styled letter display with associated word
      */
     getWordData(word) {
-        return this.vocabulary?.vocabulary[word] || { emoji: '❓', category: 'unknown' };
+        const data = this.vocabulary?.vocabulary[word] || { emoji: '❓', category: 'unknown' };
+        
+        // Special handling for letters - display as styled letter block
+        if (data.category === 'letter' && data.letter) {
+            return {
+                ...data,
+                // Use a styled letter display instead of generic emoji
+                emoji: `<span class="letter-block">${data.letter}</span>`,
+                displayWord: data.word,
+                displayEmoji: data.wordEmoji
+            };
+        }
+        
+        return data;
     },
-    
+
     /**
      * Start a theme
      */
-    startTheme(themeId, userType) {
+    startTheme(themeId, userType, level = 1) {
         this.currentTheme = this.getTheme(themeId);
         if (!this.currentTheme) return false;
-        
+
+        this.currentLevel = level;
         this.currentActivityIndex = 0;
         this.collectedItems = [];
         this.correctAnswers = 0;
         this.totalQuestions = 0;
-        
-        const activities = this.currentTheme.activities[userType];
+
+        const activities = this.getActivities(userType);
         if (!activities || activities.length === 0) return false;
-        
+
         this.currentActivity = activities[this.currentActivityIndex];
         this.currentItemIndex = 0;
-        
+
         return true;
     },
-    
+
     /**
      * Get current activity
      */
     getCurrentActivity() {
         return this.currentActivity;
     },
-    
+
     /**
      * Get activities for current theme and user type
      */
     getActivities(userType) {
         if (!this.currentTheme) return [];
-        return this.currentTheme.activities[userType] || [];
+        const allActivities = this.currentTheme.activities[userType] || [];
+
+        // Filter by level
+        return this.filterActivitiesByLevel(allActivities, this.currentLevel);
     },
-    
+
+    /**
+     * Filter activities by level
+     * Uses explicit level tags if present, otherwise returns empty for non-level-1
+     */
+    filterActivitiesByLevel(activities, level) {
+        // 1. Check if ANY activity has explicit level tags
+        const hasLevelTags = activities.some(a => a.level !== undefined);
+        
+        if (hasLevelTags) {
+            // Return only activities matching the requested level
+            return activities.filter(a => a.level === level);
+        }
+        
+        // 2. No level tags - only level 1 exists (return all for level 1, empty for others)
+        if (level === 1) {
+            return activities;
+        }
+        
+        return []; // No activities for levels 2+ when no tags defined
+    },
+
     /**
      * Move to next activity
      */
     nextActivity(userType) {
         const activities = this.getActivities(userType);
         this.currentActivityIndex++;
-        
+
         if (this.currentActivityIndex >= activities.length) {
             return null; // Theme completed
         }
-        
+
         this.currentActivity = activities[this.currentActivityIndex];
         this.currentItemIndex = 0;
         return this.currentActivity;
     },
-    
+
     /**
      * Calculate stars based on performance
      */
@@ -403,13 +474,13 @@ const GameScenes = {
         if (percentage >= 70) return 2;
         return 1;
     },
-    
+
     /**
      * Render scene based on theme
      */
     renderScene(sceneArea, theme) {
         const background = theme?.background || 'default';
-        
+
         switch (background) {
             case 'supermarket':
                 return this.renderSupermarketScene(sceneArea);
@@ -435,7 +506,7 @@ const GameScenes = {
                 return this.renderDefaultScene(sceneArea);
         }
     },
-    
+
     /**
      * Render supermarket scene
      */
@@ -458,7 +529,7 @@ const GameScenes = {
             </div>
         `;
     },
-    
+
     /**
      * Render kitchen scene
      */
@@ -481,7 +552,7 @@ const GameScenes = {
             </div>
         `;
     },
-    
+
     /**
      * Render zoo scene
      */
@@ -500,7 +571,7 @@ const GameScenes = {
             </div>
         `;
     },
-    
+
     /**
      * Render space scene
      */
@@ -522,7 +593,7 @@ const GameScenes = {
             </div>
         `;
     },
-    
+
     /**
      * Render island/pirate scene
      */
@@ -541,7 +612,7 @@ const GameScenes = {
             </div>
         `;
     },
-    
+
     /**
      * Render prehistoric/dinosaur scene
      */
@@ -561,7 +632,7 @@ const GameScenes = {
             </div>
         `;
     },
-    
+
     /**
      * Render construction scene
      */
@@ -580,7 +651,7 @@ const GameScenes = {
             </div>
         `;
     },
-    
+
     /**
      * Render racetrack scene
      */
@@ -599,7 +670,7 @@ const GameScenes = {
             </div>
         `;
     },
-    
+
     /**
      * Render city/firefighter scene
      */
@@ -620,7 +691,7 @@ const GameScenes = {
             </div>
         `;
     },
-    
+
     /**
      * Render underwater/ocean scene
      */
@@ -641,7 +712,7 @@ const GameScenes = {
             </div>
         `;
     },
-    
+
     /**
      * Render default scene
      */
@@ -657,16 +728,16 @@ const GameScenes = {
             </div>
         `;
     },
-    
+
     /**
      * Populate shelf/scene with items
      */
     populateItems(items, onItemClick) {
         const shelf = document.getElementById('store-shelf');
         if (!shelf) return;
-        
+
         shelf.innerHTML = '';
-        
+
         items.forEach((item, index) => {
             const wordData = this.getWordData(item);
             const itemElement = document.createElement('div');
@@ -675,21 +746,21 @@ const GameScenes = {
             itemElement.dataset.index = index;
             itemElement.innerHTML = wordData.emoji;
             itemElement.title = item;
-            
+
             if (this.collectedItems.includes(item)) {
                 itemElement.classList.add('collected');
             }
-            
+
             itemElement.addEventListener('click', () => {
                 if (!itemElement.classList.contains('collected')) {
                     onItemClick(item, itemElement);
                 }
             });
-            
+
             shelf.appendChild(itemElement);
         });
     },
-    
+
     /**
      * Show item as collected
      */
@@ -697,17 +768,17 @@ const GameScenes = {
         if (!this.collectedItems.includes(word)) {
             this.collectedItems.push(word);
         }
-        
+
         const item = document.querySelector(`.shelf-item[data-word="${word}"]`);
         if (item) {
             item.classList.add('collected');
         }
-        
+
         // Play collect sound
         if (typeof GameSounds !== 'undefined') {
             GameSounds.collect();
         }
-        
+
         // Update cart
         const cartItems = document.getElementById('cart-items');
         const cartBadge = document.getElementById('cart-badge');
@@ -719,7 +790,7 @@ const GameScenes = {
             cartBadge.textContent = this.collectedItems.length;
         }
     },
-    
+
     /**
      * Show correct feedback on item
      */
@@ -727,7 +798,7 @@ const GameScenes = {
         element.classList.add('correct');
         setTimeout(() => element.classList.remove('correct'), 500);
     },
-    
+
     /**
      * Show wrong feedback on item
      */
@@ -735,34 +806,34 @@ const GameScenes = {
         element.classList.add('wrong');
         setTimeout(() => element.classList.remove('wrong'), 500);
     },
-    
+
     /**
      * Get shuffled array of items including target
      */
     getShuffledOptions(targetWord, allItems, count = 4) {
         const options = [targetWord];
         const otherItems = allItems.filter(item => item !== targetWord);
-        
+
         // Shuffle other items
         for (let i = otherItems.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [otherItems[i], otherItems[j]] = [otherItems[j], otherItems[i]];
         }
-        
+
         // Add items until we have enough
         while (options.length < count && otherItems.length > 0) {
             options.push(otherItems.pop());
         }
-        
+
         // Shuffle final options
         for (let i = options.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [options[i], options[j]] = [options[j], options[i]];
         }
-        
+
         return options;
     },
-    
+
     /**
      * Reset scene state
      */

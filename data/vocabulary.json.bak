@@ -1,0 +1,872 @@
+{
+    "themes": [
+        {
+            "id": "supermarket",
+            "name": "Supermarket Adventure",
+            "emoji": "🛒",
+            "description": "Help Max fill his shopping cart!",
+            "background": "supermarket",
+            "character": "👦",
+            "unlocked": true,
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap each item to learn its name!",
+                        "items": ["apple", "banana", "orange", "milk", "bread"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["apple", "banana", "orange", "milk", "bread"]
+                    },
+                    {
+                        "type": "match-pairs",
+                        "instruction": "Match the words with pictures!",
+                        "items": ["apple", "banana", "orange"]
+                    },
+                    {
+                        "type": "match-sound",
+                        "instruction": "Which one did I say?",
+                        "words": ["apple", "banana", "orange", "milk"]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap each item to learn its name!",
+                        "items": ["apple", "banana", "orange", "carrot", "tomato", "milk", "bread", "cheese", "eggs"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["apple", "banana", "orange", "carrot", "tomato", "milk", "bread", "cheese"]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["apple", "milk", "bread"]
+                    },
+                    {
+                        "type": "shopping-list",
+                        "instruction": "Get everything on the shopping list!",
+                        "list": ["apple", "milk", "bread", "banana"]
+                    },
+                    {
+                        "type": "counting",
+                        "instruction": "Count the {word}s! How many are there?",
+                        "items": ["apple", "banana", "orange"]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "bakery",
+            "name": "Birthday Cake",
+            "emoji": "🎂",
+            "description": "Bake a birthday cake!",
+            "background": "kitchen",
+            "character": "👨‍🍳",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap each ingredient!",
+                        "items": ["egg", "milk", "flour", "sugar", "butter"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["egg", "milk", "flour", "sugar", "butter"]
+                    },
+                    {
+                        "type": "collect-items",
+                        "instruction": "Put the {word} in the bowl!",
+                        "items": ["egg", "milk", "flour"]
+                    },
+                    {
+                        "type": "action-sequence",
+                        "instruction": "Let's {action}!",
+                        "actions": ["mix", "pour", "bake"]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap each ingredient!",
+                        "items": ["egg", "milk", "flour", "sugar", "butter", "chocolate", "vanilla", "cream"]
+                    },
+                    {
+                        "type": "recipe-steps",
+                        "instruction": "Follow the recipe!",
+                        "steps": [
+                            "First, add the flour",
+                            "Then, add the eggs",
+                            "Now, pour the milk",
+                            "Mix everything together",
+                            "Put it in the oven"
+                        ]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["egg", "milk", "cake"]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "zoo",
+            "name": "Safari Zoo",
+            "emoji": "🦁",
+            "description": "Be a zookeeper for a day!",
+            "background": "zoo",
+            "character": "🧑‍🌾",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap each animal!",
+                        "items": ["lion", "elephant", "monkey", "giraffe", "zebra"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["lion", "elephant", "monkey", "giraffe", "zebra"]
+                    },
+                    {
+                        "type": "match-sound",
+                        "instruction": "Which animal did I say?",
+                        "words": ["lion", "elephant", "monkey", "giraffe"]
+                    },
+                    {
+                        "type": "feed-animal",
+                        "instruction": "Feed the {animal}!",
+                        "pairs": [
+                            {"animal": "lion", "food": "meat"},
+                            {"animal": "elephant", "food": "banana"},
+                            {"animal": "monkey", "food": "banana"}
+                        ]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap each animal!",
+                        "items": ["lion", "elephant", "monkey", "giraffe", "zebra", "tiger", "hippo", "crocodile", "penguin"]
+                    },
+                    {
+                        "type": "drag-and-drop",
+                        "instruction": "Feed the animals! Drag the food to the right animal!",
+                        "pairs": [
+                            {"item": "meat", "target": "lion", "targetLabel": "Lion", "targetEmoji": "🦁"},
+                            {"item": "banana", "target": "monkey", "targetLabel": "Monkey", "targetEmoji": "🐵"},
+                            {"item": "fish", "target": "penguin", "targetLabel": "Penguin", "targetEmoji": "🐧"}
+                        ]
+                    },
+                    {
+                        "type": "match-pairs",
+                        "instruction": "Match the animals with their names!",
+                        "items": ["lion", "elephant", "monkey", "giraffe"]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["lion", "zebra", "monkey"]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "space",
+            "name": "Space Mission",
+            "emoji": "🚀",
+            "description": "Become an astronaut!",
+            "background": "space",
+            "character": "👨‍🚀",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap to explore space!",
+                        "items": ["rocket", "star", "moon", "planet", "sun"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["rocket", "star", "moon", "planet", "sun"]
+                    },
+                    {
+                        "type": "counting",
+                        "instruction": "Count the stars!",
+                        "items": ["star"]
+                    },
+                    {
+                        "type": "dress-up",
+                        "instruction": "Put on the {item}!",
+                        "items": ["helmet", "suit", "boots", "gloves"]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap to explore space!",
+                        "items": ["rocket", "star", "moon", "planet", "sun", "asteroid", "satellite", "astronaut"]
+                    },
+                    {
+                        "type": "directions",
+                        "instruction": "Move the rocket {direction}!",
+                        "directions": ["up", "down", "left", "right"]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["star", "moon", "sun"]
+                    },
+                    {
+                        "type": "planet-facts",
+                        "instruction": "Learn about the planets!",
+                        "facts": [
+                            {"planet": "Mars", "fact": "Mars is red"},
+                            {"planet": "Saturn", "fact": "Saturn has rings"},
+                            {"planet": "Earth", "fact": "We live on Earth"}
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "pirate",
+            "name": "Pirate Treasure",
+            "emoji": "🏴‍☠️",
+            "description": "Find the hidden treasure!",
+            "background": "island",
+            "character": "🏴‍☠️",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap to discover pirate items!",
+                        "items": ["ship", "treasure", "map", "parrot", "island"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["ship", "treasure", "map", "parrot", "gold"]
+                    },
+                    {
+                        "type": "hidden-objects",
+                        "instruction": "Find the hidden {word}!",
+                        "items": ["treasure", "gold", "key"]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap to discover pirate items!",
+                        "items": ["ship", "treasure", "map", "parrot", "island", "chest", "sword", "flag", "compass"]
+                    },
+                    {
+                        "type": "map-directions",
+                        "instruction": "Follow the map! Go {direction}!",
+                        "steps": ["right", "up", "right", "down", "left"]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["ship", "gold", "map"]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "dinosaur",
+            "name": "Dinosaur Discovery",
+            "emoji": "🦕",
+            "description": "Explore the dinosaur world!",
+            "background": "prehistoric",
+            "character": "🔍",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap each dinosaur!",
+                        "items": ["t-rex", "triceratops", "brontosaurus", "pterodactyl", "egg"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["t-rex", "egg", "bone", "fossil"]
+                    },
+                    {
+                        "type": "dig-fossils",
+                        "instruction": "Dig to find the {word}!",
+                        "items": ["bone", "fossil", "egg"]
+                    },
+                    {
+                        "type": "sizes",
+                        "instruction": "Which dinosaur is {size}?",
+                        "items": [
+                            {"word": "t-rex", "size": "big"},
+                            {"word": "egg", "size": "small"}
+                        ]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap each dinosaur!",
+                        "items": ["t-rex", "triceratops", "brontosaurus", "pterodactyl", "stegosaurus", "velociraptor"]
+                    },
+                    {
+                        "type": "dino-facts",
+                        "instruction": "Learn dinosaur facts!",
+                        "facts": [
+                            {"dino": "T-Rex", "fact": "T-Rex was a meat eater"},
+                            {"dino": "Triceratops", "fact": "Triceratops had three horns"},
+                            {"dino": "Brontosaurus", "fact": "Brontosaurus had a very long neck"}
+                        ]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["bone", "egg", "big"]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "construction",
+            "name": "Construction Site",
+            "emoji": "🏗️",
+            "description": "Build a house!",
+            "background": "construction",
+            "character": "👷",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap the tools and vehicles!",
+                        "items": ["hammer", "truck", "crane", "brick", "wood"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["hammer", "truck", "crane", "brick", "wood"]
+                    },
+                    {
+                        "type": "build-stack",
+                        "instruction": "Stack the {word}s!",
+                        "items": ["brick", "wood"]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap the tools and vehicles!",
+                        "items": ["hammer", "truck", "crane", "brick", "wood", "nail", "saw", "drill", "helmet"]
+                    },
+                    {
+                        "type": "build-sequence",
+                        "instruction": "Build the house! First, put the {item}!",
+                        "sequence": ["bricks", "wood", "roof", "door", "window"]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["brick", "wood", "nail"]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "racing",
+            "name": "Racing Day",
+            "emoji": "🏎️",
+            "description": "Get ready to race!",
+            "background": "racetrack",
+            "character": "🏁",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap to learn racing words!",
+                        "items": ["car", "wheel", "helmet", "flag", "trophy"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["car", "wheel", "helmet", "flag", "trophy"]
+                    },
+                    {
+                        "type": "colors",
+                        "instruction": "Find the {color} car!",
+                        "colors": ["red", "blue", "green", "yellow"]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap to learn racing words!",
+                        "items": ["car", "wheel", "helmet", "flag", "trophy", "engine", "tire", "finish"]
+                    },
+                    {
+                        "type": "positions",
+                        "instruction": "Who is in {position} place?",
+                        "positions": ["first", "second", "third", "last"]
+                    },
+                    {
+                        "type": "speed-words",
+                        "instruction": "Which car is {speed}?",
+                        "items": [
+                            {"car": "red", "speed": "fast"},
+                            {"car": "blue", "speed": "slow"}
+                        ]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["car", "fast", "win"]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "firefighter",
+            "name": "Firefighter Hero",
+            "emoji": "🚒",
+            "description": "Save the day!",
+            "background": "city",
+            "character": "👨‍🚒",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap the firefighter items!",
+                        "items": ["fire", "water", "truck", "ladder", "hose"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["fire", "water", "truck", "ladder", "hose"]
+                    },
+                    {
+                        "type": "put-out-fire",
+                        "instruction": "Use the {item} to put out the fire!",
+                        "items": ["water", "hose"]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap the firefighter items!",
+                        "items": ["fire", "water", "truck", "ladder", "hose", "helmet", "boots", "axe", "alarm"]
+                    },
+                    {
+                        "type": "rescue-mission",
+                        "instruction": "Help rescue! {action}!",
+                        "actions": ["climb the ladder", "spray the water", "save the cat"]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["fire", "water", "help"]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "ocean",
+            "name": "Ocean Exploration",
+            "emoji": "🐠",
+            "description": "Dive into the deep sea!",
+            "background": "underwater",
+            "character": "🤿",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap the sea creatures!",
+                        "items": ["fish", "whale", "octopus", "crab", "starfish"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["fish", "whale", "octopus", "crab", "starfish"]
+                    },
+                    {
+                        "type": "bubble-pop",
+                        "instruction": "Pop the bubble with the {word}!",
+                        "words": ["fish", "whale", "crab"]
+                    },
+                    {
+                        "type": "counting",
+                        "instruction": "Count the fish!",
+                        "items": ["fish"]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap the sea creatures!",
+                        "items": ["fish", "whale", "octopus", "crab", "starfish", "shark", "dolphin", "jellyfish", "turtle"]
+                    },
+                    {
+                        "type": "ocean-facts",
+                        "instruction": "Learn ocean facts!",
+                        "facts": [
+                            {"creature": "Whale", "fact": "Whales are very big"},
+                            {"creature": "Octopus", "fact": "Octopus has eight arms"},
+                            {"creature": "Dolphin", "fact": "Dolphins are very smart"}
+                        ]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["fish", "crab", "swim"]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "farm",
+            "name": "Farm Friends",
+            "emoji": "🐄",
+            "description": "Visit the farm animals!",
+            "background": "farm",
+            "character": "👨‍🌾",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap each farm animal!",
+                        "items": ["cow", "pig", "chicken", "horse", "sheep"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["cow", "pig", "chicken", "horse", "sheep"]
+                    },
+                    {
+                        "type": "match-sound",
+                        "instruction": "Which animal did I say?",
+                        "words": ["cow", "pig", "chicken", "horse"]
+                    },
+                    {
+                        "type": "collect-items",
+                        "instruction": "Put the {word} in the barn!",
+                        "items": ["cow", "pig", "chicken"]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap each farm item!",
+                        "items": ["cow", "pig", "chicken", "horse", "sheep", "duck", "tractor", "barn", "corn", "hay"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["cow", "pig", "chicken", "horse", "sheep", "duck", "tractor", "barn"]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["cow", "pig", "duck"]
+                    },
+                    {
+                        "type": "farm-sounds",
+                        "instruction": "Which animal says {sound}?",
+                        "items": [
+                            {"animal": "cow", "sound": "moo"},
+                            {"animal": "pig", "sound": "oink"},
+                            {"animal": "chicken", "sound": "cluck"},
+                            {"animal": "duck", "sound": "quack"}
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "doctor",
+            "name": "Doctor's Office",
+            "emoji": "🏥",
+            "description": "Be a doctor for a day!",
+            "background": "hospital",
+            "character": "👨‍⚕️",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap to learn body parts!",
+                        "items": ["head", "arm", "leg", "hand", "foot"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["head", "arm", "leg", "hand", "foot"]
+                    },
+                    {
+                        "type": "match-sound",
+                        "instruction": "Which body part did I say?",
+                        "words": ["head", "arm", "leg", "hand"]
+                    },
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap the doctor's tools!",
+                        "items": ["bandage", "medicine", "stethoscope"]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap to learn body parts!",
+                        "items": ["head", "arm", "leg", "hand", "foot", "eye", "ear", "nose", "mouth", "heart"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["head", "arm", "leg", "hand", "foot", "eye", "ear", "nose", "mouth"]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["arm", "leg", "eye"]
+                    },
+                    {
+                        "type": "body-checkup",
+                        "instruction": "Point to your {word}!",
+                        "words": ["head", "arm", "leg", "eye", "ear"]
+                    }
+                ]
+            }
+        },
+        {
+            "id": "weather",
+            "name": "Weather Station",
+            "emoji": "🌦️",
+            "description": "Learn about the weather!",
+            "background": "sky",
+            "character": "☀️",
+            "activities": {
+                "explorer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap to learn weather words!",
+                        "items": ["sun", "rain", "cloud", "snow", "wind"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["sun", "rain", "cloud", "snow", "wind"]
+                    },
+                    {
+                        "type": "match-sound",
+                        "instruction": "Which weather did I say?",
+                        "words": ["sun", "rain", "cloud", "snow"]
+                    },
+                    {
+                        "type": "dress-for-weather",
+                        "instruction": "It's {weather}! Wear the {item}!",
+                        "pairs": [
+                            {"weather": "rainy", "item": "umbrella"},
+                            {"weather": "sunny", "item": "sunglasses"},
+                            {"weather": "cold", "item": "coat"}
+                        ]
+                    }
+                ],
+                "adventurer": [
+                    {
+                        "type": "tap-to-learn",
+                        "instruction": "Tap to learn weather words!",
+                        "items": ["sun", "rain", "cloud", "snow", "wind", "rainbow", "storm", "lightning", "umbrella", "coat"]
+                    },
+                    {
+                        "type": "find-item",
+                        "instruction": "Find the {word}!",
+                        "targetWords": ["sun", "rain", "cloud", "snow", "wind", "rainbow", "umbrella", "coat"]
+                    },
+                    {
+                        "type": "spelling",
+                        "instruction": "Spell the word: {word}",
+                        "words": ["sun", "rain", "snow"]
+                    },
+                    {
+                        "type": "seasons",
+                        "instruction": "When do we see {word}?",
+                        "items": [
+                            {"word": "snow", "season": "winter"},
+                            {"word": "flowers", "season": "spring"},
+                            {"word": "beach", "season": "summer"},
+                            {"word": "leaves", "season": "fall"}
+                        ]
+                    }
+                ]
+            }
+        }
+    ],
+    "vocabulary": {
+        "apple": {"emoji": "🍎", "category": "food"},
+        "banana": {"emoji": "🍌", "category": "food"},
+        "orange": {"emoji": "🍊", "category": "food"},
+        "milk": {"emoji": "🥛", "category": "food"},
+        "bread": {"emoji": "🍞", "category": "food"},
+        "carrot": {"emoji": "🥕", "category": "food"},
+        "tomato": {"emoji": "🍅", "category": "food"},
+        "cheese": {"emoji": "🧀", "category": "food"},
+        "eggs": {"emoji": "🥚", "category": "food"},
+        "egg": {"emoji": "🥚", "category": "food"},
+        "flour": {"emoji": "🌾", "category": "food"},
+        "sugar": {"emoji": "🍬", "category": "food"},
+        "butter": {"emoji": "🧈", "category": "food"},
+        "chocolate": {"emoji": "🍫", "category": "food"},
+        "vanilla": {"emoji": "🧁", "category": "food"},
+        "cream": {"emoji": "🍦", "category": "food"},
+        "cake": {"emoji": "🎂", "category": "food"},
+        "meat": {"emoji": "🥩", "category": "food"},
+        "lion": {"emoji": "🦁", "category": "animal"},
+        "elephant": {"emoji": "🐘", "category": "animal"},
+        "monkey": {"emoji": "🐵", "category": "animal"},
+        "giraffe": {"emoji": "🦒", "category": "animal"},
+        "zebra": {"emoji": "🦓", "category": "animal"},
+        "tiger": {"emoji": "🐯", "category": "animal"},
+        "hippo": {"emoji": "🦛", "category": "animal"},
+        "crocodile": {"emoji": "🐊", "category": "animal"},
+        "penguin": {"emoji": "🐧", "category": "animal"},
+        "parrot": {"emoji": "🦜", "category": "animal"},
+        "fish": {"emoji": "🐟", "category": "animal"},
+        "whale": {"emoji": "🐳", "category": "animal"},
+        "octopus": {"emoji": "🐙", "category": "animal"},
+        "crab": {"emoji": "🦀", "category": "animal"},
+        "starfish": {"emoji": "⭐", "category": "animal"},
+        "shark": {"emoji": "🦈", "category": "animal"},
+        "dolphin": {"emoji": "🐬", "category": "animal"},
+        "jellyfish": {"emoji": "🪼", "category": "animal"},
+        "turtle": {"emoji": "🐢", "category": "animal"},
+        "cat": {"emoji": "🐱", "category": "animal"},
+        "rocket": {"emoji": "🚀", "category": "space"},
+        "star": {"emoji": "⭐", "category": "space"},
+        "moon": {"emoji": "🌙", "category": "space"},
+        "planet": {"emoji": "🪐", "category": "space"},
+        "sun": {"emoji": "☀️", "category": "space"},
+        "asteroid": {"emoji": "☄️", "category": "space"},
+        "satellite": {"emoji": "🛰️", "category": "space"},
+        "astronaut": {"emoji": "👨‍🚀", "category": "space"},
+        "helmet": {"emoji": "⛑️", "category": "clothing"},
+        "suit": {"emoji": "👔", "category": "clothing"},
+        "boots": {"emoji": "👢", "category": "clothing"},
+        "gloves": {"emoji": "🧤", "category": "clothing"},
+        "ship": {"emoji": "🚢", "category": "vehicle"},
+        "treasure": {"emoji": "💎", "category": "object"},
+        "map": {"emoji": "🗺️", "category": "object"},
+        "island": {"emoji": "🏝️", "category": "place"},
+        "chest": {"emoji": "📦", "category": "object"},
+        "sword": {"emoji": "⚔️", "category": "object"},
+        "flag": {"emoji": "🏴‍☠️", "category": "object"},
+        "compass": {"emoji": "🧭", "category": "object"},
+        "gold": {"emoji": "🪙", "category": "object"},
+        "key": {"emoji": "🔑", "category": "object"},
+        "t-rex": {"emoji": "🦖", "category": "dinosaur"},
+        "triceratops": {"emoji": "🦕", "category": "dinosaur"},
+        "brontosaurus": {"emoji": "🦕", "category": "dinosaur"},
+        "pterodactyl": {"emoji": "🦅", "category": "dinosaur"},
+        "stegosaurus": {"emoji": "🦕", "category": "dinosaur"},
+        "velociraptor": {"emoji": "🦖", "category": "dinosaur"},
+        "bone": {"emoji": "🦴", "category": "object"},
+        "fossil": {"emoji": "🪨", "category": "object"},
+        "hammer": {"emoji": "🔨", "category": "tool"},
+        "truck": {"emoji": "🚚", "category": "vehicle"},
+        "crane": {"emoji": "🏗️", "category": "vehicle"},
+        "brick": {"emoji": "🧱", "category": "material"},
+        "wood": {"emoji": "🪵", "category": "material"},
+        "nail": {"emoji": "🔩", "category": "tool"},
+        "saw": {"emoji": "🪚", "category": "tool"},
+        "drill": {"emoji": "🔧", "category": "tool"},
+        "car": {"emoji": "🚗", "category": "vehicle"},
+        "wheel": {"emoji": "🛞", "category": "object"},
+        "trophy": {"emoji": "🏆", "category": "object"},
+        "engine": {"emoji": "⚙️", "category": "object"},
+        "tire": {"emoji": "🛞", "category": "object"},
+        "fire": {"emoji": "🔥", "category": "element"},
+        "water": {"emoji": "💧", "category": "element"},
+        "ladder": {"emoji": "🪜", "category": "object"},
+        "hose": {"emoji": "🔫", "category": "object"},
+        "axe": {"emoji": "🪓", "category": "tool"},
+        "alarm": {"emoji": "🚨", "category": "object"},
+        "door": {"emoji": "🚪", "category": "object"},
+        "window": {"emoji": "🪟", "category": "object"},
+        "roof": {"emoji": "🏠", "category": "object"},
+        "cow": {"emoji": "🐄", "category": "animal"},
+        "pig": {"emoji": "🐷", "category": "animal"},
+        "chicken": {"emoji": "🐔", "category": "animal"},
+        "horse": {"emoji": "🐴", "category": "animal"},
+        "sheep": {"emoji": "🐑", "category": "animal"},
+        "duck": {"emoji": "🦆", "category": "animal"},
+        "tractor": {"emoji": "🚜", "category": "vehicle"},
+        "barn": {"emoji": "🏚️", "category": "place"},
+        "corn": {"emoji": "🌽", "category": "food"},
+        "hay": {"emoji": "🌾", "category": "material"},
+        "head": {"emoji": "🗣️", "category": "body"},
+        "arm": {"emoji": "💪", "category": "body"},
+        "leg": {"emoji": "🦵", "category": "body"},
+        "hand": {"emoji": "✋", "category": "body"},
+        "foot": {"emoji": "🦶", "category": "body"},
+        "eye": {"emoji": "👁️", "category": "body"},
+        "ear": {"emoji": "👂", "category": "body"},
+        "nose": {"emoji": "👃", "category": "body"},
+        "mouth": {"emoji": "👄", "category": "body"},
+        "heart": {"emoji": "❤️", "category": "body"},
+        "bandage": {"emoji": "🩹", "category": "medical"},
+        "medicine": {"emoji": "💊", "category": "medical"},
+        "stethoscope": {"emoji": "🩺", "category": "medical"},
+        "rain": {"emoji": "🌧️", "category": "weather"},
+        "cloud": {"emoji": "☁️", "category": "weather"},
+        "snow": {"emoji": "❄️", "category": "weather"},
+        "wind": {"emoji": "💨", "category": "weather"},
+        "rainbow": {"emoji": "🌈", "category": "weather"},
+        "storm": {"emoji": "⛈️", "category": "weather"},
+        "lightning": {"emoji": "⚡", "category": "weather"},
+        "umbrella": {"emoji": "☂️", "category": "object"},
+        "coat": {"emoji": "🧥", "category": "clothing"},
+        "sunglasses": {"emoji": "🕶️", "category": "clothing"},
+        "flowers": {"emoji": "🌸", "category": "nature"},
+        "leaves": {"emoji": "🍂", "category": "nature"},
+        "beach": {"emoji": "🏖️", "category": "place"}
+    },
+    "colors": {
+        "red": "🔴",
+        "blue": "🔵",
+        "green": "🟢",
+        "yellow": "🟡",
+        "orange": "🟠",
+        "purple": "🟣",
+        "black": "⚫",
+        "white": "⚪"
+    },
+    "numbers": {
+        "one": 1,
+        "two": 2,
+        "three": 3,
+        "four": 4,
+        "five": 5,
+        "six": 6,
+        "seven": 7,
+        "eight": 8,
+        "nine": 9,
+        "ten": 10
+    },
+    "actions": {
+        "mix": "🥄",
+        "pour": "🫗",
+        "bake": "🔥",
+        "cut": "✂️",
+        "eat": "😋",
+        "drink": "🥤",
+        "jump": "🦘",
+        "run": "🏃",
+        "swim": "🏊",
+        "fly": "✈️",
+        "dig": "⛏️",
+        "build": "🏗️"
+    }
+}

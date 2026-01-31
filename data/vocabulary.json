@@ -1,6 +1,32 @@
 {
     "themes": [
         {
+            "id": "alphabet",
+            "name": "Alphabet Adventure",
+            "emoji": "🔤",
+            "description": "Learn your ABCs!",
+            "background": "default",
+            "character": "🎓",
+            "unlocked": true,
+            "activities": {
+                "explorer": [
+                    { "type": "tap-to-learn", "instruction": "Tap the letter!", "items": ["A", "B", "C", "D", "E"], "level": 1 },
+                    { "type": "letter-word-match", "instruction": "What does {letter} stand for?", "letters": ["A", "B", "C"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap the letter!", "items": ["F", "G", "H", "I", "J"], "level": 2 },
+                    { "type": "letter-word-match", "instruction": "What does {letter} stand for?", "letters": ["D", "E", "F"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the letter {word}!", "targetWords": ["A", "B", "C", "D", "E"], "level": 3 }
+                ],
+                "adventurer": [
+                    { "type": "tap-to-learn", "instruction": "Tap the letter!", "items": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], "level": 1 },
+                    { "type": "letter-word-match", "instruction": "What does {letter} stand for?", "letters": ["A", "B", "C", "D", "E"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap the letter!", "items": ["K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"], "level": 2 },
+                    { "type": "letter-word-match", "instruction": "What does {letter} stand for?", "letters": ["F", "G", "H", "I", "J", "K"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the letter {word}!", "targetWords": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which letter did I say?", "words": ["A", "B", "C", "D", "E"], "level": 3 }
+                ]
+            }
+        },
+        {
             "id": "supermarket",
             "name": "Supermarket Adventure",
             "emoji": "🛒",
@@ -10,53 +36,21 @@
             "unlocked": true,
             "activities": {
                 "explorer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap each item to learn its name!",
-                        "items": ["apple", "banana", "orange", "milk", "bread"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["apple", "banana", "orange", "milk", "bread"]
-                    },
-                    {
-                        "type": "match-pairs",
-                        "instruction": "Match the words with pictures!",
-                        "items": ["apple", "banana", "orange"]
-                    },
-                    {
-                        "type": "match-sound",
-                        "instruction": "Which one did I say?",
-                        "words": ["apple", "banana", "orange", "milk"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap each item to learn its name!", "items": ["apple", "banana", "orange"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["apple", "banana", "orange"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap each item to learn its name!", "items": ["milk", "bread", "cheese"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Put the {word} in the cart!", "items": ["apple", "banana", "orange"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["apple", "banana", "orange", "milk", "bread"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["apple", "banana", "orange", "milk"], "level": 3 }
                 ],
                 "adventurer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap each item to learn its name!",
-                        "items": ["apple", "banana", "orange", "carrot", "tomato", "milk", "bread", "cheese", "eggs"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["apple", "banana", "orange", "carrot", "tomato", "milk", "bread", "cheese"]
-                    },
-                    {
-                        "type": "spelling",
-                        "instruction": "Spell the word: {word}",
-                        "words": ["apple", "milk", "bread"]
-                    },
-                    {
-                        "type": "shopping-list",
-                        "instruction": "Get everything on the shopping list!",
-                        "list": ["apple", "milk", "bread", "banana"]
-                    },
-                    {
-                        "type": "counting",
-                        "instruction": "Count the {word}s! How many are there?",
-                        "items": ["apple", "banana", "orange"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap each item to learn its name!", "items": ["apple", "banana", "orange", "carrot", "tomato"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["apple", "banana", "orange", "carrot"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap each item to learn its name!", "items": ["milk", "bread", "cheese", "eggs"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Put the {word} in the cart!", "items": ["apple", "banana", "milk", "bread"], "level": 2 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["apple", "banana", "orange", "milk", "bread"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["apple", "banana", "carrot", "milk", "bread", "cheese"], "level": 3 },
+                    { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["apple", "milk", "bread"], "level": 3 }
                 ]
             }
         },
@@ -69,49 +63,21 @@
             "character": "👨‍🍳",
             "activities": {
                 "explorer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap each ingredient!",
-                        "items": ["egg", "milk", "flour", "sugar", "butter"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["egg", "milk", "flour", "sugar", "butter"]
-                    },
-                    {
-                        "type": "collect-items",
-                        "instruction": "Put the {word} in the bowl!",
-                        "items": ["egg", "milk", "flour"]
-                    },
-                    {
-                        "type": "action-sequence",
-                        "instruction": "Let's {action}!",
-                        "actions": ["mix", "pour", "bake"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap each ingredient!", "items": ["egg", "milk", "flour"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["egg", "milk", "flour"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap each ingredient!", "items": ["sugar", "butter", "chocolate"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Put the {word} in the bowl!", "items": ["egg", "milk", "flour"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["egg", "milk", "flour", "sugar", "butter"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which ingredient did I say?", "words": ["egg", "milk", "flour", "sugar"], "level": 3 }
                 ],
                 "adventurer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap each ingredient!",
-                        "items": ["egg", "milk", "flour", "sugar", "butter", "chocolate", "vanilla", "cream"]
-                    },
-                    {
-                        "type": "recipe-steps",
-                        "instruction": "Follow the recipe!",
-                        "steps": [
-                            "First, add the flour",
-                            "Then, add the eggs",
-                            "Now, pour the milk",
-                            "Mix everything together",
-                            "Put it in the oven"
-                        ]
-                    },
-                    {
-                        "type": "spelling",
-                        "instruction": "Spell the word: {word}",
-                        "words": ["egg", "milk", "cake"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap each ingredient!", "items": ["egg", "milk", "flour", "sugar", "butter"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["egg", "milk", "flour", "sugar"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap each ingredient!", "items": ["chocolate", "vanilla", "cream", "cake"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Put the {word} in the bowl!", "items": ["egg", "milk", "flour", "sugar"], "level": 2 },
+                    { "type": "match-sound", "instruction": "Which ingredient did I say?", "words": ["egg", "milk", "flour", "chocolate"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["egg", "milk", "flour", "chocolate", "cream"], "level": 3 },
+                    { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["egg", "milk", "cake"], "level": 3 }
                 ]
             }
         },
@@ -124,56 +90,20 @@
             "character": "🧑‍🌾",
             "activities": {
                 "explorer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap each animal!",
-                        "items": ["lion", "elephant", "monkey", "giraffe", "zebra"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["lion", "elephant", "monkey", "giraffe", "zebra"]
-                    },
-                    {
-                        "type": "match-sound",
-                        "instruction": "Which animal did I say?",
-                        "words": ["lion", "elephant", "monkey", "giraffe"]
-                    },
-                    {
-                        "type": "feed-animal",
-                        "instruction": "Feed the {animal}!",
-                        "pairs": [
-                            {"animal": "lion", "food": "meat"},
-                            {"animal": "elephant", "food": "banana"},
-                            {"animal": "monkey", "food": "banana"}
-                        ]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap each animal!", "items": ["lion", "elephant", "monkey"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["lion", "elephant", "monkey"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap each animal!", "items": ["giraffe", "zebra", "tiger"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Put the {word} in the zoo!", "items": ["lion", "elephant", "monkey"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["lion", "elephant", "monkey", "giraffe", "zebra"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which animal did I say?", "words": ["lion", "elephant", "monkey", "giraffe"], "level": 3 }
                 ],
                 "adventurer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap each animal!",
-                        "items": ["lion", "elephant", "monkey", "giraffe", "zebra", "tiger", "hippo", "crocodile", "penguin"]
-                    },
-                    {
-                        "type": "drag-and-drop",
-                        "instruction": "Feed the animals! Drag the food to the right animal!",
-                        "pairs": [
-                            {"item": "meat", "target": "lion", "targetLabel": "Lion", "targetEmoji": "🦁"},
-                            {"item": "banana", "target": "monkey", "targetLabel": "Monkey", "targetEmoji": "🐵"},
-                            {"item": "fish", "target": "penguin", "targetLabel": "Penguin", "targetEmoji": "🐧"}
-                        ]
-                    },
-                    {
-                        "type": "match-pairs",
-                        "instruction": "Match the animals with their names!",
-                        "items": ["lion", "elephant", "monkey", "giraffe"]
-                    },
-                    {
-                        "type": "spelling",
-                        "instruction": "Spell the word: {word}",
-                        "words": ["lion", "zebra", "monkey"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap each animal!", "items": ["lion", "elephant", "monkey", "giraffe", "zebra"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["lion", "elephant", "monkey", "giraffe"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap each animal!", "items": ["tiger", "hippo", "crocodile", "penguin"], "level": 2 },
+                    { "type": "drag-and-drop", "instruction": "Feed the animals!", "pairs": [{"item": "meat", "target": "lion", "targetLabel": "Lion", "targetEmoji": "🦁"}, {"item": "banana", "target": "monkey", "targetLabel": "Monkey", "targetEmoji": "🐵"}, {"item": "fish", "target": "penguin", "targetLabel": "Penguin", "targetEmoji": "🐧"}], "level": 2 },
+                    { "type": "match-pairs", "instruction": "Match the animals with their names!", "items": ["lion", "elephant", "monkey", "giraffe"], "level": 3 },
+                    { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["lion", "zebra"], "level": 3 }
                 ]
             }
         },
@@ -186,52 +116,21 @@
             "character": "👨‍🚀",
             "activities": {
                 "explorer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap to explore space!",
-                        "items": ["rocket", "star", "moon", "planet", "sun"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["rocket", "star", "moon", "planet", "sun"]
-                    },
-                    {
-                        "type": "counting",
-                        "instruction": "Count the stars!",
-                        "items": ["star"]
-                    },
-                    {
-                        "type": "dress-up",
-                        "instruction": "Put on the {item}!",
-                        "items": ["helmet", "suit", "boots", "gloves"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap to explore space!", "items": ["rocket", "star", "moon"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["rocket", "star", "moon"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap to explore space!", "items": ["planet", "sun", "astronaut"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Collect the {word}!", "items": ["star", "moon", "planet"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["rocket", "star", "moon", "planet", "sun"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["rocket", "star", "moon", "sun"], "level": 3 }
                 ],
                 "adventurer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap to explore space!",
-                        "items": ["rocket", "star", "moon", "planet", "sun", "asteroid", "satellite", "astronaut"]
-                    },
-                    {
-                        "type": "directions",
-                        "instruction": "Move the rocket {direction}!",
-                        "directions": ["up", "down", "left", "right"]
-                    },
-                    {
-                        "type": "spelling",
-                        "instruction": "Spell the word: {word}",
-                        "words": ["star", "moon", "sun"]
-                    },
-                    {
-                        "type": "planet-facts",
-                        "instruction": "Learn about the planets!",
-                        "facts": [
-                            {"planet": "Mars", "fact": "Mars is red"},
-                            {"planet": "Saturn", "fact": "Saturn has rings"},
-                            {"planet": "Earth", "fact": "We live on Earth"}
-                        ]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap to explore space!", "items": ["rocket", "star", "moon", "planet", "sun"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["rocket", "star", "moon", "planet"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap to explore space!", "items": ["asteroid", "satellite", "astronaut"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Collect the {word}!", "items": ["star", "moon", "planet", "rocket"], "level": 2 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["rocket", "star", "moon", "astronaut"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["rocket", "star", "astronaut", "satellite"], "level": 3 },
+                    { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["star", "moon", "sun"], "level": 3 }
                 ]
             }
         },
@@ -244,38 +143,21 @@
             "character": "🏴‍☠️",
             "activities": {
                 "explorer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap to discover pirate items!",
-                        "items": ["ship", "treasure", "map", "parrot", "island"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["ship", "treasure", "map", "parrot", "gold"]
-                    },
-                    {
-                        "type": "hidden-objects",
-                        "instruction": "Find the hidden {word}!",
-                        "items": ["treasure", "gold", "key"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap to discover pirate items!", "items": ["ship", "treasure", "map"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["ship", "treasure", "map"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap to discover pirate items!", "items": ["parrot", "island", "gold"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Find the {word}!", "items": ["treasure", "gold", "map"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["ship", "treasure", "map", "parrot", "gold"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["ship", "treasure", "map", "gold"], "level": 3 }
                 ],
                 "adventurer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap to discover pirate items!",
-                        "items": ["ship", "treasure", "map", "parrot", "island", "chest", "sword", "flag", "compass"]
-                    },
-                    {
-                        "type": "map-directions",
-                        "instruction": "Follow the map! Go {direction}!",
-                        "steps": ["right", "up", "right", "down", "left"]
-                    },
-                    {
-                        "type": "spelling",
-                        "instruction": "Spell the word: {word}",
-                        "words": ["ship", "gold", "map"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap to discover pirate items!", "items": ["ship", "treasure", "map", "parrot", "island"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["ship", "treasure", "map", "parrot"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap to discover pirate items!", "items": ["chest", "sword", "flag", "compass"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Find the {word}!", "items": ["treasure", "gold", "chest", "sword"], "level": 2 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["ship", "treasure", "sword", "compass"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["ship", "treasure", "chest", "sword", "compass"], "level": 3 },
+                    { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["ship", "gold", "map"], "level": 3 }
                 ]
             }
         },
@@ -288,50 +170,21 @@
             "character": "🔍",
             "activities": {
                 "explorer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap each dinosaur!",
-                        "items": ["t-rex", "triceratops", "brontosaurus", "pterodactyl", "egg"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["t-rex", "egg", "bone", "fossil"]
-                    },
-                    {
-                        "type": "dig-fossils",
-                        "instruction": "Dig to find the {word}!",
-                        "items": ["bone", "fossil", "egg"]
-                    },
-                    {
-                        "type": "sizes",
-                        "instruction": "Which dinosaur is {size}?",
-                        "items": [
-                            {"word": "t-rex", "size": "big"},
-                            {"word": "egg", "size": "small"}
-                        ]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap each dinosaur!", "items": ["t-rex", "egg", "bone"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["t-rex", "egg", "bone"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap each item!", "items": ["fossil", "triceratops", "brontosaurus"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Collect the {word}!", "items": ["egg", "bone", "fossil"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["t-rex", "egg", "bone", "fossil"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["t-rex", "egg", "bone", "fossil"], "level": 3 }
                 ],
                 "adventurer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap each dinosaur!",
-                        "items": ["t-rex", "triceratops", "brontosaurus", "pterodactyl", "stegosaurus", "velociraptor"]
-                    },
-                    {
-                        "type": "dino-facts",
-                        "instruction": "Learn dinosaur facts!",
-                        "facts": [
-                            {"dino": "T-Rex", "fact": "T-Rex was a meat eater"},
-                            {"dino": "Triceratops", "fact": "Triceratops had three horns"},
-                            {"dino": "Brontosaurus", "fact": "Brontosaurus had a very long neck"}
-                        ]
-                    },
-                    {
-                        "type": "spelling",
-                        "instruction": "Spell the word: {word}",
-                        "words": ["bone", "egg", "big"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap each dinosaur!", "items": ["t-rex", "triceratops", "brontosaurus", "egg", "bone"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["t-rex", "triceratops", "egg", "bone"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap each dinosaur!", "items": ["pterodactyl", "stegosaurus", "velociraptor", "fossil"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Collect the {word}!", "items": ["egg", "bone", "fossil"], "level": 2 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["t-rex", "triceratops", "brontosaurus"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["t-rex", "triceratops", "pterodactyl", "fossil"], "level": 3 },
+                    { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["bone", "egg"], "level": 3 }
                 ]
             }
         },
@@ -344,38 +197,21 @@
             "character": "👷",
             "activities": {
                 "explorer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap the tools and vehicles!",
-                        "items": ["hammer", "truck", "crane", "brick", "wood"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["hammer", "truck", "crane", "brick", "wood"]
-                    },
-                    {
-                        "type": "build-stack",
-                        "instruction": "Stack the {word}s!",
-                        "items": ["brick", "wood"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap the tools!", "items": ["hammer", "truck", "brick"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["hammer", "truck", "brick"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap the items!", "items": ["crane", "wood", "nail"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Get the {word}!", "items": ["hammer", "brick", "wood"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["hammer", "truck", "crane", "brick", "wood"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["hammer", "truck", "brick", "wood"], "level": 3 }
                 ],
                 "adventurer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap the tools and vehicles!",
-                        "items": ["hammer", "truck", "crane", "brick", "wood", "nail", "saw", "drill", "helmet"]
-                    },
-                    {
-                        "type": "build-sequence",
-                        "instruction": "Build the house! First, put the {item}!",
-                        "sequence": ["bricks", "wood", "roof", "door", "window"]
-                    },
-                    {
-                        "type": "spelling",
-                        "instruction": "Spell the word: {word}",
-                        "words": ["brick", "wood", "nail"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap the tools and vehicles!", "items": ["hammer", "truck", "crane", "brick", "wood"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["hammer", "truck", "crane", "brick"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap the tools!", "items": ["nail", "saw", "drill", "helmet"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Get the {word}!", "items": ["hammer", "brick", "wood", "nail"], "level": 2 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["hammer", "truck", "brick", "nail"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["hammer", "crane", "nail", "saw", "helmet"], "level": 3 },
+                    { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["brick", "wood", "nail"], "level": 3 }
                 ]
             }
         },
@@ -388,46 +224,21 @@
             "character": "🏁",
             "activities": {
                 "explorer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap to learn racing words!",
-                        "items": ["car", "wheel", "helmet", "flag", "trophy"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["car", "wheel", "helmet", "flag", "trophy"]
-                    },
-                    {
-                        "type": "colors",
-                        "instruction": "Find the {color} car!",
-                        "colors": ["red", "blue", "green", "yellow"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap to learn racing words!", "items": ["car", "wheel", "flag"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["car", "wheel", "flag"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap to learn racing words!", "items": ["helmet", "trophy"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Get the {word}!", "items": ["car", "wheel", "helmet"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["car", "wheel", "helmet", "flag", "trophy"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["car", "wheel", "flag", "trophy"], "level": 3 }
                 ],
                 "adventurer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap to learn racing words!",
-                        "items": ["car", "wheel", "helmet", "flag", "trophy", "engine", "tire", "finish"]
-                    },
-                    {
-                        "type": "positions",
-                        "instruction": "Who is in {position} place?",
-                        "positions": ["first", "second", "third", "last"]
-                    },
-                    {
-                        "type": "speed-words",
-                        "instruction": "Which car is {speed}?",
-                        "items": [
-                            {"car": "red", "speed": "fast"},
-                            {"car": "blue", "speed": "slow"}
-                        ]
-                    },
-                    {
-                        "type": "spelling",
-                        "instruction": "Spell the word: {word}",
-                        "words": ["car", "fast", "win"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap to learn racing words!", "items": ["car", "wheel", "helmet", "flag", "trophy"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["car", "wheel", "helmet", "flag"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap to learn racing words!", "items": ["engine", "tire"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Get the {word}!", "items": ["car", "wheel", "helmet", "trophy"], "level": 2 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["car", "wheel", "helmet", "trophy"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["car", "wheel", "engine", "tire", "trophy"], "level": 3 },
+                    { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["car"], "level": 3 }
                 ]
             }
         },
@@ -440,38 +251,21 @@
             "character": "👨‍🚒",
             "activities": {
                 "explorer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap the firefighter items!",
-                        "items": ["fire", "water", "truck", "ladder", "hose"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["fire", "water", "truck", "ladder", "hose"]
-                    },
-                    {
-                        "type": "put-out-fire",
-                        "instruction": "Use the {item} to put out the fire!",
-                        "items": ["water", "hose"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap the firefighter items!", "items": ["fire", "water", "truck"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fire", "water", "truck"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap the firefighter items!", "items": ["ladder", "hose", "helmet"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Get the {word}!", "items": ["water", "hose", "ladder"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fire", "water", "truck", "ladder", "hose"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["fire", "water", "truck", "hose"], "level": 3 }
                 ],
                 "adventurer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap the firefighter items!",
-                        "items": ["fire", "water", "truck", "ladder", "hose", "helmet", "boots", "axe", "alarm"]
-                    },
-                    {
-                        "type": "rescue-mission",
-                        "instruction": "Help rescue! {action}!",
-                        "actions": ["climb the ladder", "spray the water", "save the cat"]
-                    },
-                    {
-                        "type": "spelling",
-                        "instruction": "Spell the word: {word}",
-                        "words": ["fire", "water", "help"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap the firefighter items!", "items": ["fire", "water", "truck", "ladder", "hose"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fire", "water", "truck", "ladder"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap the firefighter items!", "items": ["helmet", "boots", "axe", "alarm"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Get the {word}!", "items": ["water", "hose", "ladder", "helmet"], "level": 2 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["fire", "water", "ladder", "helmet"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fire", "truck", "helmet", "boots", "alarm"], "level": 3 },
+                    { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["fire", "water"], "level": 3 }
                 ]
             }
         },
@@ -484,47 +278,21 @@
             "character": "🤿",
             "activities": {
                 "explorer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap the sea creatures!",
-                        "items": ["fish", "whale", "octopus", "crab", "starfish"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["fish", "whale", "octopus", "crab", "starfish"]
-                    },
-                    {
-                        "type": "bubble-pop",
-                        "instruction": "Pop the bubble with the {word}!",
-                        "words": ["fish", "whale", "crab"]
-                    },
-                    {
-                        "type": "counting",
-                        "instruction": "Count the fish!",
-                        "items": ["fish"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap the sea creatures!", "items": ["fish", "whale", "crab"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fish", "whale", "crab"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap the sea creatures!", "items": ["octopus", "starfish", "dolphin"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Catch the {word}!", "items": ["fish", "crab", "starfish"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fish", "whale", "octopus", "crab", "starfish"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["fish", "whale", "crab", "octopus"], "level": 3 }
                 ],
                 "adventurer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap the sea creatures!",
-                        "items": ["fish", "whale", "octopus", "crab", "starfish", "shark", "dolphin", "jellyfish", "turtle"]
-                    },
-                    {
-                        "type": "ocean-facts",
-                        "instruction": "Learn ocean facts!",
-                        "facts": [
-                            {"creature": "Whale", "fact": "Whales are very big"},
-                            {"creature": "Octopus", "fact": "Octopus has eight arms"},
-                            {"creature": "Dolphin", "fact": "Dolphins are very smart"}
-                        ]
-                    },
-                    {
-                        "type": "spelling",
-                        "instruction": "Spell the word: {word}",
-                        "words": ["fish", "crab", "swim"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap the sea creatures!", "items": ["fish", "whale", "octopus", "crab", "starfish"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fish", "whale", "octopus", "crab"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap the sea creatures!", "items": ["shark", "dolphin", "jellyfish", "turtle"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Catch the {word}!", "items": ["fish", "crab", "starfish", "dolphin"], "level": 2 },
+                    { "type": "match-sound", "instruction": "Which one did I say?", "words": ["fish", "whale", "shark", "dolphin"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["fish", "whale", "shark", "dolphin", "turtle"], "level": 3 },
+                    { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["fish", "crab"], "level": 3 }
                 ]
             }
         },
@@ -537,53 +305,21 @@
             "character": "👨‍🌾",
             "activities": {
                 "explorer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap each farm animal!",
-                        "items": ["cow", "pig", "chicken", "horse", "sheep"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["cow", "pig", "chicken", "horse", "sheep"]
-                    },
-                    {
-                        "type": "match-sound",
-                        "instruction": "Which animal did I say?",
-                        "words": ["cow", "pig", "chicken", "horse"]
-                    },
-                    {
-                        "type": "collect-items",
-                        "instruction": "Put the {word} in the barn!",
-                        "items": ["cow", "pig", "chicken"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap each farm animal!", "items": ["cow", "pig", "chicken"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["cow", "pig", "chicken"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap each farm animal!", "items": ["horse", "sheep", "duck"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Put the {word} in the barn!", "items": ["cow", "pig", "chicken"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["cow", "pig", "chicken", "horse", "sheep"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which animal did I say?", "words": ["cow", "pig", "chicken", "horse"], "level": 3 }
                 ],
                 "adventurer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap each farm item!",
-                        "items": ["cow", "pig", "chicken", "horse", "sheep", "duck", "tractor", "barn", "corn", "hay"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["cow", "pig", "chicken", "horse", "sheep", "duck", "tractor", "barn"]
-                    },
-                    {
-                        "type": "spelling",
-                        "instruction": "Spell the word: {word}",
-                        "words": ["cow", "pig", "duck"]
-                    },
-                    {
-                        "type": "farm-sounds",
-                        "instruction": "Which animal says {sound}?",
-                        "items": [
-                            {"animal": "cow", "sound": "moo"},
-                            {"animal": "pig", "sound": "oink"},
-                            {"animal": "chicken", "sound": "cluck"},
-                            {"animal": "duck", "sound": "quack"}
-                        ]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap each farm animal!", "items": ["cow", "pig", "chicken", "horse", "sheep"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["cow", "pig", "chicken", "horse"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap each farm item!", "items": ["duck", "tractor", "barn", "corn"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Put the {word} in the barn!", "items": ["cow", "pig", "chicken", "duck"], "level": 2 },
+                    { "type": "match-sound", "instruction": "Which animal did I say?", "words": ["cow", "pig", "chicken", "horse", "duck"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["cow", "pig", "duck", "tractor", "barn"], "level": 3 },
+                    { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["cow", "pig", "duck"], "level": 3 }
                 ]
             }
         },
@@ -596,48 +332,21 @@
             "character": "👨‍⚕️",
             "activities": {
                 "explorer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap to learn body parts!",
-                        "items": ["head", "arm", "leg", "hand", "foot"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["head", "arm", "leg", "hand", "foot"]
-                    },
-                    {
-                        "type": "match-sound",
-                        "instruction": "Which body part did I say?",
-                        "words": ["head", "arm", "leg", "hand"]
-                    },
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap the doctor's tools!",
-                        "items": ["bandage", "medicine", "stethoscope"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap to learn body parts!", "items": ["head", "arm", "leg"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["head", "arm", "leg"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap to learn body parts!", "items": ["hand", "foot", "eye"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Touch the {word}!", "items": ["head", "arm", "leg", "hand"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["head", "arm", "leg", "hand", "foot"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which body part did I say?", "words": ["head", "arm", "leg", "hand"], "level": 3 }
                 ],
                 "adventurer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap to learn body parts!",
-                        "items": ["head", "arm", "leg", "hand", "foot", "eye", "ear", "nose", "mouth", "heart"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["head", "arm", "leg", "hand", "foot", "eye", "ear", "nose", "mouth"]
-                    },
-                    {
-                        "type": "spelling",
-                        "instruction": "Spell the word: {word}",
-                        "words": ["arm", "leg", "eye"]
-                    },
-                    {
-                        "type": "body-checkup",
-                        "instruction": "Point to your {word}!",
-                        "words": ["head", "arm", "leg", "eye", "ear"]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap to learn body parts!", "items": ["head", "arm", "leg", "hand", "foot"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["head", "arm", "leg", "hand"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap to learn body parts!", "items": ["eye", "ear", "nose", "mouth"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Touch the {word}!", "items": ["head", "arm", "eye", "ear", "nose"], "level": 2 },
+                    { "type": "match-sound", "instruction": "Which body part did I say?", "words": ["head", "arm", "eye", "ear"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["head", "arm", "eye", "ear", "nose", "mouth"], "level": 3 },
+                    { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["arm", "leg", "eye"], "level": 3 }
                 ]
             }
         },
@@ -650,57 +359,21 @@
             "character": "☀️",
             "activities": {
                 "explorer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap to learn weather words!",
-                        "items": ["sun", "rain", "cloud", "snow", "wind"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["sun", "rain", "cloud", "snow", "wind"]
-                    },
-                    {
-                        "type": "match-sound",
-                        "instruction": "Which weather did I say?",
-                        "words": ["sun", "rain", "cloud", "snow"]
-                    },
-                    {
-                        "type": "dress-for-weather",
-                        "instruction": "It's {weather}! Wear the {item}!",
-                        "pairs": [
-                            {"weather": "rainy", "item": "umbrella"},
-                            {"weather": "sunny", "item": "sunglasses"},
-                            {"weather": "cold", "item": "coat"}
-                        ]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap to learn weather words!", "items": ["sun", "rain", "cloud"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["sun", "rain", "cloud"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap to learn weather words!", "items": ["snow", "wind", "rainbow"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Find the {word}!", "items": ["sun", "rain", "cloud", "snow"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["sun", "rain", "cloud", "snow", "wind"], "level": 3 },
+                    { "type": "match-sound", "instruction": "Which weather did I say?", "words": ["sun", "rain", "cloud", "snow"], "level": 3 }
                 ],
                 "adventurer": [
-                    {
-                        "type": "tap-to-learn",
-                        "instruction": "Tap to learn weather words!",
-                        "items": ["sun", "rain", "cloud", "snow", "wind", "rainbow", "storm", "lightning", "umbrella", "coat"]
-                    },
-                    {
-                        "type": "find-item",
-                        "instruction": "Find the {word}!",
-                        "targetWords": ["sun", "rain", "cloud", "snow", "wind", "rainbow", "umbrella", "coat"]
-                    },
-                    {
-                        "type": "spelling",
-                        "instruction": "Spell the word: {word}",
-                        "words": ["sun", "rain", "snow"]
-                    },
-                    {
-                        "type": "seasons",
-                        "instruction": "When do we see {word}?",
-                        "items": [
-                            {"word": "snow", "season": "winter"},
-                            {"word": "flowers", "season": "spring"},
-                            {"word": "beach", "season": "summer"},
-                            {"word": "leaves", "season": "fall"}
-                        ]
-                    }
+                    { "type": "tap-to-learn", "instruction": "Tap to learn weather words!", "items": ["sun", "rain", "cloud", "snow", "wind"], "level": 1 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["sun", "rain", "cloud", "snow"], "level": 1 },
+                    { "type": "tap-to-learn", "instruction": "Tap to learn weather words!", "items": ["rainbow", "storm", "umbrella", "coat"], "level": 2 },
+                    { "type": "collect-items", "instruction": "Find the {word}!", "items": ["sun", "rain", "cloud", "umbrella"], "level": 2 },
+                    { "type": "match-sound", "instruction": "Which weather did I say?", "words": ["sun", "rain", "cloud", "storm"], "level": 2 },
+                    { "type": "find-item", "instruction": "Find the {word}!", "targetWords": ["sun", "rain", "rainbow", "storm", "umbrella"], "level": 3 },
+                    { "type": "spelling", "instruction": "Spell the word: {word}", "words": ["sun", "rain", "snow"], "level": 3 }
                 ]
             }
         }
@@ -831,7 +504,33 @@
         "sunglasses": {"emoji": "🕶️", "category": "clothing"},
         "flowers": {"emoji": "🌸", "category": "nature"},
         "leaves": {"emoji": "🍂", "category": "nature"},
-        "beach": {"emoji": "🏖️", "category": "place"}
+        "beach": {"emoji": "🏖️", "category": "place"},
+        "A": {"emoji": "🔤", "letter": "A", "category": "letter", "word": "apple", "wordEmoji": "🍎"},
+        "B": {"emoji": "🔤", "letter": "B", "category": "letter", "word": "banana", "wordEmoji": "🍌"},
+        "C": {"emoji": "🔤", "letter": "C", "category": "letter", "word": "cat", "wordEmoji": "🐱"},
+        "D": {"emoji": "🔤", "letter": "D", "category": "letter", "word": "dog", "wordEmoji": "🐕"},
+        "E": {"emoji": "🔤", "letter": "E", "category": "letter", "word": "elephant", "wordEmoji": "🐘"},
+        "F": {"emoji": "🔤", "letter": "F", "category": "letter", "word": "fish", "wordEmoji": "🐟"},
+        "G": {"emoji": "🔤", "letter": "G", "category": "letter", "word": "grape", "wordEmoji": "🍇"},
+        "H": {"emoji": "🔤", "letter": "H", "category": "letter", "word": "house", "wordEmoji": "🏠"},
+        "I": {"emoji": "🔤", "letter": "I", "category": "letter", "word": "ice cream", "wordEmoji": "🍦"},
+        "J": {"emoji": "🔤", "letter": "J", "category": "letter", "word": "juice", "wordEmoji": "🧃"},
+        "K": {"emoji": "🔤", "letter": "K", "category": "letter", "word": "kite", "wordEmoji": "🪁"},
+        "L": {"emoji": "🔤", "letter": "L", "category": "letter", "word": "lion", "wordEmoji": "🦁"},
+        "M": {"emoji": "🔤", "letter": "M", "category": "letter", "word": "moon", "wordEmoji": "🌙"},
+        "N": {"emoji": "🔤", "letter": "N", "category": "letter", "word": "nest", "wordEmoji": "🪹"},
+        "O": {"emoji": "🔤", "letter": "O", "category": "letter", "word": "orange", "wordEmoji": "🍊"},
+        "P": {"emoji": "🔤", "letter": "P", "category": "letter", "word": "pig", "wordEmoji": "🐷"},
+        "Q": {"emoji": "🔤", "letter": "Q", "category": "letter", "word": "queen", "wordEmoji": "👸"},
+        "R": {"emoji": "🔤", "letter": "R", "category": "letter", "word": "rabbit", "wordEmoji": "🐰"},
+        "S": {"emoji": "🔤", "letter": "S", "category": "letter", "word": "sun", "wordEmoji": "☀️"},
+        "T": {"emoji": "🔤", "letter": "T", "category": "letter", "word": "tree", "wordEmoji": "🌳"},
+        "U": {"emoji": "🔤", "letter": "U", "category": "letter", "word": "umbrella", "wordEmoji": "☂️"},
+        "V": {"emoji": "🔤", "letter": "V", "category": "letter", "word": "violin", "wordEmoji": "🎻"},
+        "W": {"emoji": "🔤", "letter": "W", "category": "letter", "word": "whale", "wordEmoji": "🐋"},
+        "X": {"emoji": "🔤", "letter": "X", "category": "letter", "word": "xylophone", "wordEmoji": "🎵"},
+        "Y": {"emoji": "🔤", "letter": "Y", "category": "letter", "word": "yo-yo", "wordEmoji": "🪀"},
+        "Z": {"emoji": "🔤", "letter": "Z", "category": "letter", "word": "zebra", "wordEmoji": "🦓"}
     },
     "colors": {
         "red": "🔴",
