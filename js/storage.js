@@ -305,15 +305,20 @@ const GameStorage = {
 
     /**
      * Complete a level
+     * @param {string} userId - User ID
+     * @param {string} themeId - Theme ID
+     * @param {number} level - Level number
+     * @param {number} stars - Stars earned (1-3)
+     * @param {Object} stats - Optional statistics object { correctAnswers, totalQuestions, wordsLearned }
      */
-    completeLevel(userId, themeId, level, stars) {
+    completeLevel(userId, themeId, level, stars, stats = {}) {
         const user = this.getUser(userId);
         if (!user) return false;
 
         const themeProgress = { ...user.themeProgress };
         
         if (!themeProgress[themeId]) {
-            themeProgress[themeId] = { levels: {} };
+            themeProgress[themeId] = { levels: {}, totalCorrectAnswers: 0, totalQuestions: 0, wordsLearned: [] };
         }
         if (!themeProgress[themeId].levels) {
             themeProgress[themeId].levels = {};
@@ -324,8 +329,21 @@ const GameStorage = {
         themeProgress[themeId].levels[level] = {
             completed: true,
             stars: Math.max(currentLevel.stars || 0, stars),
-            unlocked: true
+            unlocked: true,
+            correctAnswers: stats.correctAnswers || 0,
+            totalQuestions: stats.totalQuestions || 0
         };
+
+        // Accumulate theme-level statistics
+        themeProgress[themeId].totalCorrectAnswers = (themeProgress[themeId].totalCorrectAnswers || 0) + (stats.correctAnswers || 0);
+        themeProgress[themeId].totalQuestions = (themeProgress[themeId].totalQuestions || 0) + (stats.totalQuestions || 0);
+        
+        // Track words learned (merge and dedupe)
+        if (stats.wordsLearned && Array.isArray(stats.wordsLearned)) {
+            const existingWords = themeProgress[themeId].wordsLearned || [];
+            const allWords = [...new Set([...existingWords, ...stats.wordsLearned])];
+            themeProgress[themeId].wordsLearned = allWords;
+        }
 
         // Unlock next level
         const nextLevel = level + 1;

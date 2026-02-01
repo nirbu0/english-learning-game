@@ -129,9 +129,11 @@ const ParentDashboard = {
         container.innerHTML = allUsers.map(user => {
             const userId = user.id;
             const totalStars = user.totalStars || 0;
-            const completedThemes = themes.filter(t =>
-                GameStorage.getThemeProgress(userId, t.id).completed
-            ).length;
+            // Check completed themes - a theme is complete if level 1 is completed or it's in completedThemes
+            const completedThemes = themes.filter(t => {
+                const progress = GameStorage.getThemeProgress(userId, t.id);
+                return progress?.levels?.[1]?.completed || user.completedThemes?.includes(t.id);
+            }).length;
             const ageRange = user.userType === 'explorer' ? 'Ages 4-5' : 'Ages 6-9';
 
             return `
@@ -193,7 +195,6 @@ const ParentDashboard = {
         const themes = GameScenes.getThemes();
 
         // Calculate overall statistics
-        let totalPlayTime = 0;
         let totalCorrectAnswers = 0;
         let totalQuestions = 0;
         let wordsLearned = new Set();
@@ -205,9 +206,12 @@ const ParentDashboard = {
             themes.forEach(theme => {
                 const progress = userProgress[theme.id];
                 if (progress) {
-                    totalCorrectAnswers += progress.correctAnswers || 0;
+                    // Read accumulated statistics from theme progress
+                    totalCorrectAnswers += progress.totalCorrectAnswers || 0;
                     totalQuestions += progress.totalQuestions || 0;
-                    if (progress.wordsLearned) {
+                    
+                    // Collect words learned
+                    if (progress.wordsLearned && Array.isArray(progress.wordsLearned)) {
                         progress.wordsLearned.forEach(w => wordsLearned.add(w));
                     }
                 }
@@ -298,9 +302,11 @@ const ParentDashboard = {
             
             <div class="certificates-list">
                 ${allUsers.map(user => {
-            const completedThemes = themes.filter(t =>
-                GameStorage.getThemeProgress(user.id, t.id).completed
-            );
+            // Check completed themes - a theme is complete if level 1 is completed or it's in completedThemes
+            const completedThemes = themes.filter(t => {
+                const progress = GameStorage.getThemeProgress(user.id, t.id);
+                return progress?.levels?.[1]?.completed || user.completedThemes?.includes(t.id);
+            });
 
             if (completedThemes.length === 0) {
                 return `
