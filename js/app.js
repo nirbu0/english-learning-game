@@ -213,13 +213,6 @@ const Game = {
             GameI18n.setLanguage(e.target.value);
             GameSounds.click();
         });
-        this.elements.resetProgressBtn.addEventListener('click', () => {
-            if (confirm('Are you sure you want to reset all progress?')) {
-                GameStorage.resetAll();
-                this.hideSettings();
-                location.reload();
-            }
-        });
 
         // Celebration buttons
         this.elements.playAgainBtn.addEventListener('click', () => {

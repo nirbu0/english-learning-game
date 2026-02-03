@@ -2966,3 +2966,106 @@ input[type="checkbox"]:checked::after {
     color: #666;
     font-family: var(--font-body);
 }
+
+/* ==========================================
+   User Migration Modal (Parent Dashboard)
+   ========================================== */
+.migrate-modal-content {
+    max-width: 450px;
+    text-align: center;
+}
+
+.migrate-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.migrate-avatar {
+    font-size: 4rem;
+    margin-bottom: 10px;
+}
+
+.migrate-name {
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    color: var(--text-dark);
+}
+
+.migrate-direction {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 25px 0;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 15px;
+}
+
+.migrate-from,
+.migrate-to {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.migrate-type-emoji {
+    font-size: 2.5rem;
+}
+
+.migrate-type-label {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 600;
+}
+
+.migrate-arrow {
+    font-size: 2rem;
+}
+
+.migrate-info {
+    text-align: left;
+    background: rgba(0, 0, 0, 0.02);
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin: 20px 0;
+}
+
+.migrate-info h4 {
+    font-size: 1rem;
+    margin: 10px 0 8px 0;
+    color: var(--text-dark);
+}
+
+.migrate-info h4:first-child {
+    margin-top: 0;
+}
+
+.migrate-info ul {
+    margin: 0;
+    padding-left: 25px;
+}
+
+.migrate-info li {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 5px 0;
+}
+
+.migrate-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.user-actions {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+}

@@ -179,9 +179,131 @@ const ParentDashboard = {
             }).join('')}
                         </div>
                     </div>
+                    
+                    <div class="user-actions">
+                        <button class="btn btn-secondary btn-small migrate-user-btn" data-user-id="${userId}" data-current-type="${user.userType}">
+                            ${user.userType === 'explorer' ? '⬆️ Upgrade to Adventurer' : '⬇️ Change to Explorer'}
+                        </button>
+                    </div>
                 </div>
             `;
         }).join('');
+
+        // Add event listeners for migrate buttons
+        setTimeout(() => {
+            document.querySelectorAll('.migrate-user-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const userId = btn.dataset.userId;
+                    const currentType = btn.dataset.currentType;
+                    this.showMigrateUserModal(userId, currentType);
+                });
+            });
+        }, 0);
+    },
+
+    /**
+     * Show modal to migrate user between Explorer and Adventurer
+     */
+    showMigrateUserModal(userId, currentType) {
+        const user = GameStorage.getUser(userId);
+        if (!user) return;
+
+        const newType = currentType === 'explorer' ? 'adventurer' : 'explorer';
+        const newTypeLabel = newType === 'explorer' ? 'Explorer (Ages 4-5)' : 'Adventurer (Ages 6-9)';
+        const currentTypeLabel = currentType === 'explorer' ? 'Explorer (Ages 4-5)' : 'Adventurer (Ages 6-9)';
+
+        // Create or reuse modal
+        let modal = document.getElementById('migrate-user-modal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'migrate-user-modal';
+            modal.className = 'modal hidden';
+            document.body.appendChild(modal);
+        }
+
+        modal.innerHTML = `
+            <div class="modal-content migrate-modal-content">
+                <h2>🔄 Change User Level</h2>
+                <div class="migrate-user-info">
+                    <div class="migrate-avatar">${user.avatar}</div>
+                    <div class="migrate-name">${user.name}</div>
+                </div>
+                <div class="migrate-direction">
+                    <div class="migrate-from">
+                        <span class="migrate-type-emoji">${currentType === 'explorer' ? '🧒' : '👦'}</span>
+                        <span class="migrate-type-label">${currentTypeLabel}</span>
+                    </div>
+                    <div class="migrate-arrow">➡️</div>
+                    <div class="migrate-to">
+                        <span class="migrate-type-emoji">${newType === 'explorer' ? '🧒' : '👦'}</span>
+                        <span class="migrate-type-label">${newTypeLabel}</span>
+                    </div>
+                </div>
+                <div class="migrate-info">
+                    <h4>✅ What will be kept:</h4>
+                    <ul>
+                        <li>⭐ ${user.totalStars || 0} stars earned</li>
+                        <li>📓 ${(user.stickers || []).length} stickers collected</li>
+                        <li>📊 All theme progress</li>
+                    </ul>
+                    <h4>🔄 What will change:</h4>
+                    <ul>
+                        <li>Activity difficulty level</li>
+                        <li>User will appear in ${newType === 'explorer' ? 'Explorers' : 'Adventurers'} section</li>
+                    </ul>
+                </div>
+                <div class="migrate-buttons">
+                    <button class="btn btn-secondary" id="migrate-cancel-btn">Cancel</button>
+                    <button class="btn btn-primary" id="migrate-confirm-btn">
+                        ${newType === 'adventurer' ? '⬆️ Upgrade' : '⬇️ Change'} to ${newType === 'explorer' ? 'Explorer' : 'Adventurer'}
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Add event listeners
+        document.getElementById('migrate-cancel-btn').addEventListener('click', () => {
+            modal.classList.add('hidden');
+            GameSounds.click();
+        });
+
+        document.getElementById('migrate-confirm-btn').addEventListener('click', () => {
+            this.migrateUser(userId, newType);
+            modal.classList.add('hidden');
+            GameSounds.click();
+        });
+
+        modal.classList.remove('hidden');
+        GameSounds.click();
+    },
+
+    /**
+     * Migrate a user to a new type (explorer/adventurer)
+     */
+    migrateUser(userId, newType) {
+        const user = GameStorage.getUser(userId);
+        if (!user) return;
+
+        // Update user type and age range
+        const newAge = newType === 'explorer' ? Math.min(user.age || 5, 5) : Math.max(user.age || 7, 6);
+        const newAgeRange = newType === 'explorer' ? 'Ages 4-5' : 'Ages 6-9';
+
+        GameStorage.saveUser(userId, {
+            userType: newType,
+            age: newAge,
+            ageRange: newAgeRange
+        });
+
+        // Refresh the dashboard
+        this.populateProgress();
+        
+        // Refresh welcome screen if Game object is available
+        if (typeof Game !== 'undefined' && Game.loadUserProfiles) {
+            Game.loadUserProfiles();
+        }
+
+        // Show success message
+        alert(`✅ ${user.name} is now ${newType === 'explorer' ? 'an Explorer' : 'an Adventurer'}! All progress and rewards have been kept.`);
     },
 
     /**
