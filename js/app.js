@@ -213,13 +213,6 @@ const Game = {
             GameI18n.setLanguage(e.target.value);
             GameSounds.click();
         });
-        this.elements.resetProgressBtn.addEventListener('click', () => {
-            if (confirm('Are you sure you want to reset all progress?')) {
-                GameStorage.resetAll();
-                this.hideSettings();
-                location.reload();
-            }
-        });
 
         // Celebration buttons
         this.elements.playAgainBtn.addEventListener('click', () => {
@@ -658,6 +651,7 @@ const Game = {
                 if (word === targetWord) {
                     // Correct!
                     GameScenes.correctAnswers++;
+                    GameScenes.trackWordLearned(targetWord); // Track learned word
                     GameScenes.showCorrectFeedback(element);
                     this.showFeedback(true);
                     GameSpeech.speakEncouragement(true);
@@ -825,6 +819,7 @@ const Game = {
             if (item === targetWord) {
                 // Correct!
                 GameScenes.correctAnswers++;
+                GameScenes.trackWordLearned(targetWord); // Track learned word
                 collectedCount++;
 
                 GameSounds.correct();
@@ -900,6 +895,7 @@ const Game = {
                 if (word === targetWord) {
                     // Correct!
                     GameScenes.correctAnswers++;
+                    GameScenes.trackWordLearned(targetWord); // Track learned word
                     GameScenes.showCorrectFeedback(element);
                     this.showFeedback(true);
                     GameSpeech.speakEncouragement(true);
@@ -1410,8 +1406,11 @@ const Game = {
         const stars = GameScenes.calculateStars();
         const level = GameScenes.currentLevel;
 
-        // Save progress for the level
-        GameStorage.completeLevel(this.currentUser, this.currentTheme.id, level, stars);
+        // Get session statistics
+        const stats = GameScenes.getSessionStats();
+
+        // Save progress for the level with statistics
+        GameStorage.completeLevel(this.currentUser, this.currentTheme.id, level, stars, stats);
 
         // Check if next level exists to prompt user or just congrats
         const nextLevel = level + 1;

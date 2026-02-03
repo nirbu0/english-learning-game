@@ -12,6 +12,7 @@ const GameScenes = {
     collectedItems: [],
     correctAnswers: 0,
     totalQuestions: 0,
+    wordsLearned: [], // Track words the user has learned/interacted with
 
     /**
      * Initialize scenes with vocabulary data
@@ -399,6 +400,7 @@ const GameScenes = {
         this.collectedItems = [];
         this.correctAnswers = 0;
         this.totalQuestions = 0;
+        this.wordsLearned = []; // Reset words learned for this session
 
         const activities = this.getActivities(userType);
         if (!activities || activities.length === 0) return false;
@@ -407,6 +409,28 @@ const GameScenes = {
         this.currentItemIndex = 0;
 
         return true;
+    },
+
+    /**
+     * Track a word as learned (interacted with correctly)
+     * @param {string} word - The word to track
+     */
+    trackWordLearned(word) {
+        if (word && !this.wordsLearned.includes(word)) {
+            this.wordsLearned.push(word);
+        }
+    },
+
+    /**
+     * Get statistics for the current session
+     * @returns {Object} Statistics object with correctAnswers, totalQuestions, wordsLearned
+     */
+    getSessionStats() {
+        return {
+            correctAnswers: this.correctAnswers,
+            totalQuestions: this.totalQuestions,
+            wordsLearned: [...this.wordsLearned]
+        };
     },
 
     /**
@@ -906,6 +930,7 @@ const GameScenes = {
         this.collectedItems = [];
         this.correctAnswers = 0;
         this.totalQuestions = 0;
+        this.wordsLearned = [];
     }
 };
 
